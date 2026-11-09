@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Republic of Ireland",
-    status="experimental",
+    status="available",
 )
 class RoastedBrownScraper(ShopifyJsonScraper):
     """Scraper for Roasted Brown (roastedbrown.com) using Shopify products.json."""

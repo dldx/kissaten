@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="PHP",
     country="Philippines",
-    status="experimental",
+    status="available",
 )
 class GoodCupScraper(ShopifyJsonScraper):
     """Scraper for Good Cup (goodcup.ph) using Shopify products.json."""

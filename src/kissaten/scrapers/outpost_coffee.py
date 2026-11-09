@@ -6,9 +6,6 @@ They focus on high-quality single-origin coffees and innovative processing metho
 
 import logging
 
-from bs4 import BeautifulSoup
-from pydantic import HttpUrl
-
 from ..schemas import CoffeeBean
 from .base import BaseScraper
 from .registry import register_scraper
@@ -58,11 +55,17 @@ class OutpostCoffeeScraper(BaseScraper):
 
         Returns:
             List containing the coffee collection URLs
+
+        NOTE: The dedicated ``coffees`` collection exists but is currently
+        empty roaster-side (verified live: its listing HTML contains only a
+        gift-card link and "no products" markers). The ``all`` collection is
+        the only listing that still exposes the coffee products (BROKEN
+        PROMISE, CHEAT CODE, COOL KIDS, LOW RIDER, ...), alongside equipment
+        and merch which are filtered out below.
         """
         return [
-            "https://outpost.coffee/collections/coffees",
+            "https://outpost.coffee/collections/all",
         ]
-
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -128,4 +131,39 @@ class OutpostCoffeeScraper(BaseScraper):
             if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
                 filtered_urls.append(url)
 
-        return filtered_urls
+        # The 'all' collection also carries brewing equipment and merch that
+        # the legacy excluded_products list doesn't cover (aeropress, V60,
+        # Fellow, La Marzocco, tote bags, running caps, ...). Filter those by
+        # slug so only coffee beans reach the AI extraction stage.
+        equipment_and_merch_slugs = [
+            "aeropress",
+            "aero-press",
+            "v60",
+            "hario",
+            "fellow",
+            "la-marzocco",
+            "stagg",
+            "grinder",
+            "filter-papers",
+            "filtropa",
+            "dripper",
+            "kettle",
+            "tote",
+            "cap",
+            "shirt",
+            "mug",
+            "cup",
+        ]
+        coffee_urls = []
+        for url in filtered_urls:
+            slug = url.rstrip("/").rsplit("/", 1)[-1].lower()
+            if any(marker in slug for marker in equipment_and_merch_slugs):
+                logger.debug(f"Skipping equipment/merch product: {url}")
+                continue
+            coffee_urls.append(url)
+
+        logger.info(
+            f"Outpost Coffee: {len(coffee_urls)} coffee URLs after filtering "
+            f"({len(product_urls)} raw product links from {store_url})"
+        )
+        return coffee_urls

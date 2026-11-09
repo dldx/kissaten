@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Netherlands",
-    status="experimental",
+    status="available",
 )
 class PSCoffeeRoastersScraper(ShopifyJsonScraper):
     """Scraper for PS Coffee Roasters (pscoffeeroasters.com) using Shopify products.json."""

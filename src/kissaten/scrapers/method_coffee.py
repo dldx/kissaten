@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="GBP",
     country="United Kingdom",
-    status="experimental",
+    status="available",
 )
 class MethodCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Method Coffee Roasters (methodroastery.com) using Shopify products.json."""

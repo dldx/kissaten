@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Denmark",
-    status="experimental",
+    status="available",
 )
 class TheBrewCompanyScraper(ShopifyJsonScraper):
     """Scraper for The Brew Company (brew-company.com) using Shopify products.json."""

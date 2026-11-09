@@ -1,21 +1,90 @@
-"""DAK Coffee Roasters scraper using their API endpoint.
+"""DAK Coffee Roasters scraper using the WooCommerce Store API.
 
-This scraper uses DAK Coffee's API endpoint instead of traditional HTML scraping,
+DAK Coffee migrated its shop from a custom API (``/api/products/all``, now
+removed/404) to WordPress + WooCommerce. Products are fetched from the public
+WooCommerce Store API (``/wp-json/wc/store/v1/products``), which returns
+structured attributes (origin, region, process, varietal, tasting notes,
+altitude, weights) so beans are parsed deterministically without AI extraction.
 """
 
+import asyncio
+import html
 import json
 import logging
+import re
 from datetime import datetime, timezone
+from functools import lru_cache
 from pathlib import Path
 
-from pydantic import HttpUrl
-
-from ..ai.extractor import CoffeeDataExtractor
-from ..schemas import CoffeeBean, CoffeeBeanDiffUpdate
+from ..schemas import CoffeeBean, CoffeeBeanDiffUpdate, PriceOption
+from ..schemas.coffee_bean import Bean
 from .base import BaseScraper
 from .registry import register_scraper
 
 logger = logging.getLogger(__name__)
+
+PRODUCTS_API_URL = "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products"
+_COUNTRY_CODES_PATH = Path(__file__).parent.parent / "database" / "countrycodes.csv"
+
+# Product categories that contain coffee beans (vs. wear/goods merchandise).
+_COFFEE_CATEGORY_SLUGS = {"espresso", "filter"}
+# Slugs to exclude even if categorized as coffee (e.g. the "Steeped" bag-in-box packs).
+_EXCLUDED_SLUGS = ["steeped"]
+
+
+@lru_cache(maxsize=1)
+def _country_name_to_alpha2() -> dict[str, str]:
+    """Load a country-name -> alpha-2 code mapping from the bundled CSV."""
+    import csv
+
+    mapping: dict[str, str] = {}
+    try:
+        with open(_COUNTRY_CODES_PATH, encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                mapping[row["name"].strip().lower()] = row["alpha-2"].strip()
+    except FileNotFoundError:
+        logger.warning(f"Country codes CSV not found at {_COUNTRY_CODES_PATH}")
+    return mapping
+
+
+def _minor_unit_price(amount: str | int | None, minor_unit: int | None) -> float | None:
+    """Convert a WooCommerce minor-unit price string (e.g. "1780") to a float.
+
+    Args:
+        amount: Raw amount from the API (string or int, in minor units).
+        minor_unit: Number of decimal digits (currency_minor_unit, e.g. 2 for EUR).
+
+    Returns:
+        Price in major currency units, or None if the amount is missing/invalid.
+    """
+    if amount in (None, ""):
+        return None
+    try:
+        value = float(amount)
+    except (TypeError, ValueError):
+        return None
+    return value / (10 ** (minor_unit if minor_unit is not None else 2))
+
+
+def _parse_weight_grams(text: str) -> int | None:
+    """Parse a weight label like "250g", "1kg" or "125 g" into grams."""
+    if not text:
+        return None
+    m = re.search(r"(\d+(?:[.,]\d+)?)\s*(kg|g)\b", text.lower())
+    if not m:
+        return None
+    value = float(m.group(1).replace(",", "."))
+    if m.group(2) == "kg":
+        value *= 1000
+    return int(value)
+
+
+def _parse_elevation(altitude: str) -> tuple[int, int]:
+    """Parse an altitude label like "1260masl" or "1650-2000masl" into (min, max)."""
+    numbers = [int(n) for n in re.findall(r"\d+", altitude or "")]
+    if not numbers:
+        return 0, 0
+    return min(numbers), max(numbers)
 
 
 @register_scraper(
@@ -30,7 +99,7 @@ logger = logging.getLogger(__name__)
     status="available",
 )
 class DakCoffeeScraper(BaseScraper):
-    """Scraper for DAK Coffee Roasters using their API endpoint."""
+    """Scraper for DAK Coffee Roasters using their WooCommerce Store API."""
 
     def __init__(self, api_key: str | None = None):
         """Initialize DAK Coffee scraper.
@@ -45,8 +114,6 @@ class DakCoffeeScraper(BaseScraper):
             max_retries=3,
             timeout=30.0,
         )
-        # Initialize AI extractor
-        self.extractor = CoffeeDataExtractor()
 
     async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
@@ -61,7 +128,7 @@ class DakCoffeeScraper(BaseScraper):
     async def scrape(
         self, output_dir=None, force_full_update: bool = False, create_diffjson_updates: bool = True
     ) -> list[CoffeeBean]:
-        """Scrape coffee beans from DAK Coffee Roasters using their API endpoint.
+        """Scrape coffee beans from DAK Coffee Roasters using their WooCommerce Store API.
 
         Args:
             output_dir: Output directory for saving files (optional)
@@ -83,79 +150,56 @@ class DakCoffeeScraper(BaseScraper):
 
             self._load_existing_beans_for_session(output_dir)
 
-            # Call the API endpoint
-            api_url = "https://www.dakcoffeeroasters.com/api/products/all?isActive=true"
-            logger.info(f"Fetching data from DAK Coffee API: {api_url}")
-
-            response = await self.client.get(api_url)
-            response.raise_for_status()
-            data = response.json()
-
-            products = data.get("products", [])
-            logger.info(f"Found {len(products)} products from DAK Coffee API")
-
+            # Call the Store API (paginated)
+            logger.info(f"Fetching data from DAK Coffee Store API: {PRODUCTS_API_URL}")
+            products = await self._fetch_all_products()
             session.requests_made += 1
 
+            coffee_products = self._filter_coffee_products(products)
+            logger.info(f"Found {len(products)} products ({len(coffee_products)} coffee) from DAK Coffee Store API")
+
             # Extract all current product URLs for diffjson processing
-            current_product_urls = []
-            for product in products:
-                if product.get("type") == "coffee":
-                    slug = product.get("slug", "")
-                    if slug:
-                        product_url = f"https://www.dakcoffeeroasters.com/shop/coffee/{slug}"
-                        current_product_urls.append(product_url)
+            current_product_urls = [self._product_url(p) for p in coffee_products]
 
             # Create diffjson stock updates for existing products if enabled
             in_stock_count = 0
             out_of_stock_count = 0
             if create_diffjson_updates:
                 in_stock_count, out_of_stock_count = await self._create_api_based_diffjson_updates(
-                    products, current_product_urls, output_dir, force_full_update
+                    coffee_products, current_product_urls, output_dir, force_full_update
                 )
 
             # Process each product
-            for product in products:
+            for product in coffee_products:
                 try:
-                    # Skip non-coffee products
-                    if product.get("type") != "coffee":
-                        continue
-
-                    # Build product URL
-                    slug = product.get("slug", "")
-                    if slug:
-                        product_url = f"https://www.dakcoffeeroasters.com/shop/coffee/{slug}"
-                    else:
-                        product_url = "https://www.dakcoffeeroasters.com"
+                    product_url = self._product_url(product)
 
                     # Skip if already scraped in this session
                     if self._is_bean_already_scraped_in_session(product_url):
-                        product_name = self._get_localized_text(product.get("name", {}))
-                        logger.debug(f"Skipping already scraped product: {product_name}")
+                        logger.debug(f"Skipping already scraped product: {product.get('name')}")
                         continue
 
                     # If not forcing full update and diffjson is enabled, skip existing products
                     # (they've already been handled by diffjson updates)
                     if not force_full_update and create_diffjson_updates:
                         if self._is_bean_already_scraped_historically(product_url):
-                            product_name = self._get_localized_text(product.get("name", {}))
-                            logger.debug(f"Skipping existing product (handled by diffjson): {product_name}")
+                            logger.debug(f"Skipping existing product (handled by diffjson): {product.get('name')}")
                             continue
 
-                    # Parse the product using AI extractor
-                    coffee_bean = await self._parse_product_with_ai(product)
+                    coffee_bean = self._parse_product(product)
 
                     if coffee_bean:
+                        self._apply_product_flags(coffee_bean, product_url)
                         coffee_beans.append(coffee_bean)
                         self._mark_bean_as_scraped(product_url)
 
                 except Exception as e:
-                    product_name = self._get_localized_text(product.get("name", {}))
-                    logger.warning(f"Error processing product {product_name}: {e}")
+                    logger.warning(f"Error processing product {product.get('name')}: {e}")
                     session.add_error(f"Error processing product: {e}")
                     continue
 
             # Log summary
-            total_products = len([p for p in products if p.get("type") == "coffee"])
+            total_products = len(coffee_products)
             skipped_count = total_products - len(coffee_beans)
             if skipped_count > 0:
                 logger.info(f"Skipped {skipped_count} already scraped products from today's session")
@@ -181,181 +225,218 @@ class DakCoffeeScraper(BaseScraper):
             return coffee_beans
 
         except Exception as e:
-            logger.error(f"Error fetching data from DAK Coffee API: {e}")
+            logger.error(f"Error fetching data from DAK Coffee Store API: {e}")
             session.add_error(f"API error: {e}")
+            # The listing fetch failed this session — "not found" is untrustworthy,
+            # so out-of-stock updates must be suppressed (see BaseScraper guard).
+            self._failed_listing_urls.append(PRODUCTS_API_URL)
             self.end_session(success=False)
             return []
 
-    async def _parse_product_with_ai(self, product: dict) -> CoffeeBean | None:
-        """Parse a product from the API response using AI extractor.
-
-        Args:
-            product: Product data from the API
+    async def _fetch_all_products(self) -> list[dict]:
+        """Fetch all products from the WooCommerce Store API, following pagination.
 
         Returns:
-            CoffeeBean object or None if parsing fails
+            List of raw product dicts.
+
+        Raises:
+            httpx.HTTPError: On any request failure (propagated to scrape()).
         """
-        try:
-            # Skip non-coffee products
-            if product.get("type") != "coffee":
-                return None
-            excluded_slugs = ["steeped"]
-            for excluded_slug in excluded_slugs:
-                if excluded_slug in product.get("slug", ""):
-                    return None
+        products: list[dict] = []
+        page = 1
+        while True:
+            response = await self.client.get(PRODUCTS_API_URL, params={"per_page": 100, "page": page})
+            response.raise_for_status()
+            page_products = response.json()
+            products.extend(page_products)
+            total_pages = int(response.headers.get("x-wp-totalpages", "1") or "1")
+            if page >= total_pages:
+                break
+            page += 1
+            await asyncio.sleep(self.rate_limit_delay)
+        return products
 
-            # Build product URL
+    def _filter_coffee_products(self, products: list[dict]) -> list[dict]:
+        """Keep only products in coffee categories, excluding known non-bean slugs."""
+        coffee = []
+        for product in products:
+            category_slugs = {c.get("slug") for c in product.get("categories", [])}
+            if not category_slugs & _COFFEE_CATEGORY_SLUGS:
+                continue
             slug = product.get("slug", "")
-            if slug:
-                product_url = f"https://www.dakcoffeeroasters.com/shop/coffee/{slug}"
-            else:
-                return None
+            if any(excluded in slug for excluded in _EXCLUDED_SLUGS):
+                logger.debug(f"Skipping excluded product slug: {slug}")
+                continue
+            coffee.append(product)
+        return coffee
 
-            # Use AI extractor to parse the product
-            coffee_bean = await self.extractor.extract_coffee_data(
-                html_content=json.dumps(product),
-                product_url=product_url,
-                use_optimized_mode=False,
-                translate_to_english=False,
-            )
+    def _product_url(self, product: dict) -> str:
+        """Build the canonical product URL from the Store API permalink."""
+        return (product.get("permalink") or "").rstrip("/")
 
-            if not coffee_bean:
-                return None
+    def _get_attributes(self, product: dict) -> dict[str, list[str]]:
+        """Flatten product attributes into a name -> [term names] mapping."""
+        attrs: dict[str, list[str]] = {}
+        for attr in product.get("attributes", []):
+            name = (attr.get("name") or "").strip()
+            terms = [t.get("name", "").strip() for t in attr.get("terms", []) if t.get("name")]
+            if name and terms:
+                attrs[name] = terms
+        return attrs
 
-            # Override URL and image URL with our API-derived values
-            coffee_bean.url = HttpUrl(product_url)
+    def _parse_product(self, product: dict) -> CoffeeBean | None:
+        """Parse a Store API product into a CoffeeBean deterministically.
 
-            # Set image URL from API data
-            if product.get("images", {}).get("main"):
-                image_url = f"https://res.cloudinary.com/dak-coffee-roasters/image/upload/f_auto,q_auto,c_scale//Products/Mains/{product['images']['main']}"
-                coffee_bean.image_url = HttpUrl(image_url)
+        Args:
+            product: Raw product dict from the WooCommerce Store API.
 
-            # Ensure roaster name is correct
-            coffee_bean.roaster = "DAK Coffee Roasters"
-            coffee_bean.description = self._get_localized_text(product.get("short", {}))
-
-            # Set stock status from API
-            coffee_bean.in_stock = product.get("isActive", False)
-
-            # Set raw data
-            coffee_bean.raw_data = json.dumps(product, ensure_ascii=False)
-
-            return coffee_bean
-
-        except Exception as e:
-            logger.error(f"Error parsing product with AI: {e}")
+        Returns:
+            CoffeeBean object or None if required fields are missing.
+        """
+        name = (product.get("name") or "").strip()
+        product_url = self._product_url(product)
+        if not name or not product_url:
             return None
 
-    def _get_localized_text(self, text_obj: dict) -> str:
-        """Extract localized text, preferring English.
+        prices = product.get("prices", {})
+        currency = (prices.get("currency_code") or "EUR").upper()
+        minor_unit = prices.get("currency_minor_unit")
+        price_range = prices.get("price_range") or {}
+        price = _minor_unit_price(price_range.get("min_amount") or prices.get("price"), minor_unit)
+        if price is None:
+            logger.warning(f"Skipping product without a parseable price: {name}")
+            return None
 
-        Args:
-            text_obj: Dictionary with language codes as keys
+        attrs = self._get_attributes(product)
 
-        Returns:
-            Localized text string
+        # Weights (grams) from the "Weight" attribute; the lowest weight pairs with
+        # the min price from the price range.
+        weights = sorted(w for w in (_parse_weight_grams(t) for t in attrs.get("Weight", [])) if w)
+        weight = weights[0] if weights else None
+
+        # Build the origin(s)
+        origin_names = attrs.get("Origin", [])
+        origins = self._build_origins(attrs, origin_names)
+        is_single_origin = len(origin_names) <= 1
+
+        # Roast profile: both profiles offered as separate options -> "Both"
+        roast_terms = attrs.get("Roast Profile", [])
+        roast_profile = None
+        if roast_terms:
+            roast_profile = "Both" if len(roast_terms) > 1 else roast_terms[0].title()
+
+        # Price options: the API exposes only the price range, so pair the
+        # base (min) price with the smallest available weight.
+        price_options = [PriceOption(weight=weight, price=price, currency=currency)]
+
+        # Decaf flag from name/attributes
+        haystack = (name + " " + " ".join(attrs.get("Process", []))).lower()
+        is_decaf = "decaf" in haystack
+
+        description = self._strip_html(product.get("description") or product.get("short_description") or "")
+
+        images = product.get("images") or []
+        image_url = images[0].get("src") if images and images[0].get("src") else None
+
+        return CoffeeBean(
+            name=name,
+            roaster="DAK Coffee Roasters",
+            url=product_url,
+            image_url=image_url,
+            description=description or None,
+            origins=origins,
+            is_single_origin=is_single_origin,
+            roast_profile=roast_profile,
+            price_options=price_options,
+            price=price,
+            weight=weight,
+            currency=currency,
+            is_decaf=is_decaf,
+            tasting_notes=attrs.get("Tasting notes", []),
+            in_stock=product.get("is_in_stock", True),
+            scraper_version="3.0",
+            raw_data=json.dumps(product, ensure_ascii=False),
+        )
+
+    def _build_origins(self, attrs: dict[str, list[str]], origin_names: list[str]) -> list[Bean]:
+        """Build Bean origin entries from the structured attributes.
+
+        Single-origin products get the full region/producer/elevation/process/
+        varietal detail; blends get one minimal Bean per origin country.
         """
-        if not isinstance(text_obj, dict):
-            return str(text_obj).strip() if text_obj else ""
+        countries = [self._to_country_code(o) for o in origin_names]
+        countries = [c for c in countries if c]
+        if not countries:
+            return [Bean()]
 
-        # Prefer English, then Dutch, then French, then any available
-        for lang in ["en", "nl", "fr"]:
-            if lang in text_obj and text_obj[lang]:
-                return str(text_obj[lang]).strip()
+        if len(countries) > 1:
+            return [Bean(country=c) for c in countries]
 
-        # Fallback to any available text
-        for value in text_obj.values():
-            if value:
-                return str(value).strip()
+        regions = attrs.get("Region", [])
+        producers = [re.sub(r"^Produced by\s+", "", t, flags=re.IGNORECASE) for t in attrs.get("Producer / Farm", [])]
+        altitudes = attrs.get("Altitude", [])
+        elevation_min, elevation_max = _parse_elevation(altitudes[0]) if altitudes else (0, 0)
+        processes = attrs.get("Process", [])
+        varietals = attrs.get("Varietal", [])
 
-        return ""
+        return [
+            Bean(
+                country=countries[0],
+                region=regions[0] if regions else None,
+                producer=producers[0] if producers else None,
+                elevation_min=elevation_min,
+                elevation_max=elevation_max,
+                process=processes[0] if processes else None,
+                variety=", ".join(varietals) if varietals else None,
+            )
+        ]
 
-    def _extract_price_info(self, price_list: list) -> dict:
-        """Extract price information from the price list.
+    def _to_country_code(self, name: str) -> str | None:
+        """Map a country name to its alpha-2 code (fallback: upper-cased name)."""
+        if not name:
+            return None
+        code = _country_name_to_alpha2().get(name.strip().lower())
+        return code or name.strip().upper()
 
-        Args:
-            price_list: List of price objects
-
-        Returns:
-            Dictionary with price, currency, and weight information
-        """
-        if not price_list:
-            return {}
-
-        # Prefer EUR pricing, fallback to first available
-        eur_price = None
-        fallback_price = None
-
-        for price_obj in price_list:
-            base = price_obj.get("base", {})
-            currency = base.get("currency", "").upper()
-
-            if currency == "EUR":
-                eur_price = price_obj
-                break
-            elif not fallback_price:
-                fallback_price = price_obj
-
-        price_obj = eur_price or fallback_price
-        if not price_obj:
-            return {}
-
-        base = price_obj.get("base", {})
-        increments = price_obj.get("increments", [])
-
-        # Get base price info
-        price = base.get("value")
-        currency = base.get("currency", "EUR").upper()
-
-        # Get weight from first increment (usually the base size)
-        weight = ""
-        if increments:
-            weight = increments[0].get("option", "")
-
-        return {
-            "price": price,
-            "currency": currency,
-            "weight": weight,
-        }
+    def _strip_html(self, text: str) -> str:
+        """Strip HTML tags and entities, collapsing whitespace."""
+        text = re.sub(r"<[^>]+>", " ", text or "")
+        text = html.unescape(text)
+        return re.sub(r"\s+", " ", text).strip()
 
     async def _create_diffjson_update_from_api_product(self, product: dict, output_dir: Path) -> bool:
-        """Create a diffjson update from API product data.
+        """Create a diffjson update from Store API product data.
 
         Args:
             product: Product data from the API
-            output_dir: Output directory
 
         Returns:
             True if diffjson was created successfully
         """
         try:
-            # Build product URL
-            slug = product.get("slug", "")
-            if slug:
-                product_url = f"https://www.dakcoffeeroasters.com/shop/coffee/{slug}"
-            else:
+            product_url = self._product_url(product)
+            if not product_url:
                 return False
 
-            # Extract basic fields that might have changed
-            name = self._get_localized_text(product.get("name", {}))
-            price_info = self._extract_price_info(product.get("price", []))
-            is_active = product.get("isActive", False)
+            prices = product.get("prices", {})
+            currency = (prices.get("currency_code") or "EUR").upper()
+            price = _minor_unit_price(
+                (prices.get("price_range") or {}).get("min_amount") or prices.get("price"),
+                prices.get("currency_minor_unit"),
+            )
 
-            # Create diffjson update
-            update_data = {
+            update_data: dict = {
                 "url": product_url,
-                "in_stock": is_active,
+                "in_stock": product.get("is_in_stock", False),
                 "scraped_at": datetime.now(timezone.utc).isoformat(),
                 "scraper_version": "3.0",
             }
-
-            # Add optional fields if they have values
+            name = (product.get("name") or "").strip()
             if name:
                 update_data["name"] = name
-            if price_info.get("price"):
-                update_data["price"] = price_info.get("price")
-            if price_info.get("currency"):
-                update_data["currency"] = price_info.get("currency", "EUR")
+            if price is not None:
+                update_data["price"] = price
+                update_data["currency"] = currency
 
             # Validate using Pydantic schema (for error checking)
             CoffeeBeanDiffUpdate.model_validate(update_data)
@@ -382,7 +463,7 @@ class DakCoffeeScraper(BaseScraper):
     async def _create_api_based_diffjson_updates(
         self, products: list[dict], current_product_urls: list[str], output_dir: Path, force_full_update: bool = False
     ) -> tuple[int, int]:
-        """Create diffjson stock updates using API product data.
+        """Create diffjson stock updates using Store API product data.
 
         This method leverages the rich API data to create more accurate diffjson updates
         compared to the base class method which only has URLs.
@@ -403,25 +484,31 @@ class DakCoffeeScraper(BaseScraper):
         # Load existing beans from all sessions
         self._load_existing_beans_from_all_sessions(output_dir)
 
-        # Create diffjson updates for existing in-stock products
+        # Create diffjson updates for products that were previously scraped
         in_stock_count = 0
         for product in products:
-            if product.get("type") != "coffee":
+            product_url = self._product_url(product)
+            if not product_url:
                 continue
-
-            slug = product.get("slug", "")
-            if not slug:
-                continue
-
-            product_url = f"https://www.dakcoffeeroasters.com/shop/coffee/{slug}"
-
-            # Only create diffjson for products that were previously scraped
             if self._is_bean_already_scraped_historically(product_url):
                 if await self._create_diffjson_update_from_api_product(product, output_dir):
                     in_stock_count += 1
 
-        # Create out-of-stock updates for products no longer available
-        out_of_stock_count = await self._create_out_of_stock_updates_from_api(current_product_urls, output_dir)
+        # Create out-of-stock updates for products no longer available,
+        # unless a listing fetch failed this session (network error, 404,
+        # layout change) — in that case "not found" is untrustworthy and
+        # marking the catalogue out of stock would poison the database.
+        out_of_stock_count = 0
+        if self._failed_listing_urls:
+            msg = (
+                f"Skipped out-of-stock updates: listing fetch failed for "
+                f"{len(self._failed_listing_urls)} store URL(s): {self._failed_listing_urls}"
+            )
+            logger.warning(msg)
+            if self.session:
+                self.session.add_error(msg)
+        else:
+            out_of_stock_count = await self._create_out_of_stock_updates_from_api(current_product_urls, output_dir)
 
         logger.info(f"Created {in_stock_count} in-stock and {out_of_stock_count} out-of-stock diffjson updates")
         return in_stock_count, out_of_stock_count
@@ -437,12 +524,10 @@ class DakCoffeeScraper(BaseScraper):
             Number of out-of-stock updates created
         """
         # Find existing beans that are no longer in the current product list
-        current_url_set = set(current_urls)
-        out_of_stock_urls = []
-
-        for existing_url in self._all_sessions_bean_files:
-            if existing_url not in current_url_set:
-                out_of_stock_urls.append(existing_url)
+        current_url_set = {self._normalize_url(u) for u in current_urls}
+        out_of_stock_urls = [
+            url for url in self._all_sessions_bean_files if self._normalize_url(url) not in current_url_set
+        ]
 
         if not out_of_stock_urls:
             return 0

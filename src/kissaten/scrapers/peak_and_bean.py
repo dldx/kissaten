@@ -78,7 +78,7 @@ EXCLUDED_URL_PATTERNS = [
     requires_api_key=True,
     currency="GTQ",
     country="Guatemala",
-    status="experimental",
+    status="available",
 )
 class PeakAndBeanScraper(BaseScraper):
     """Scraper for Peak and Bean (odoo.peakandbeans.com) — an Odoo storefront.

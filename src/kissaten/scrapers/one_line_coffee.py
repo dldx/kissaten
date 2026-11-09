@@ -29,7 +29,7 @@ _MARKET_PARAM = "country=US"
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class OneLineCoffeeScraper(ShopifyJsonScraper):
     """Scraper for One Line Coffee (onelinecoffee.com) using Shopify products.json."""

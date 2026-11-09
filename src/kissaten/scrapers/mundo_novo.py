@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Spain",
-    status="experimental",
+    status="available",
 )
 class MundoNovoScraper(ShopifyJsonScraper):
     """Scraper for Mundo Novo Coffee (mundonovocoffee.com) using Shopify products.json."""

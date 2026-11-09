@@ -37,7 +37,7 @@ _SOLD_OUT_MARKERS = ("out of stock", "uitverkocht", "niet op voorraad")
     requires_api_key=True,
     currency="EUR",
     country="Netherlands",
-    status="experimental",
+    status="available",
 )
 class IefIdoScraper(BaseScraper):
     """Scraper for Ief & Ido (iefido.nl) with AI-powered extraction."""

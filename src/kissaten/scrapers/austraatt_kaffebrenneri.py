@@ -1,6 +1,7 @@
 """Austrått Kaffebrenneri scraper implementation with AI-powered extraction."""
 
 import logging
+import re
 
 from bs4 import BeautifulSoup, Tag
 
@@ -46,10 +47,14 @@ class AustraattKaffebrenneriScraper(BaseScraper):
     async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
 
+        The old ``/categories/kaffe`` page was removed by the roaster and now
+        returns a 404 ("Siden finnes ikke"). The shop moved to a Next.js
+        storefront where ``/products`` lists every coffee in the catalogue.
+
         Returns:
-            List of coffee category URLs.
+            List of coffee store URLs.
         """
-        return ["https://www.austraattkaffebrenneri.no/categories/kaffe"]
+        return ["https://www.austraattkaffebrenneri.no/products"]
 
     async def fetch_page(self, *args, **kwargs) -> BeautifulSoup | Tag | None:
         """Fetch a page and return a reduced soup for AI extraction.
@@ -132,14 +137,63 @@ class AustraattKaffebrenneriScraper(BaseScraper):
         bean.currency = "NOK"
         return super().postprocess_extracted_bean(bean)
 
-    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from a Kaffe category page.
+    def _normalize_card_text(self, text: str) -> str:
+        """Normalize card text to a slug-like form for exclusion matching.
 
-        Sold-out detection: text detection. Each product card contains a
-        ``pb_stock_info`` block that says "På lager" (in stock) for available
-        products and "Ikke på lager" / "Utsolgt" for sold-out ones. We skip
-        cards that don't include the "På lager" marker before the standard
-        coffee URL filter runs.
+        Norwegian/English product names on the storefront contain spaces and
+        mixed casing (e.g. "Espresso og baristamaskin"). URL-pattern
+        exclusions can't match them because many product URLs are UUID slugs
+        (e.g. ``/products/404e7fb8-c9ea-4a65-a41f-20b68adbec72``). Normalizing
+        card text (lowercase + runs of non-alphanumeric characters collapsed
+        to single hyphens) lets the same exclusion patterns run against card
+        text at the card level.
+
+        Args:
+            text: Raw card text
+
+        Returns:
+            Normalized, slug-like text
+        """
+        lowered = text.lower()
+        return re.sub(r"[^a-z0-9æøå]+", "-", lowered).strip("-")
+
+    def _get_card_title(self, card: Tag) -> str | None:
+        """Extract the product title from a Next.js product card.
+
+        The title lives in the ``alt`` attribute of the ``img`` tag inside the
+        card's primary ``<a>`` link. Falling back to the link's own text keeps
+        this working if the roaster renames/restructures the image markup.
+
+        Args:
+            card: The product card element
+
+        Returns:
+            Product title, or None if not found.
+        """
+        img = card.select_one('a[href*="/products/"] img[alt]')
+        if isinstance(img, Tag):
+            alt = img.get("alt")
+            if isinstance(alt, str) and alt.strip():
+                return alt.strip()
+        link = card.select_one('a[href*="/products/"]')
+        if isinstance(link, Tag):
+            text = link.get_text(" ", strip=True)
+            if text:
+                return text
+        return None
+
+    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
+        """Extract product URLs from the /products listing page.
+
+        Sold-out detection: text detection. Each Next.js product card says
+        "På lager" (in stock) for available products and "Ikke på lager" /
+        "Utsolgt" for sold-out ones. We skip cards that don't include the
+        "På lager" marker before the standard coffee URL filter runs.
+
+        Equipment exclusion: some products (e.g. the "Espresso og
+        baristamaskin" machine bundle) use UUID slugs that URL-pattern
+        exclusions can't match, so exclusions also run against normalized
+        card text at the card level.
 
         Args:
             store_url: URL of the store page
@@ -151,13 +205,30 @@ class AustraattKaffebrenneriScraper(BaseScraper):
         if not soup:
             return []
 
+        excluded_text_patterns = self._get_excluded_url_patterns()
+
         product_urls: list[str] = []
-        for card in soup.select("article.product-thumb-info"):
-            # Sold-out detection: text (Norwegian "På lager" = in stock)
-            stock_info = card.select_one(".pb_stock_info")
-            stock_text = stock_info.get_text(" ", strip=True) if stock_info else card.get_text(" ", strip=True)
-            if "På lager" not in stock_text:
+        seen: set[str] = set()
+        for card in soup.select('div:has(> a[href*="/products/"])'):
+            card_text = card.get_text(" ", strip=True)
+
+            # Sold-out detection: text (Norwegian "På lager" = in stock).
+            # In-stock cards never render a stock badge, but sold-out ones
+            # explicitly show "Ikke på lager" / "Utsolgt", so skipping those
+            # is equivalent to only returning in-stock products.
+            if "Ikke på lager" in card_text or "Utsolgt" in card_text:
                 logger.debug(f"Skipping sold-out product on {store_url}")
+                continue
+
+            # Equipment exclusion at card level (normalized title matching).
+            # UUID product slugs mean URL-pattern exclusions can't match the
+            # equipment bundle, so we match against the card title instead.
+            title = self._get_card_title(card)
+            if title is None:
+                title = card_text
+            normalized_text = self._normalize_card_text(title)
+            if any(pattern in normalized_text for pattern in excluded_text_patterns):
+                logger.debug(f"Skipping excluded (non-bean) product on {store_url}")
                 continue
 
             link = card.select_one('a[href*="/products/"]')
@@ -169,15 +240,9 @@ class AustraattKaffebrenneriScraper(BaseScraper):
 
             full_url = self.resolve_url(href).split("?")[0]
             if self.is_coffee_product_url(full_url, required_path_patterns=["/products/"]):
-                product_urls.append(full_url)
+                if full_url not in seen:
+                    seen.add(full_url)
+                    product_urls.append(full_url)
 
-        # Deduplicate while preserving order
-        seen: set[str] = set()
-        unique_urls: list[str] = []
-        for url in product_urls:
-            if url not in seen:
-                seen.add(url)
-                unique_urls.append(url)
-
-        logger.info(f"Found {len(unique_urls)} in-stock product URLs from {store_url}")
-        return unique_urls
+        logger.info(f"Found {len(product_urls)} in-stock product URLs from {store_url}")
+        return product_urls

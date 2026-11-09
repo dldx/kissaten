@@ -112,13 +112,17 @@ class WanderlustEspressoScraper(BaseScraper):
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from the Wix store listing, filtering sold-out items.
 
+        The Wix listing is JS-rendered: the httpx-only fetch returns a shell
+        without the product grid, so the listing must be fetched via Playwright
+        and scrolled until the product grid is fully hydrated.
+
         Args:
             store_url: URL of the store/category page
 
         Returns:
             List of in-stock product URLs
         """
-        soup = await self.fetch_page(store_url)
+        soup = await self.fetch_page(store_url, use_playwright=True)
         if not soup:
             return []
 
@@ -127,30 +131,66 @@ class WanderlustEspressoScraper(BaseScraper):
 
         sold_out_markers = ("unavailable", "sold out", "out of stock")
 
-        for item in soup.select('[data-hook="product-item-root"]'):
-            link = item.select_one('a[href*="/product-page/"]')
-            if not link:
-                continue
-            href = link.get("href")
-            if not href or not isinstance(href, str):
-                continue
+        def _is_sold_out_text(text: str) -> bool:
+            return any(marker in text for marker in sold_out_markers)
 
-            # Strip query string and fragment; resolve to absolute URL
-            full_url = self.resolve_url(href.split("?")[0].split("#")[0])
-
-            # Skip sold-out products before URL-pattern filtering
-            item_text = item.get_text(" ", strip=True).lower()
-            if any(marker in item_text for marker in sold_out_markers):
-                logger.debug(f"Skipping sold-out product: {full_url}")
-                continue
-
-            # Apply standard coffee-product URL filtering (uses /product-page/ path pattern)
-            if not self.is_coffee_product_url(full_url, required_path_patterns=["/product-page/"]):
-                continue
-
+        def _add_product_url(full_url: str) -> None:
             if full_url not in seen:
                 seen.add(full_url)
                 product_urls.append(full_url)
+
+        # Current Wix product-widget gallery: each rendered card is a
+        # ``[data-hook="product-widget"]`` section holding the product link
+        # and its add-to-cart button. The stock signal is the card's
+        # ``[data-hook="product-widget-OutOfStock"]`` badge (rendered when
+        # sold out) or the action button text/state. NOTE: naive text checks
+        # over the whole card are unreliable - the hidden quick-view
+        # templates elsewhere in the page contain "Out of Stock" text for
+        # every product even when in stock.
+        widgets = soup.select('[data-hook="product-widget"]')
+        if widgets:
+            for section in widgets:
+                link = section.select_one('a[href*="/product-page/"]')
+                if not link:
+                    continue
+                href = link.get("href")
+                if not href or not isinstance(href, str):
+                    continue
+                # Strip query string and fragment; resolve to absolute URL
+                full_url = self.resolve_url(href.split("?")[0].split("#")[0])
+
+                badge = section.select_one('[data-hook="product-widget-OutOfStock"]')
+                button = section.select_one('[data-hook="action-button"]')
+                button_text = button.get_text(" ", strip=True).lower() if button else ""
+                disabled = bool(button and (button.get("disabled") or button.get("aria-disabled") == "true"))
+                if badge is not None or _is_sold_out_text(button_text) or disabled:
+                    logger.debug(f"Skipping sold-out product: {full_url}")
+                    continue
+
+                if self.is_coffee_product_url(full_url, required_path_patterns=["/product-page/"]):
+                    _add_product_url(full_url)
+        else:
+            # Legacy Wix stores markup ([data-hook="product-item-root"] cards):
+            # use the card's add-to-cart button text/state as the stock signal
+            # (whole-card text contains the hidden quick-view modal copy).
+            for item in soup.select('[data-hook="product-item-root"]'):
+                link = item.select_one('a[href*="/product-page/"]')
+                if not link:
+                    continue
+                href = link.get("href")
+                if not href or not isinstance(href, str):
+                    continue
+                full_url = self.resolve_url(href.split("?")[0].split("#")[0])
+
+                button = item.select_one('[data-hook="product-item-add-to-cart-button"], [data-hook="action-button"]')
+                button_text = button.get_text(" ", strip=True).lower() if button else ""
+                disabled = bool(button and (button.get("disabled") or button.get("aria-disabled") == "true"))
+                if _is_sold_out_text(button_text) or disabled:
+                    logger.debug(f"Skipping sold-out product: {full_url}")
+                    continue
+
+                if self.is_coffee_product_url(full_url, required_path_patterns=["/product-page/"]):
+                    _add_product_url(full_url)
 
         logger.info(f"Found {len(product_urls)} in-stock product URLs from {store_url}")
         return product_urls

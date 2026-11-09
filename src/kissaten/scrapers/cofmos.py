@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Lithuania",
-    status="experimental",
+    status="available",
 )
 class CofmosScraper(BaseScraper):
     """Scraper for Cofmos (cofmos.lt) with AI extraction behind Cloudflare."""

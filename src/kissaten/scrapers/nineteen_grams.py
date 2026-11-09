@@ -30,7 +30,7 @@ COFFEE_PRODUCT_TYPES = {
     requires_api_key=True,
     currency="EUR",
     country="Germany",
-    status="experimental",
+    status="available",
 )
 class NineteenGramsScraper(ShopifyJsonScraper):
     """Scraper for 19grams (19grams.coffee) using Shopify products.json."""

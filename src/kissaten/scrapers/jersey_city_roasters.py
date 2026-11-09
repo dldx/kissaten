@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class JerseyCityRoastersScraper(ShopifyJsonScraper):
     """Scraper for Jersey City Roasters (jerseycityroasters.com) using Shopify products.json."""

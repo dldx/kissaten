@@ -39,7 +39,7 @@ class FredaScraper(ShopifyJsonScraper):
         super().__init__(
             roaster_name="Freda",
             base_url="https://freda.coffee",
-            products_json_urls=["https://freda.coffee/collections/all-coffee-copy/products.json"],
+            products_json_urls=["https://freda.coffee/collections/coffee-beans/products.json"],
             scrape_product_pages=True,
             cache_product_pages=True,
             rate_limit_delay=2.0,
@@ -55,9 +55,9 @@ class FredaScraper(ShopifyJsonScraper):
         self._currency_detected = True
 
         # Defensive exclusions. The "all-coffee-copy" (Coffee Beans) collection
-        # currently holds exactly the curated single origins; subscriptions and
-        # equipment live in their own collections, but keep the guards in case
-        # new products join this collection later.
+        # was retired/emptied on the roaster side, so we now scrape the store-wide
+        # "all" collection and filter non-coffee items out via these slugs
+        # (merch, filter papers, brewing equipment, subscriptions, etc).
         self.exclude_slugs = [
             "subscription",
             "gift-card",
@@ -73,6 +73,8 @@ class FredaScraper(ShopifyJsonScraper):
             "hario",
             "v60",
             "orea",
+            "tote",
+            "running-cap",
         ]
 
         if api_key:
@@ -89,7 +91,7 @@ class FredaScraper(ShopifyJsonScraper):
         collection segment here.
 
         Examples:
-            https://freda.coffee/collections/all-coffee-copy/products/black-dog
+            https://freda.coffee/collections/all/products/black-dog
                 -> https://freda.coffee/products/black-dog
         """
         if "/collections/" in url and "/products/" in url:

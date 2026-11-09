@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class StoneCreekCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Stone Creek Coffee (stonecreekcoffee.com) using Shopify products.json."""

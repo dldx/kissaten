@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class YesPlzScraper(BaseScraper):
     """Scraper for YES PLZ (yesplz.coffee) — a small custom Next.js storefront.

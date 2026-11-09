@@ -58,7 +58,7 @@ EXCLUDED_URL_PATTERNS = [
     requires_api_key=True,
     currency="SEK",
     country="Sweden",
-    status="experimental",
+    status="available",
 )
 class GringoNordicScraper(BaseScraper):
     """Scraper for Gringo Nordic (gringonordic.se) — a WooCommerce storefront.

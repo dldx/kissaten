@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class SuperlostCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Superlost Coffee (superlost.com) using Shopify products.json."""

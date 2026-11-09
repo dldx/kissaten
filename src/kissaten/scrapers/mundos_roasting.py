@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class MundosRoastingScraper(BaseScraper):
     """Scraper for Mundos Roasting (mundosroastingco.com) — a Squarespace storefront.

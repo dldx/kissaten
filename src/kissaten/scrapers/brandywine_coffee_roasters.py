@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class BrandywineCoffeeRoastersScraper(ShopifyJsonScraper):
     """Scraper for Brandywine (brandywinecoffeeroasters.com) using Shopify products.json."""

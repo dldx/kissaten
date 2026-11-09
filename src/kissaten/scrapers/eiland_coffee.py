@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class EilandCoffeeScraper(BaseScraper):
     """Scraper for Eiland Coffee Roasters (eilandcoffee.com) — a Squarespace storefront.

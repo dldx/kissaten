@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="CAD",
     country="Canada",
-    status="experimental",
+    status="available",
 )
 class JuliusCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Julius Coffee (juliuscoffee.com) using Shopify products.json."""

@@ -49,7 +49,7 @@ def test_registry_entry():
     assert info.currency == "EUR"
     assert info.country == "Netherlands"
     assert info.requires_api_key is True
-    assert info.status == "experimental"
+    assert info.status == "available"
 
 
 def test_roaster_name_matches_registry():

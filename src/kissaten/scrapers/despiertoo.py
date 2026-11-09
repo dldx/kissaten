@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Spain",
-    status="experimental",
+    status="available",
 )
 class DespiertooScraper(BaseScraper):
     """Scraper for Despiertoo (despiertoo.com) — a Wix storefront.

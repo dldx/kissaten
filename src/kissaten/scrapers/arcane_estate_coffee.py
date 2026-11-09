@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class ArcaneEstateCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Arcane Estate Coffee (arcaneestatecoffee.com) using Shopify products.json."""

@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Republic of Ireland",
-    status="experimental",
+    status="available",
 )
 class FarmhandCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Farmhand Coffee (farmhandcoffee.ie) using Shopify products.json."""

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head><script data-source-attribution="shopify.exit_interstitial">(()=>{var s=Function.prototype.bind.bind(Function.prototype.call),Wt=(i,c)=>{for(let d=i;d;d=Object.getPrototypeOf(d)){let h=Object.getOwnPropertyDescriptor(d,c);if(h)return h}throw new TypeError(`${c} is not defined`)},a=(i,c)=>s(Wt(i,c).get),H=(i,c)=>s(Wt(i,c).set);var It=s(String.prototype.endsWith),cn=s(String.prototype.slice),S=s(RegExp.prototype.exec),an=/^_(self|top|parent)$/i,ln=/(^|\s)noreferrer(\s|$)/i,Ct=/^(no-referrer(-when-downgrade)?|same-origin|(strict-)?origin(-when-cross-origin)?|unsafe-url)$/i,un=/^(never|default|always|origin-when-crossorigin)$/i,Ft=/^(no-referrer|same-origin|never)$/i,pn=/\s(musical_ly|trill)_|\sBytedanceWebview\//,Tt=i=>It(i,".")?cn(i,0,-1):i,Mt=i=>{let c=Tt(i),d=`.${c}`;return h=>{let _=Tt(h);return _===c||It(_,d)}},Dt=(i,c,d)=>i!==void 0&&(i.protocol==="https:"||i.protocol==="http:")&&i.origin!==c&&!d(i.hostname),nt=(i,c,d)=>i!==null&&S(ln,i)!==null?!0:c!==null&&S(Ct,c)!==null?S(Ft,c)!==null:d,Ht=(i,c)=>S(Ct,i)!==null||S(un,i)!==null?S(Ft,i)!==null:c,W=(i,{metaKey:c,ctrlKey:d,shiftKey:h,button:_})=>i&&S(an,i)===null?i:c||d||h||_===1?"_blank":"",Ut=i=>S(pn,i)!==null;var fn="http://www.w3.org/2000/svg",dn="http://www.w3.org/1999/xlink",ot=["rel","referrerpolicy","download","ping","hreflang","type"],gn=Object.freeze({__proto__:null,metaKey:!1,ctrlKey:!1,shiftKey:!1,button:0});function Kt(i){let c=window;if(c.top!==c)return;let d=document,h=c.navigation,_=location.origin,b=URL,U=a(b.prototype,"href"),$t=a(b.prototype,"origin"),Bt=a(b.prototype,"protocol"),qt=a(b.prototype,"hostname"),Gt=H(b.prototype,"search"),rt=FormData,Yt=URLSearchParams,jt=s(URLSearchParams.prototype.toString),Vt=s(URLSearchParams.prototype.append),st=s(Event.prototype.preventDefault),zt=s(Event.prototype.stopPropagation),ct=s(Event.prototype.stopImmediatePropagation),K=s(Event.prototype.composedPath),Xt=a(Event.prototype,"type"),Jt=a(Event.prototype,"target"),it=typeof SubmitEvent=="function"?a(SubmitEvent.prototype,"submitter"):void 0,Qt=typeof File=="function"?a(File.prototype,"name"):void 0,Zt=a(HTMLButtonElement.prototype,"form"),te=a(HTMLInputElement.prototype,"form"),ee=a(Event.prototype,"cancelable"),at=a(Event.prototype,"defaultPrevented"),ne=a(Event.prototype,"bubbles"),oe=a(Event.prototype,"currentTarget"),re=a(Event.prototype,"eventPhase"),{CAPTURING_PHASE:se}=Event,lt=a(Event.prototype,"cancelBubble"),ce=H(Event.prototype,"cancelBubble"),ie=a(MouseEvent.prototype,"button"),ae=a(MouseEvent.prototype,"metaKey"),le=a(MouseEvent.prototype,"ctrlKey"),ue=a(MouseEvent.prototype,"shiftKey"),pe=h&&a(NavigateEvent.prototype,"destination"),fe=h&&a(NavigationDestination.prototype,"url"),ut=h&&a(NavigateEvent.prototype,"navigationType"),de=h&&a(NavigateEvent.prototype,"formData"),pt=h&&"sourceElement"in NavigateEvent.prototype?a(NavigateEvent.prototype,"sourceElement"):void 0,w=s(Element.prototype.getAttribute),ge=s(Element.prototype.getAttributeNS),$=s(Element.prototype.setAttribute),ye=a(Element.prototype,"localName"),he=a(Element.prototype,"namespaceURI"),me=s(Document.prototype.querySelector),we=s(Document.prototype.querySelectorAll),Ee=a(NodeList.prototype,"length"),_e=s(NodeList.prototype.item),T=a(Node.prototype,"baseURI"),I=a(Node.prototype,"isConnected"),be=s(Document.prototype.createElement),ve=s(HTMLElement.prototype.click),Se=s(c.open),ke=s(location.assign),Ne=s(location.replace),Re=encodeURIComponent,Oe=s(String.prototype.startsWith),ft=s(String.prototype.charCodeAt),dt=s(String.prototype.slice),Le=s(String.prototype.toLowerCase),B=s(c.setTimeout),Pe=s(c.queueMicrotask),Ae=s(c.addEventListener),xe=s(c.removeEventListener),gt=s(EventTarget.prototype.addEventListener),yt=s(EventTarget.prototype.removeEventListener),ht=Object.defineProperties,q=t=>{let e=[],n=[HTMLElement.prototype,SVGElement.prototype,Document.prototype,c];for(let o=0;o<n.length;o+=1)try{e[e.length]={get:a(n[o],t),set:H(n[o],t)}}catch{}return e},We={click:q("onclick"),auxclick:q("onauxclick"),submit:q("onsubmit")},C=WeakMap,Te=WeakSet,G=s(WeakMap.prototype.get),mt=s(WeakMap.prototype.set),wt=s(WeakMap.prototype.delete),Ie=s(WeakSet.prototype.add),Ce=s(WeakSet.prototype.has),Fe=Mt(i.site),Et=Ut(navigator.userAgent),_t=U(new b(i.exitPath,_)),Me=`${_t}?`,R=(t,e)=>{try{let n=new b(t,e);return{href:U(n),origin:$t(n),protocol:Bt(n),hostname:qt(n)}}catch{return}},De=(t,e,n)=>{let o=n?"&noreferrer=1":"";return`${_t}?q=${Re(t.href)}&trigger=${e}${o}`},Y=()=>{let t=we(d,'meta[name="referrer" i][content]'),e=!1;for(let n=0;n<Ee(t);n+=1)e=Ht(w(_e(t,n),"content"),e);return e},j=(t,e,{target:n,noReferrer:o,replaces:r})=>{let u=De(t,e,o);if(n){Se(c,u,n,"noopener");return}(r?Ne:ke)(location,u)},F=t=>Dt(t,_,Fe),M=0,V,z=!1,He=t=>{if(M>0){V=t;return}t()},Ue=t=>{if(M-=1,t&&(z=!0),M>0)return;let e=z?void 0:V;V=void 0,z=!1,e&&e()},Ke=t=>t!==void 0&&Oe(t.href,Me),P=t=>{try{return ye(t)}catch{return}},bt=t=>nt(w(t,"rel"),w(t,"referrerpolicy"),Y()),$e=t=>{let e=pt?pt(t):null,n=e===null?void 0:P(e);return n==="a"||n==="area"?bt(e):Y()},Be=t=>{let e=R(fe(pe(t)));if(Ke(e)){ct(t);return}if(!ee(t)||ut(t)==="traverse"||!F(e)||de(t)!==null)return;st(t);let n={target:"",noReferrer:$e(t),replaces:ut(t)==="replace"};He(()=>j(e,"navigate",n))},A=t=>{let e=w(t,"href");return e===null&&he(t)===fn?ge(t,dn,"href"):e},qe=t=>{let e=K(t);for(let n=0;n<e.length;n+=1){let o=e[n],r=P(o);if(r==="a"||r==="area"){let u=A(o);if(u!==null)return{node:o,href:u}}}},vt=()=>{let t=me(d,"base[target]");return t?w(t,"target"):""},X=t=>w(t,"target")??vt(),Ge=t=>{try{return{metaKey:ae(t),ctrlKey:le(t),shiftKey:ue(t),button:ie(t)}}catch{return}},St=new Te,Ye=t=>{let e=!1,n=()=>{e=!0},o=()=>e||Ce(St,t);return ht(t,{__proto__:null,preventDefault:{__proto__:null,configurable:!0,value:n},defaultPrevented:{__proto__:null,configurable:!0,get:o},returnValue:{__proto__:null,configurable:!0,get:()=>!o(),set:r=>{r||n()}}}),o},je={click:new C,auxclick:new C,submit:new C},Ve=(t,e)=>{let n=We[t],o=je[t],r=[],u=f=>{for(let p=0;p<r.length;p+=1)if(r[p]===f)return!0;return!1},g=(f,p,E)=>{let m=s(E);function D(N){let O=m(this,N);return O===!1&&typeof N=="object"&&N!==null&&Ie(St,N),O}return{target:f,accessor:p,handler:E,wrapper:D,inFlight:0}},v=()=>{for(let f=0;f<e.length;f+=1)for(let p=0;p<n.length;p+=1){let E;try{E=n[p].get(e[f])}catch{continue}if(typeof E=="function"){let m=G(o,e[f]);(!m||m.wrapper!==E)&&(m=g(e[f],n[p],E),n[p].set(e[f],m.wrapper),mt(o,e[f],m)),u(m)||(m.inFlight+=1,r[r.length]=m)}break}};return v(),{wrap:v,unwrap:()=>{for(let f=0;f<r.length;f+=1){let p=r[f];p.inFlight-=1,!(p.inFlight>0)&&(G(o,p.target)===p&&wt(o,p.target),p.accessor.get(p.target)===p.wrapper&&p.accessor.set(p.target,p.handler))}}}},ze=(t,e,n)=>{let o=A(t),r=o===null?void 0:R(o,T(d));if(!F(r))return;let u={target:Et?"":W(X(t),n),noReferrer:bt(t),replaces:!1};return{__proto__:null,inWindow:u.target==="",go:()=>j(r,e,u)}},kt=t=>{let e=A(t);if(e===null||w(t,"download")===null)return!1;let n=R(e,T(d));return n!==void 0&&(n.origin===_||n.protocol==="blob:"||n.protocol==="data:")},Xe=(t,e)=>A(t)!==null&&!kt(t)&&W(X(t),e)==="",Je=(t,e)=>{let n=A(t);if(n===null)return!1;let o=be(d,"a"),r=W(X(t),e);$(o,"href",n),$(o,"target",r||"_self");for(let u=0;u<ot.length;u+=1){let g=w(t,ot[u]);g!==null&&$(o,ot[u],g)}return ve(o),r===""&&!kt(t)},Qe=(t,e,n)=>({__proto__:null,plan:()=>ze(t,e,n),navigatesWindow:()=>Xe(t,n),follow:()=>Je(t,n)}),Nt=(t,e,n)=>{M+=1;let o=K(t),r=o.length-1,u=0,g=!1,v=!1,k=l=>{v||(v=!0,Ue(l))},f=l=>{if(g)return;g=!0;let L=at(t),y=L?void 0:n.plan(),xt=l&&n.follow!==void 0,x;!L&&(y||xt)&&(st(t),x=Ye(t)),y?.readFields!==void 0&&(l?x&&Pe(c,()=>{x()||y.handlerReturned()}):y.readFields()),B(c,()=>{if(!x){k(!at(t)&&n.navigatesWindow());return}if(x()){k(!1);return}if(xt&&(y=n.plan(),!y)){k(n.follow());return}if(y.dropped!==void 0&&y.dropped()){k(!1);return}y.go(),k(y.inWindow)},0)},p=(l,L)=>{for(let y=0;y<o.length;y+=1)if(o[y]===l)return L===se?r-y:o.length+y;return-1},E=()=>{p(oe(t),re(t))<=u&&f(!0)},m=l=>{l===t&&f(!1)},D=Ve(e,o),N=l=>L=>{if(L===t){if(u=l,lt(t)){f(!1);return}D.wrap()}},O=[],tt=[],et=ne(t);if(et){for(let l=0;l<r;l+=1)O[l]=N(r-l),tt[l]=N(o.length+l),gt(o[l],e,O[l],!0),gt(o[l],e,tt[l],!1);Ae(c,e,m,!1)}if(B(c,()=>{if(g||k(!1),g=!0,D.unwrap(),!!et){for(let l=0;l<r;l+=1)yt(o[l],e,O[l],!0),yt(o[l],e,tt[l],!1);xe(c,e,m,!1)}},0),!et){f(!0);return}ht(t,{__proto__:null,stopPropagation:{__proto__:null,configurable:!0,value:()=>{E(),zt(t)}},stopImmediatePropagation:{__proto__:null,configurable:!0,value:()=>{f(!0),ct(t)}},cancelBubble:{__proto__:null,configurable:!0,get:()=>lt(t),set:l=>{l&&E(),ce(t,l)}}})},J=new C,Ze=(t,e)=>{let n=K(t);for(let o=0;o<n.length;o+=1){let r=n[o],u=P(r);if(u==="button"||u==="input"){mt(J,r,e),B(c,()=>wt(J,r),0);return}}},Rt=t=>{let e=Xt(t),n=Ge(t);if(!n||e==="auxclick"&&n.button!==1)return;e==="click"&&Ze(t,n);let o=qe(t);!o||!F(R(o.href,T(d)))||Nt(t,e,Qe(o.node,e,n))},Q=(t,e,n,o)=>(e?w(e,n):null)??w(t,o),Ot=(t,e)=>Le(Q(t,e,"formmethod","method")??""),Lt=(t,e,n)=>W(Q(t,e,"formtarget","target")??vt(),n),Pt=(t,e)=>{let n=Ot(t,e);if(n==="post"||n==="dialog")return;let o=Q(t,e,"formaction","action");if(o===null||o==="")return;let r=R(o,T(d));return F(r)?r:void 0},tn=(t,e)=>{if((e&&(P(e)==="button"?Zt:te)(e))===t)try{return new rt(t,e)}catch{}return new rt(t)},Z=t=>{let e="",n=0;for(let o=0;o<t.length;o+=1){let r=ft(t,o);(r===13||r===10)&&(e+=`${dt(t,n,o)}\r
+`,r===13&&ft(t,o+1)===10&&(o+=1),n=o+1)}return n===0?t:e+dt(t,n)},en=t=>{try{return Z(Qt(t))}catch{return""}},At=(t,e,n)=>{try{let o=new b(n.href),r=new Yt;for(let u of tn(t,e)){let g=u[1];Vt(r,Z(u[0]),typeof g=="string"?Z(g):en(g))}return Gt(o,`?${jt(r)}`),R(U(o))??n}catch{return n}},nn=(t,e,n)=>{if(!I(t))return;let o=Pt(t,e);if(!o)return;let r,u=!1,g=()=>{r=At(t,e,o),I(t)||(u=!0)},v={target:Et?"":Lt(t,e,n),noReferrer:nt(w(t,"rel"),null,Y()),replaces:!1};return{__proto__:null,inWindow:v.target==="",go:()=>j(r??At(t,e,o),"submit",v),readFields:g,handlerReturned:()=>{I(t)?g():u=!0},dropped:()=>u}},on=(t,e,n)=>I(t)&&Ot(t,e)!=="dialog"&&Lt(t,e,n)==="",rn=(t,e,n)=>({__proto__:null,plan:()=>nn(t,e,n),navigatesWindow:()=>on(t,e,n)}),sn=t=>{if(!t.isTrusted)return;let e=Jt(t);if(P(e)!=="form")return;let n=it?it(t):null;if(!Pt(e,n))return;let o=(n&&G(J,n))??gn;Nt(t,"submit",rn(e,n,o))};h?.addEventListener("navigate",Be,!0),c.addEventListener("click",Rt,!0),c.addEventListener("auxclick",Rt,!0),c.addEventListener("submit",sn,!0)}Kt({"site":"glasscoffee.co.uk","exitPath":"\/url"});})();
+//# sourceURL=exit-interstitial.js
+</script>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="" name="theme-color"/>
+<link href="https://glasscoffee.co.uk/collections/coffee" rel="canonical"/>
+<link crossorigin="" href="https://cdn.shopify.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;display=swap" rel="stylesheet"/>
+<!-- Hotjar Tracking Code for Site 6514318 (name missing) -->
+<script>
+      (function (h, o, t, j, a, r) {
+        h.hj =
+          h.hj ||
+          function () {
+            (h.hj.q = h.hj.q || []).push(arguments);
+          };
+        h._hjSettings = { hjid: 6514318, hjsv: 6 };
+        a = o.getElementsByTagName('head')[0];
+        r = o.createElement('script');
+        r.async = 1;
+        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+        a.appendChild(r);
+      })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+    </script><link href="//glasscoffee.co.uk/cdn/shop/files/GLASS_Favicon-01.png?crop=center&amp;height=32&amp;v=1729270344&amp;width=32" rel="icon" type="image/png"/>
+<link href="https://cdn.shopify.com/s/files/1/0571/3559/5572/files/Logo_App-09.png?v=1729271114" rel="apple-touch-icon"/><link crossorigin="" href="https://fonts.shopifycdn.com" rel="preconnect"/><title>
+      Coffee
+ – Glass Coffee</title>
+<meta content="Single estate coffees. " name="description"/>
+<meta content="Glass Coffee" property="og:site_name"/>
+<meta content="https://glasscoffee.co.uk/collections/coffee" property="og:url"/>
+<meta content="Coffee" property="og:title"/>
+<meta content="website" property="og:type"/>
+<meta content="Single estate coffees. " property="og:description"/><meta content="http://glasscoffee.co.uk/cdn/shop/collections/20221219_181940000_iOS.jpg?v=1730217863" property="og:image"/>
+<meta content="https://glasscoffee.co.uk/cdn/shop/collections/20221219_181940000_iOS.jpg?v=1730217863" property="og:image:secure_url"/>
+<meta content="500" property="og:image:width"/>
+<meta content="500" property="og:image:height"/><meta content="summary_large_image" name="twitter:card"/>
+<meta content="Coffee" name="twitter:title"/>
+<meta content="Single estate coffees. " name="twitter:description"/>
+<script defer="defer" src="//glasscoffee.co.uk/cdn/shop/t/40/assets/global.js?v=34895841338690718961793138003"></script>
+<script>window.performance && window.performance.mark && window.performance.mark('shopify.content_for_header.start');</script><meta content="/57135595572/digital_wallets/dialog" id="shopify-digital-wallet" name="shopify-digital-wallet"/>
+<meta data-currency="GBP" data-environment="production" data-locale="en_US" data-paypal-v4="true" data-shop-id="57135595572" data-venmo-supported="false" id="in-context-paypal-metadata"/>
+<link href="/.well-known/ucp" rel="ucp" version="2026-08-25"/><link href="/collections/coffee.atom" rel="alternate" title="Feed" type="application/atom+xml"/>
+<link href="https://glasscoffee.co.uk/collections/coffee.oembed" rel="alternate" type="application/json+oembed"/>
+<script async="async" src="/checkouts/internal/preloads.js?locale=en-GB"></script>
+<link crossorigin="anonymous" href="https://shop.app" rel="preconnect"/>
+<script async="async" crossorigin="anonymous" src="https://shop.app/checkouts/internal/preloads.js?locale=en-GB&amp;shop_id=57135595572"></script>
+<script id="apple-pay-shop-capabilities" type="application/json">{"shopId":57135595572,"countryCode":"GB","currencyCode":"GBP","merchantCapabilities":["supports3DS"],"merchantId":"gid:\/\/shopify\/Shop\/57135595572","merchantName":"Glass Coffee","requiredBillingContactFields":["postalAddress","email"],"requiredShippingContactFields":["postalAddress","email"],"shippingType":"shipping","supportedNetworks":["visa","maestro","masterCard","amex","discover","elo"],"total":{"type":"pending","label":"Glass Coffee","amount":"1.00"},"shopifyPaymentsEnabled":true,"supportsSubscriptions":true}</script>
+<script id="shopify-features" type="application/json">{"accessToken":"86c8a53d3084283e179329069e8f1b7f","betas":["rich-media-storefront-analytics"],"domain":"glasscoffee.co.uk","predictiveSearch":true,"shopId":57135595572,"locale":"en"}</script>
+<script>var Shopify = Shopify || {};
+Shopify.shop = "carlo-493.myshopify.com";
+Shopify.locale = "en";
+Shopify.currency = {"active":"GBP","rate":"1.0"};
+Shopify.country = "GB";
+Shopify.theme = {"name":"glass-shopify\/main","id":184588697978,"schema_name":"Dawn","schema_version":"7.0.0","theme_store_id":null,"role":"main"};
+Shopify.theme.handle = "null";
+Shopify.theme.style = {"id":null,"handle":null};
+Shopify.cdnHost = "glasscoffee.co.uk/cdn";
+Shopify.routes = Shopify.routes || {};
+Shopify.routes.root = "/";
+Shopify.shopJsCdnBaseUrl = "https://cdn.shopify.com/shopifycloud/shop-js";
+Shopify.SignInWithShop = Shopify.SignInWithShop || {};
+Shopify.SignInWithShop.User = Shopify.SignInWithShop.User || {};
+Shopify.SignInWithShop.User.recognized = false;</script>
+<script type="module">!function(o){(o.Shopify=o.Shopify||{}).modules=!0}(window);</script>
+<script>!function(o){function n(){var o=[];function n(){o.push(Array.prototype.slice.apply(arguments))}return n.q=o,n}var t=o.Shopify=o.Shopify||{};t.loadFeatures=n(),t.autoloadFeatures=n()}(window);</script>
+<script>
+  window.ShopifyPay = window.ShopifyPay || {};
+  window.ShopifyPay.apiHost = "shop.app\/pay";
+  window.ShopifyPay.redirectState = null;
+</script>
+<script>
+  window.Shopify = window.Shopify || {};
+  window.Shopify.SignInWithShop = window.Shopify.SignInWithShop || {};
+  window.Shopify.SignInWithShop.assetMetrics = { sampleRate: 0.25 };
+  window.Shopify.SignInWithShop.eligible = true;
+</script>
+<script id="shop-js-analytics" type="application/json">{"pageType":"collection"}</script>
+<script async="" defer="defer" src="https://cdn.shopify.com/shopifycloud/shop-js/modules/v2/loader.init-shop-cart-sync.en.esm.js" type="module"></script>
+<script type="module">
+  await import("https://cdn.shopify.com/shopifycloud/shop-js/modules/v2/loader.init-shop-cart-sync.en.esm.js");
+
+  window.Shopify.SignInWithShop?.initShopCartSync?.({"fedCMEnabled":true,"windoidEnabled":true,"backendHost":"Z2xhc3Njb2ZmZWUuY28udWs="});
+
+</script>
+<script>
+  window.Shopify = window.Shopify || {};
+  if (!window.Shopify.featureAssets) window.Shopify.featureAssets = {};
+  window.Shopify.featureAssets['shop-js'] = {"avatar":["modules/v2/loader.avatar.en.esm.js"],"checkout-modal":["modules/v2/loader.checkout-modal.en.esm.js"],"init-customer-accounts-sign-up":["modules/v2/loader.init-customer-accounts-sign-up.en.esm.js"],"init-customer-accounts":["modules/v2/loader.init-customer-accounts.en.esm.js"],"init-fed-cm":["modules/v2/loader.init-fed-cm.en.esm.js"],"init-shop-cart-sync":["modules/v2/loader.init-shop-cart-sync.en.esm.js"],"init-shop-email-lookup-coordinator":["modules/v2/loader.init-shop-email-lookup-coordinator.en.esm.js"],"init-shop-for-new-customer-accounts":["modules/v2/loader.init-shop-for-new-customer-accounts.en.esm.js"],"init-shop-user-recognition":["modules/v2/loader.init-shop-user-recognition.en.esm.js"],"init-windoid":["modules/v2/loader.init-windoid.en.esm.js"],"lead-capture":["modules/v2/loader.lead-capture.en.esm.js"],"listener":["modules/v2/loader.listener.en.esm.js"],"pay-button":["modules/v2/loader.pay-button.en.esm.js"],"payment-terms":["modules/v2/loader.payment-terms.en.esm.js"],"shop-button":["modules/v2/loader.shop-button.en.esm.js"],"shop-cart-sync":["modules/v2/loader.shop-cart-sync.en.esm.js"],"shop-cash-offers":["modules/v2/loader.shop-cash-offers.en.esm.js"],"shop-follow-button":["modules/v2/loader.shop-follow-button.en.esm.js"],"shop-login-button":["modules/v2/loader.shop-login-button.en.esm.js"],"shop-login":["modules/v2/loader.shop-login.en.esm.js"],"shop-toast-manager":["modules/v2/loader.shop-toast-manager.en.esm.js"],"shop-user-recognition":["modules/v2/loader.shop-user-recognition.en.esm.js"]};
+</script>
+<script id="__st">var __st={"a":57135595572,"offset":0,"reqid":"08dd7f8c-584d-45f7-acd7-ff0faeffb161-1793823446","pageurl":"glasscoffee.co.uk\/collections\/coffee","u":"9a37a3c45913","p":"collection","rtyp":"collection","rid":642544140666};</script>
+<script>window.ShopifyPaypalV4VisibilityTracking = true;</script>
+<script id="captcha-bootstrap">!function(){'use strict';const t='contact',e='account',n='new_comment',o=[[t,t],['blogs',n],['comments',n],[t,'customer']],c=[[e,'customer_login'],[e,'guest_login'],[e,'recover_customer_password'],[e,'create_customer']],r=t=>t.map((([t,e])=>`form[action*='/${t}']:not([data-nocaptcha='true']) input[name='form_type'][value='${e}']`)).join(','),a=t=>()=>t?[...document.querySelectorAll(t)].map((t=>t.form)):[];function s(){const t=[...o],e=r(t);return a(e)}const i='password',u='form_key',d=['recaptcha-v3-token','g-recaptcha-response','h-captcha-response',i],f=()=>{try{return window.sessionStorage}catch{return}},m='__shopify_v',_=t=>t.elements[u];function p(t,e,n=!1){try{const o=window.sessionStorage,c=JSON.parse(o.getItem(e)),{data:r}=function(t){const{data:e,action:n}=t;return t[m]||n?{data:e,action:n}:{data:t,action:n}}(c);for(const[e,n]of Object.entries(r))t.elements[e]&&(t.elements[e].value=n);n&&o.removeItem(e)}catch(o){console.error('form repopulation failed',{error:o})}}const l='form_type',E='cptcha';function T(t){t.dataset[E]=!0}const w=window,h=w.document,L='Shopify',v='ce_forms',y='captcha';let A=!1;((t,e)=>{const n=(g='f06e6c50-85a8-45c8-87d0-21a2b65856fe',I='https://cdn.shopify.com/shopifycloud/storefront-forms-hcaptcha/ce_storefront_forms_captcha_hcaptcha.v1.5.3.iife.js',D={infoText:'Protected by hCaptcha',privacyText:'Privacy',termsText:'Terms'},(t,e,n)=>{const o=w[L][v],c=o.bindForm;if(c)return c(t,g,e,D).then(n);var r;o.q.push([[t,g,e,D],n]),r=I,A||(h.body.append(Object.assign(h.createElement('script'),{id:'captcha-provider',async:!0,src:r})),A=!0)});var g,I,D;w[L]=w[L]||{},w[L][v]=w[L][v]||{},w[L][v].q=[],w[L][y]=w[L][y]||{},w[L][y].protect=function(t,e){n(t,void 0,e),T(t)},Object.freeze(w[L][y]),function(t,e,n,w,h,L){const[v,y,A,g]=function(t,e,n){const i=e?o:[],u=t?c:[],d=[...i,...u],f=r(d),m=r(i),_=r(d.filter((([t,e])=>n.includes(e))));return[a(f),a(m),a(_),s()]}(w,h,L),I=t=>{const e=t.target;return e instanceof HTMLFormElement?e:e&&e.form},D=t=>v().includes(t);t.addEventListener('submit',(t=>{const e=I(t);if(!e)return;const n=D(e)&&!e.dataset.hcaptchaBound&&!e.dataset.recaptchaBound,o=_(e),c=g().includes(e)&&(!o||!o.value);(n||c)&&t.preventDefault(),c&&!n&&(function(t){try{if(!f())return;!function(t){const e=f();if(!e)return;const n=_(t);if(!n)return;const o=n.value;o&&e.removeItem(o)}(t);const e=Array.from(Array(32),(()=>Math.random().toString(36)[2])).join('');!function(t,e){_(t)||t.append(Object.assign(document.createElement('input'),{type:'hidden',name:u})),t.elements[u].value=e}(t,e),function(t,e){const n=f();if(!n)return;const o=[...t.querySelectorAll(`input[type='${i}']`)].map((({name:t})=>t)),c=[...d,...o],r={};for(const[a,s]of new FormData(t).entries())c.includes(a)||(r[a]=s);n.setItem(e,JSON.stringify({[m]:1,action:t.action,data:r}))}(t,e)}catch(e){console.error('failed to persist form',e)}}(e),e.submit())}));const S=(t,e)=>{t&&!t.dataset[E]&&(n(t,e.some((e=>e===t))),T(t))};for(const o of['focusin','change'])t.addEventListener(o,(t=>{const e=I(t);D(e)&&S(e,y())}));const B=e.get('form_key'),M=e.get(l),P=B&&M;t.addEventListener('DOMContentLoaded',(()=>{const t=y();if(P)for(const e of t)e.elements[l].value===M&&p(e,B);[...new Set([...A(),...v().filter((t=>'true'===t.dataset.shopifyCaptcha))])].forEach((e=>S(e,t)))}))}(h,new URLSearchParams(w.location.search),n,t,e,['guest_login'])})(!0,!0)}();</script>
+<script crossorigin="anonymous" data-source-attribution="shopify.loadfeatures" defer="defer" integrity="sha256-FYHzja/5XSmzkjz6zHj7s4rACJGFuVoYZdumgoO2Ecs=" src="//glasscoffee.co.uk/cdn/shopifycloud/storefront/assets/storefront/load_feature-ed94c51f.js"></script>
+<script>(function () {var userAgent = navigator.userAgent;var platform = navigator.platform;var maxTouchPoints = navigator.maxTouchPoints || 0;var isIOS = /iPad|iPhone|iPod/.test(platform) || (platform === 'MacIntel' && maxTouchPoints > 1);var isMacSafari = platform.indexOf('Mac') === 0 && /Safari/.test(userAgent) && !/Chrome|Chromium|CriOS|FxiOS|Edg|OPR|Android/.test(userAgent);var isAppleSafari = isIOS || isMacSafari;if (isAppleSafari) {fetch('/sf_private_access_tokens' + location.search).catch(function () {});}function browserMajorVersion(pattern) {var match = userAgent.match(pattern);return match ? parseInt(match[1], 10) : null;}function shouldLoadAutosizesPolyfill() {if (!window.PerformanceObserver?.supportedEntryTypes?.includes('paint')) {return false;}var chromeVersion = browserMajorVersion(/Chrome\/(\d+)/);if (chromeVersion !== null) {return chromeVersion < 126;}var firefoxVersion = browserMajorVersion(/Firefox\/(\d+)/);if (firefoxVersion !== null) {return firefoxVersion < 150;}var safariVersion = isAppleSafari ? browserMajorVersion(/Version\/(\d+).*Safari\//) : null;if (safariVersion !== null) {return safariVersion < 27;}return true;}if (shouldLoadAutosizesPolyfill()) {var autosizesScript = document.createElement('script');autosizesScript.async = true;autosizesScript.crossOrigin = 'anonymous';autosizesScript.src = "//glasscoffee.co.uk/cdn/shopifycloud/storefront/assets/storefront/autosizes-84416378.js";(document.head || document.documentElement).appendChild(autosizesScript);}window.ShopifyAnalytics = window.ShopifyAnalytics || {};window.ShopifyAnalytics.performance = window.ShopifyAnalytics.performance || {};(function () {var LONG_FRAME_THRESHOLD = 50;var longAnimationFrames = [];var activeRafId = null;function collectLongFrames() {var previousTime = null;function rafMonitor(now) {if (activeRafId === null) {return;}var delta = now - previousTime;if (delta > LONG_FRAME_THRESHOLD) {longAnimationFrames.push({startTime: previousTime,endTime: now,});}previousTime = now;activeRafId = requestAnimationFrame(rafMonitor);}previousTime = performance.now();activeRafId = requestAnimationFrame(rafMonitor);}if (!window.PerformanceObserver?.supportedEntryTypes?.includes('long-animation-frame')) {collectLongFrames();var timeoutId = setTimeout(function () {cancelAnimationFrame(activeRafId);}, 10000);window.ShopifyAnalytics.performance.getLongAnimationFrames = function (stopCollection) {if (stopCollection === undefined) {stopCollection = false;}if (stopCollection) {clearTimeout(timeoutId);cancelAnimationFrame(activeRafId);}return longAnimationFrames;};}})();})();</script><script crossorigin="anonymous" defer="defer" src="//glasscoffee.co.uk/cdn/shopifycloud/storefront/assets/shopify_pay/storefront-f0e26bdf.js?v=20250812"></script>
+<script async="async" crossorigin="anonymous" id="shopify-origin-trials" integrity="sha256-YSmWUz/d+OnYYvMB8Rea/mSvxjGHQPsJQmWeX4moyZg=" onerror="window.__shopifyOriginTrialsDone = true" onload="window.__shopifyOriginTrialsDone = true" src="//cdn.shopify.com/shopifycloud/storefront/assets/storefront/origin_trials-e8afbaf1.js"></script>
+<script>(()=>{var d="shopify:webmcp_adapter_loaded",n=Symbol.for("shopify.webmcp_adapter_loading");function s(c,a,{win:r=window,doc:o=document}={}){function p(){try{return r.localStorage.getItem(d)==="true"}catch{return!1}}function l(){try{r.localStorage.setItem(d,"true")}catch{}}function u(){return typeof(o.modelContext||r.navigator?.modelContext)?.registerTool=="function"}function f(){if(r[n]||!u())return;let t=o.head||o.getElementsByTagName("head")[0];if(!t)return;let e=o.createElement("script");e.type="module",e.crossOrigin="anonymous",a&&(e.integrity=a),e.src=c,e.addEventListener("load",l,{once:!0}),e.addEventListener("error",()=>{r[n]=!1},{once:!0}),t.appendChild(e),r[n]=!0}function _(t){let e=o.getElementById("shopify-origin-trials");if(!e||r.__shopifyOriginTrialsDone){t();return}e.addEventListener("load",t,{once:!0}),e.addEventListener("error",t,{once:!0})}function i(){_(()=>r.setTimeout(f,0))}function m(){o.addEventListener("DOMContentLoaded",i,{once:!0})}p()?i():m()}s("\/\/glasscoffee.co.uk\/cdn\/shopifycloud\/storefront\/assets\/storefront\/webmcp-54c687b6.js","sha256-5kNm6ku3yVQgaW8DNOK1E8HlUoBFVQFhsBTVHwnwcjA=");})();
+</script>
+<script data-source-attribution="shopify.dynamic_checkout.dynamic.init">var Shopify=Shopify||{};Shopify.PaymentButton=Shopify.PaymentButton||{isStorefrontPortableWallets:!0,init:function(){window.Shopify.PaymentButton.init=function(){};var t=document.createElement("script");t.src="https://glasscoffee.co.uk/cdn/shopifycloud/portable-wallets/latest/portable-wallets.en.js",t.type="module",document.head.appendChild(t)}};
+</script>
+<script data-source-attribution="shopify.dynamic_checkout.buyer_consent">
+  function portableWalletsHideBuyerConsent(e){var t=document.getElementById("shopify-buyer-consent"),n=document.getElementById("shopify-subscription-policy-button");t&&n&&(t.classList.add("hidden"),t.setAttribute("aria-hidden","true"),n.removeEventListener("click",e))}function portableWalletsShowBuyerConsent(e){var t=document.getElementById("shopify-buyer-consent"),n=document.getElementById("shopify-subscription-policy-button");t&&n&&(t.classList.remove("hidden"),t.removeAttribute("aria-hidden"),n.addEventListener("click",e))}window.Shopify?.PaymentButton&&(window.Shopify.PaymentButton.hideBuyerConsent=portableWalletsHideBuyerConsent,window.Shopify.PaymentButton.showBuyerConsent=portableWalletsShowBuyerConsent);
+</script>
+<script data-source-attribution="shopify.dynamic_checkout.cart.bootstrap">document.addEventListener("DOMContentLoaded",(function(){function t(){return document.querySelector("shopify-accelerated-checkout-cart, shopify-accelerated-checkout")}if(t())Shopify.PaymentButton.init();else{new MutationObserver((function(e,n){t()&&(Shopify.PaymentButton.init(),n.disconnect())})).observe(document.body,{childList:!0,subtree:!0})}}));
+</script>
+<script async="" id="scb4127" src="https://glasscoffee.co.uk/cdn/shopifycloud/privacy-banner/privacy-banner.js" type="text/javascript"></script><link crossorigin="anonymous" href="https://glasscoffee.co.uk/cdn/shopifycloud/portable-wallets/latest/accelerated-checkout-backwards-compat.css" id="shopify-accelerated-checkout-styles" media="screen" rel="stylesheet"/>
+<style id="shopify-accelerated-checkout-cart">
+        #shopify-buyer-consent {
+  margin-top: 1em;
+  display: inline-block;
+  width: 100%;
+}
+
+#shopify-buyer-consent.hidden {
+  display: none;
+}
+
+#shopify-subscription-policy-button {
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+#shopify-subscription-policy-button::before {
+  box-shadow: none;
+}
+
+      </style>
+<script data-sections="header,footer-version-2" defer="defer" id="sections-script" src="//glasscoffee.co.uk/cdn/shop/t/40/compiled_assets/scripts.js?v=49041803282043153901793139460"></script>
+<script id="shopify-cfh-end">window.performance && window.performance.mark && window.performance.mark('shopify.content_for_header.end');</script>
+<style data-shopify="">
+      @font-face {
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("//glasscoffee.co.uk/cdn/fonts/poppins/poppins_n4.0ba78fa5af9b0e1a374041b3ceaadf0a43b41362.woff2") format("woff2"),
+       url("//glasscoffee.co.uk/cdn/fonts/poppins/poppins_n4.214741a72ff2596839fc9760ee7a770386cf16ca.woff") format("woff");
+}
+
+      @font-face {
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("//glasscoffee.co.uk/cdn/fonts/poppins/poppins_n7.56758dcf284489feb014a026f3727f2f20a54626.woff2") format("woff2"),
+       url("//glasscoffee.co.uk/cdn/fonts/poppins/poppins_n7.f34f55d9b3d3205d2cd6f64955ff4b36f0cfd8da.woff") format("woff");
+}
+
+      @font-face {
+  font-family: Poppins;
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  src: url("//glasscoffee.co.uk/cdn/fonts/poppins/poppins_i4.846ad1e22474f856bd6b81ba4585a60799a9f5d2.woff2") format("woff2"),
+       url("//glasscoffee.co.uk/cdn/fonts/poppins/poppins_i4.56b43284e8b52fc64c1fd271f289a39e8477e9ec.woff") format("woff");
+}
+
+      @font-face {
+  font-family: Poppins;
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  src: url("//glasscoffee.co.uk/cdn/fonts/poppins/poppins_i7.42fd71da11e9d101e1e6c7932199f925f9eea42d.woff2") format("woff2"),
+       url("//glasscoffee.co.uk/cdn/fonts/poppins/poppins_i7.ec8499dbd7616004e21155106d13837fff4cf556.woff") format("woff");
+}
+
+      @font-face {
+  font-family: Poppins;
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("//glasscoffee.co.uk/cdn/fonts/poppins/poppins_n6.aa29d4918bc243723d56b59572e18228ed0786f6.woff2") format("woff2"),
+       url("//glasscoffee.co.uk/cdn/fonts/poppins/poppins_n6.5f815d845fe073750885d5b7e619ee00e8111208.woff") format("woff");
+}
+
+
+      :root {
+        /* custom  */
+        --font-primary: DM Sans, sans-serif;
+        /*  */
+      }
+
+      /* DM Sans is a variable font with an opsz (optical size) axis; the
+         browser's automatic optical sizing renders large text compressed.
+         Pin the axis at 14 as in the designs. Fonts without an opsz axis
+         ignore this. */
+      body {
+        font-optical-sizing: none;
+        font-variation-settings: 'opsz' 14;
+      }
+
+      :root {
+        --font-body-family: Poppins, sans-serif;
+        --font-body-style: normal;
+        --font-body-weight: 400;
+        --font-body-weight-bold: 700;
+
+        --font-heading-family: Poppins, sans-serif;
+        --font-heading-style: normal;
+        --font-heading-weight: 600;
+
+        --font-body-scale: 1.0;
+        --font-heading-scale: 1.0;
+
+        --color-base-text: 68, 68, 68;
+        --color-shadow: 68, 68, 68;
+        --color-base-background-1: 255, 255, 255;
+        --color-base-background-2: 0, 0, 0;
+        --color-base-solid-button-labels: 255, 255, 255;
+        --color-base-outline-button-labels: 18, 18, 18;
+        --color-base-accent-1: 0, 0, 0;
+        --color-base-accent-2: 67, 165, 215;
+        --payment-terms-background-color: #FFFFFF;
+
+        --gradient-base-background-1: #FFFFFF;
+        --gradient-base-background-2: #000000;
+        --gradient-base-accent-1: #000000;
+        --gradient-base-accent-2: #43a5d7;
+
+        --media-padding: px;
+        --media-border-opacity: 0.05;
+        --media-border-width: 1px;
+        --media-radius: 0px;
+        --media-shadow-opacity: 0.0;
+        --media-shadow-horizontal-offset: 0px;
+        --media-shadow-vertical-offset: 0px;
+        --media-shadow-blur-radius: 0px;
+        --media-shadow-visible: 0;
+
+        --page-width: 140rem;
+        --page-width-margin: 0rem;
+
+        --product-card-image-padding: 0.0rem;
+        --product-card-corner-radius: 0.0rem;
+        --product-card-text-alignment: center;
+        --product-card-border-width: 0.0rem;
+        --product-card-border-opacity: 0.0;
+        --product-card-shadow-opacity: 0.0;
+        --product-card-shadow-visible: 0;
+        --product-card-shadow-horizontal-offset: 0.0rem;
+        --product-card-shadow-vertical-offset: 0.0rem;
+        --product-card-shadow-blur-radius: 0.0rem;
+
+        --collection-card-image-padding: 0.0rem;
+        --collection-card-corner-radius: 0.0rem;
+        --collection-card-text-alignment: center;
+        --collection-card-border-width: 0.0rem;
+        --collection-card-border-opacity: 0.0;
+        --collection-card-shadow-opacity: 0.0;
+        --collection-card-shadow-visible: 0;
+        --collection-card-shadow-horizontal-offset: 0.0rem;
+        --collection-card-shadow-vertical-offset: 0.0rem;
+        --collection-card-shadow-blur-radius: 0.0rem;
+
+        --blog-card-image-padding: 0.0rem;
+        --blog-card-corner-radius: 0.0rem;
+        --blog-card-text-alignment: left;
+        --blog-card-border-width: 0.0rem;
+        --blog-card-border-opacity: 0.0;
+        --blog-card-shadow-opacity: 1.0;
+        --blog-card-shadow-visible: 1;
+        --blog-card-shadow-horizontal-offset: 0.0rem;
+        --blog-card-shadow-vertical-offset: 0.0rem;
+        --blog-card-shadow-blur-radius: 0.0rem;
+
+        --badge-corner-radius: 4.0rem;
+
+        --popup-border-width: 1px;
+        --popup-border-opacity: 0.1;
+        --popup-corner-radius: 0px;
+        --popup-shadow-opacity: 0.0;
+        --popup-shadow-horizontal-offset: 0px;
+        --popup-shadow-vertical-offset: 0px;
+        --popup-shadow-blur-radius: 0px;
+
+        --drawer-border-width: 1px;
+        --drawer-border-opacity: 0.1;
+        --drawer-shadow-opacity: 0.0;
+        --drawer-shadow-horizontal-offset: 0px;
+        --drawer-shadow-vertical-offset: 0px;
+        --drawer-shadow-blur-radius: 0px;
+
+        --spacing-sections-desktop: 0px;
+        --spacing-sections-mobile: 0px;
+
+        --grid-desktop-vertical-spacing: 8px;
+        --grid-desktop-horizontal-spacing: 8px;
+        --grid-mobile-vertical-spacing: 4px;
+        --grid-mobile-horizontal-spacing: 4px;
+
+        --text-boxes-border-opacity: 0.0;
+        --text-boxes-border-width: 0px;
+        --text-boxes-radius: 0px;
+        --text-boxes-shadow-opacity: 0.0;
+        --text-boxes-shadow-visible: 0;
+        --text-boxes-shadow-horizontal-offset: 0px;
+        --text-boxes-shadow-vertical-offset: 0px;
+        --text-boxes-shadow-blur-radius: 0px;
+
+        --buttons-radius: 0px;
+        --buttons-radius-outset: 0px;
+        --buttons-border-width: 3px;
+        --buttons-border-opacity: 1.0;
+        --buttons-shadow-opacity: 0.0;
+        --buttons-shadow-visible: 0;
+        --buttons-shadow-horizontal-offset: 0px;
+        --buttons-shadow-vertical-offset: 0px;
+        --buttons-shadow-blur-radius: 0px;
+        --buttons-border-offset: 0px;
+
+        --inputs-radius: 0px;
+        --inputs-border-width: 1px;
+        --inputs-border-opacity: 0.55;
+        --inputs-shadow-opacity: 0.0;
+        --inputs-shadow-horizontal-offset: 0px;
+        --inputs-margin-offset: 0px;
+        --inputs-shadow-vertical-offset: 12px;
+        --inputs-shadow-blur-radius: 0px;
+        --inputs-radius-outset: 0px;
+
+        --variant-pills-radius: 40px;
+        --variant-pills-border-width: 1px;
+        --variant-pills-border-opacity: 0.55;
+        --variant-pills-shadow-opacity: 0.0;
+        --variant-pills-shadow-horizontal-offset: 0px;
+        --variant-pills-shadow-vertical-offset: 0px;
+        --variant-pills-shadow-blur-radius: 0px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+
+      html {
+        box-sizing: border-box;
+        font-size: calc(var(--font-body-scale) * 62.5%);
+        height: 100%;
+      }
+
+      body {
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        grid-template-columns: 100%;
+        min-height: 100%;
+        margin: 0;
+        font-size: 1.5rem;
+        letter-spacing: 0.06rem;
+        line-height: calc(1 + 0.8 / var(--font-body-scale));
+        font-family: var(--font-body-family);
+        font-style: var(--font-body-style);
+        font-weight: var(--font-body-weight);
+      }
+
+      .marker {
+        background-image: url(https://cdn.shopify.com/s/files/1/0571/3559/5572/files/GlassLOGOBlue.png?v=1655393903);
+        background-size: cover;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        display:block !important;
+      }
+
+      .mapboxgl-popup {
+        max-width: 400px;
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+      }
+      
+      @media screen and (min-width: 750px) {
+        body {
+          font-size: 1.6rem;
+        }
+      }
+    </style>
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/base.css?v=25785860852690402871793138002" media="all" rel="stylesheet" type="text/css"/>
+<link as="font" crossorigin="" href="//glasscoffee.co.uk/cdn/fonts/poppins/poppins_n4.0ba78fa5af9b0e1a374041b3ceaadf0a43b41362.woff2" rel="preload" type="font/woff2"/><link as="font" crossorigin="" href="//glasscoffee.co.uk/cdn/fonts/poppins/poppins_n6.aa29d4918bc243723d56b59572e18228ed0786f6.woff2" rel="preload" type="font/woff2"/><link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-predictive-search.css?v=83512081251802922551779892862" media="print" onload="this.media='all'" rel="stylesheet"/><script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    if (Shopify.designMode) {
+      document.documentElement.classList.add('shopify-design-mode');
+    }
+    </script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css" rel="stylesheet"/>
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/customisation.css?v=110075061818408740791779892859" media="all" rel="stylesheet" type="text/css"/>
+<link href="https://monorail-edge.shopifysvc.com" rel="dns-prefetch"/>
+<script>
+  window.__TREKKIE_SHIM_QUEUE = window.__TREKKIE_SHIM_QUEUE || [];
+</script>
+<script>
+  window.ShopifyAnalytics = window.ShopifyAnalytics || {};
+  window.ShopifyAnalytics.meta = window.ShopifyAnalytics.meta || {};
+  window.ShopifyAnalytics.meta.currency = 'GBP';
+  var meta = {"products":[{"id":16150973972858,"gid":"gid:\/\/shopify\/Product\/16150973972858","vendor":"Glass Coffee","type":"","handle":"bambito-estate-caturra-catuai-washed","variants":[{"id":57069092864378,"price":1100,"name":"Bambito Estate - Caturra Catuai Blend - 125g \/ filter","public_title":"125g \/ filter","sku":null},{"id":57069092897146,"price":1100,"name":"Bambito Estate - Caturra Catuai Blend - 125g \/ espresso","public_title":"125g \/ espresso","sku":null},{"id":57069092929914,"price":2200,"name":"Bambito Estate - Caturra Catuai Blend - 250g \/ filter","public_title":"250g \/ filter","sku":null},{"id":57069092962682,"price":2200,"name":"Bambito Estate - Caturra Catuai Blend - 250g \/ espresso","public_title":"250g \/ espresso","sku":null}],"remote":false},{"id":15944074723706,"gid":"gid:\/\/shopify\/Product\/15944074723706","vendor":"Glass Coffee","type":"","handle":"bette-buna-duba-74112-74110-wild-guji-megadu","variants":[{"id":56760161304954,"price":680,"name":"Bette Buna - 74112, 74110 - 125g \/ filter","public_title":"125g \/ filter","sku":null},{"id":56760275566970,"price":680,"name":"Bette Buna - 74112, 74110 - 125g \/ espresso","public_title":"125g \/ espresso","sku":null},{"id":56760161337722,"price":1360,"name":"Bette Buna - 74112, 74110 - 250g \/ filter","public_title":"250g \/ filter","sku":null},{"id":56760275599738,"price":1360,"name":"Bette Buna - 74112, 74110 - 250g \/ espresso","public_title":"250g \/ espresso","sku":null}],"remote":false},{"id":16157416882554,"gid":"gid:\/\/shopify\/Product\/16157416882554","vendor":"Glass Coffee","type":"","handle":"chevas-reactor-geisha","variants":[{"id":57094480560506,"price":2320,"name":"Chevas - Reactor Mosto · Geisha - 50g \/ filter","public_title":"50g \/ filter","sku":null},{"id":57094422987130,"price":4640,"name":"Chevas - Reactor Mosto · Geisha - 100g \/ filter","public_title":"100g \/ filter","sku":null},{"id":57094423052666,"price":9280,"name":"Chevas - Reactor Mosto · Geisha - 200g \/ filter","public_title":"200g \/ filter","sku":null}],"remote":false},{"id":15391682265466,"gid":"gid:\/\/shopify\/Product\/15391682265466","vendor":"Glass Coffee","type":"","handle":"nintai","variants":[{"id":55974944637306,"price":3500,"name":"Hachi - Nintai (忍耐) · Gesha - 60g \/ filter","public_title":"60g \/ filter","sku":null},{"id":55974944670074,"price":7400,"name":"Hachi - Nintai (忍耐) · Gesha - 125g \/ filter","public_title":"125g \/ filter","sku":null},{"id":55974944702842,"price":14800,"name":"Hachi - Nintai (忍耐) · Gesha - 250g \/ filter","public_title":"250g \/ filter","sku":null}],"remote":false},{"id":16210428100986,"gid":"gid:\/\/shopify\/Product\/16210428100986","vendor":"Glass Coffee","type":"","handle":"hacienda-copey-itadaki-gesha-natural","variants":[{"id":57294727414138,"price":2320,"name":"Hacienda Copey - ITADAKI · Gesha - 100g \/ filter","public_title":"100g \/ filter","sku":null},{"id":57294727479674,"price":4240,"name":"Hacienda Copey - ITADAKI · Gesha - 200g \/ filter","public_title":"200g \/ filter","sku":null}],"remote":false},{"id":16216453644666,"gid":"gid:\/\/shopify\/Product\/16216453644666","vendor":"Glass Coffee","type":"","handle":"hacienda-copey-itadaki-gesha-honey","variants":[{"id":57322889642362,"price":1880,"name":"Hacienda Copey - ITADAKI · Gesha - 100g \/ filter","public_title":"100g \/ filter","sku":null},{"id":57322889707898,"price":3760,"name":"Hacienda Copey - ITADAKI · Gesha - 200g \/ filter","public_title":"200g \/ filter","sku":null}],"remote":false},{"id":15525940953466,"gid":"gid:\/\/shopify\/Product\/15525940953466","vendor":"Glass Coffee","type":"","handle":"hacienda-copey","variants":[{"id":56255833473402,"price":2200,"name":"Hacienda Copey - Takara · Gesha - 100g \/ filter","public_title":"100g \/ filter","sku":null},{"id":56939112956282,"price":2200,"name":"Hacienda Copey - Takara · Gesha - 100g \/ espresso","public_title":"100g \/ espresso","sku":null},{"id":56255833506170,"price":4400,"name":"Hacienda Copey - Takara · Gesha - 200g \/ filter","public_title":"200g \/ filter","sku":null},{"id":56939112989050,"price":4400,"name":"Hacienda Copey - Takara · Gesha - 200g \/ espresso","public_title":"200g \/ espresso","sku":null}],"remote":false},{"id":16119923212666,"gid":"gid:\/\/shopify\/Product\/16119923212666","vendor":"Glass Coffee","type":"","handle":"julio-madrid-uba-geisha-logan","variants":[{"id":56943044428154,"price":1900,"name":"Julio Madrid - UBA · Logan · Geisha - 125g \/ filter","public_title":"125g \/ filter","sku":null},{"id":56943044460922,"price":1900,"name":"Julio Madrid - UBA · Logan · Geisha - 125g \/ espresso","public_title":"125g \/ espresso","sku":null},{"id":56943044493690,"price":3800,"name":"Julio Madrid - UBA · Logan · Geisha - 250g \/ filter","public_title":"250g \/ filter","sku":null},{"id":56943044526458,"price":3800,"name":"Julio Madrid - UBA · Logan · Geisha - 250g \/ espresso","public_title":"250g \/ espresso","sku":null}],"remote":false},{"id":14805939880314,"gid":"gid:\/\/shopify\/Product\/14805939880314","vendor":"Glass Coffee","type":"","handle":"red-fruits","variants":[{"id":54898171052410,"price":1325,"name":"Sebastian Ramirez - Red Fruits · Pink Bourbon - 125g \/ filter","public_title":"125g \/ filter","sku":null},{"id":54898171085178,"price":1325,"name":"Sebastian Ramirez - Red Fruits · Pink Bourbon - 125g \/ espresso","public_title":"125g \/ espresso","sku":null},{"id":51887399010682,"price":2650,"name":"Sebastian Ramirez - Red Fruits · Pink Bourbon - 250g \/ filter","public_title":"250g \/ filter","sku":null},{"id":54865188880762,"price":2650,"name":"Sebastian Ramirez - Red Fruits · Pink Bourbon - 250g \/ espresso","public_title":"250g \/ espresso","sku":null}],"remote":false},{"id":16011288281466,"gid":"gid:\/\/shopify\/Product\/16011288281466","vendor":"Glass Coffee","type":"","handle":"tnt-coffee-lab-talamanca-mosto-geisha-hot-november-rain","variants":[{"id":56929389445498,"price":2100,"name":"TNT Coffee Lab x MamaCata - Mosto · Geisha - 50g \/ filter","public_title":"50g \/ filter","sku":null},{"id":56811034247546,"price":4200,"name":"TNT Coffee Lab x MamaCata - Mosto · Geisha - 100g \/ filter","public_title":"100g \/ filter","sku":null},{"id":56811034280314,"price":8400,"name":"TNT Coffee Lab x MamaCata - Mosto · Geisha - 200g \/ filter","public_title":"200g \/ filter","sku":null}],"remote":false},{"id":16115899367802,"gid":"gid:\/\/shopify\/Product\/16115899367802","vendor":"Glass Coffee","type":"","handle":"tnt-coffee-lab-talamanca-honey-kefir-geisha","variants":[{"id":56929409171834,"price":2100,"name":"TNT Coffee Lab x Talamanca - Kefir · Geisha - 50g \/ filter","public_title":"50g \/ filter","sku":null},{"id":56929409204602,"price":4200,"name":"TNT Coffee Lab x Talamanca - Kefir · Geisha - 100g \/ filter","public_title":"100g \/ filter","sku":null},{"id":56929409237370,"price":8400,"name":"TNT Coffee Lab x Talamanca - Kefir · Geisha - 200g \/ filter","public_title":"200g \/ filter","sku":null}],"remote":false},{"id":16010199826810,"gid":"gid:\/\/shopify\/Product\/16010199826810","vendor":"Glass Coffee","type":"","handle":"tnt-coffee-lab-talamanca-geisha","variants":[{"id":56929392427386,"price":1980,"name":"TNT Coffee Lab x Talamanca - Koji · Geisha - 50g \/ filter","public_title":"50g \/ filter","sku":null},{"id":56809567748474,"price":3960,"name":"TNT Coffee Lab x Talamanca - Koji · Geisha - 100g \/ filter","public_title":"100g \/ filter","sku":null},{"id":56809567781242,"price":7920,"name":"TNT Coffee Lab x Talamanca - Koji · Geisha - 200g \/ filter","public_title":"200g \/ filter","sku":null}],"remote":false},{"id":16119928357242,"gid":"gid:\/\/shopify\/Product\/16119928357242","vendor":"Glass Coffee","type":"","handle":"wilder-lazo-bella-alejandria-gesha","variants":[{"id":56943057142138,"price":1285,"name":"Wilder Lazo · Gesha - 125g \/ filter","public_title":"125g \/ filter","sku":null},{"id":56943057174906,"price":1285,"name":"Wilder Lazo · Gesha - 125g \/ espresso","public_title":"125g \/ espresso","sku":null},{"id":56943057207674,"price":2575,"name":"Wilder Lazo · Gesha - 250g \/ filter","public_title":"250g \/ filter","sku":null},{"id":56943057240442,"price":2575,"name":"Wilder Lazo · Gesha - 250g \/ espresso","public_title":"250g \/ espresso","sku":null}],"remote":false}],"page":{"pageType":"collection","resourceType":"collection","resourceId":642544140666,"requestId":"08dd7f8c-584d-45f7-acd7-ff0faeffb161-1793823446"}};
+  for (var attr in meta) {
+    window.ShopifyAnalytics.meta[attr] = meta[attr];
+  }
+</script>
+<script class="analytics">
+  (function () {
+    var customDocumentWrite = function(content) {
+      var jquery = null;
+
+      if (window.jQuery) {
+        jquery = window.jQuery;
+      } else if (window.Checkout && window.Checkout.$) {
+        jquery = window.Checkout.$;
+      }
+
+      if (jquery) {
+        jquery('body').append(content);
+      }
+    };
+
+    var hasLoggedConversion = function(token) {
+      if (token) {
+        return document.cookie.indexOf('loggedConversion=' + token) !== -1;
+      }
+      return false;
+    }
+
+    var setCookieIfConversion = function(token) {
+      if (token) {
+        var twoMonthsFromNow = new Date(Date.now());
+        twoMonthsFromNow.setMonth(twoMonthsFromNow.getMonth() + 2);
+
+        document.cookie = 'loggedConversion=' + token + '; expires=' + twoMonthsFromNow;
+      }
+    }
+
+    var trekkie = window.ShopifyAnalytics.lib = window.trekkie = window.trekkie || [];
+    window.ShopifyAnalytics.lib.trekkie = window.trekkie;
+    if (trekkie.integrations) {
+      return;
+    }
+    trekkie.methods = [
+      'identify',
+      'page',
+      'ready',
+      'track',
+      'trackForm',
+      'trackLink'
+    ];
+    trekkie.factory = function(method) {
+      return function() {
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift(method);
+        trekkie.push(args);
+        if (method == 'track' || method == 'page') {
+          var pageUrl;
+          try {
+            pageUrl = window.location.href;
+          } catch (e) {}
+          var pageReferrer;
+          try {
+            pageReferrer = document.referrer;
+          } catch (e) {}
+          try {
+            if (window.__TREKKIE_SHIM_QUEUE == null) {
+              window.__TREKKIE_SHIM_QUEUE = [];
+            }
+            window.__TREKKIE_SHIM_QUEUE.push({
+              from: 'trekkie-stub',
+              method: method,
+              args: args.slice(1),
+              pageContext: {
+                url: pageUrl,
+                referrer: pageReferrer
+              }
+            });
+          } catch (e) {
+            // no-op
+          }
+        }
+        return trekkie;
+      };
+    };
+    for (var i = 0; i < trekkie.methods.length; i++) {
+      var key = trekkie.methods[i];
+      trekkie[key] = trekkie.factory(key);
+    }
+    trekkie.load = function(config) {
+      trekkie.config = config || {};
+      trekkie.config.initialDocumentCookie = document.cookie;
+      
+    };
+    trekkie.load(
+      {"Trekkie":{"appName":"storefront","development":false,"defaultAttributes":{"shopId":57135595572,"isMerchantRequest":null,"themeId":184588697978,"themeCityHash":"8776517234488085664","contentLanguage":"en","currency":"GBP","eventMetadataId":"7c61ab2c-c25b-4530-b6c0-c47dfbf44eab"},"isServerSideCookieWritingEnabled":true,"monorailRegion":"shop_domain","enabledBetaFlags":["7b21cf0b","b13923a8","4c64608a"]},"Session Attribution":{},"S2S":{"facebookCapiEnabled":false,"source":"trekkie-storefront-renderer","apiClientId":580111}}
+    );
+
+    var loaded = false;
+    trekkie.ready(function() {
+      if (loaded) return;
+      loaded = true;
+
+      window.ShopifyAnalytics.lib = window.trekkie;
+
+      var originalDocumentWrite = document.write;
+      document.write = customDocumentWrite;
+      try { window.ShopifyAnalytics.merchantGoogleAnalytics.call(this); } catch(error) {};
+      document.write = originalDocumentWrite;
+
+      var match = window.location.pathname.match(/checkouts\/(.+)\/(thank_you|post_purchase)/)
+      var token = match? match[1]: undefined;
+      if (!hasLoggedConversion(token)) {
+        setCookieIfConversion(token);
+        window.ShopifyAnalytics.lib.track("Viewed Product Category",{"currency":"GBP","category":"Collection: coffee","collectionName":"coffee","collectionId":642544140666,"nonInteraction":true},undefined,undefined,{"shopifyEmitted":true});
+      }
+    });
+
+    window.ShopifyAnalytics.lib.page(null,{"pageType":"collection","resourceType":"collection","resourceId":642544140666,"requestId":"08dd7f8c-584d-45f7-acd7-ff0faeffb161-1793823446","shopifyEmitted":true});
+
+    var eventsListenerScript = document.createElement('script');
+    eventsListenerScript.async = true;
+    eventsListenerScript.src = "//glasscoffee.co.uk/cdn/shopifycloud/storefront/assets/shop_events_listener-819172a8.js";
+    document.getElementsByTagName('head')[0].appendChild(eventsListenerScript);
+})();</script>
+<script data-application="storefront-renderer" data-monorail-region="shop_domain" data-page-type="collection" data-render-region="gcp-europe-west1" data-resource-timing-sampling-rate="10" data-shop-id="57135595572" data-shs="true" data-shs-beacon="true" data-shs-beacon-endpoint="https://glasscoffee.co.uk/api/collect" data-shs-export-with-fetch="true" data-shs-logs-sample-rate="1" data-theme-instance-id="184588697978" data-theme-name="Dawn" data-theme-version="7.0.0" defer="" src="https://glasscoffee.co.uk/cdn/shopifycloud/perf-kit/shopify-perf-kit-3.15.1.min.js"></script>
+<meta content="00000000-0000-0000-5000-000000000000" data-expiration="1825381047000" name="shopify-y"/><meta content="00000000-0000-0000-5000-000000000000" data-expiration="1793825247000" name="shopify-s"/><meta content="08dd7f8c-584d-45f7-acd7-ff0faeffb161-1793823446" name="request-id"/>
+</head>
+<!-- fixture body trimmed to the product grid -->
+<ul class="grid product-grid grid--2-col-tablet-down grid--3-col-desktop" data-id="template--26375396655482__product-grid" id="product-grid">
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/bambito-estate-caturra-catuai-washed" id="CardLink-template--26375396655482__product-grid-16150973972858"><div class="product-card__media">
+<img alt="Bambito Estate - Caturra Catuai Blend" class="motion-reduce" height="1463" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/Bambito_Smile.jpg?v=1785345031&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/Bambito_Smile.jpg?v=1785345031&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/Bambito_Smile.jpg?v=1785345031&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/Bambito_Smile.jpg?v=1785345031&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/Bambito_Smile.jpg?v=1785345031&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/Bambito_Smile.jpg?v=1785345031&amp;width=940 940w,//glasscoffee.co.uk/cdn/shop/files/Bambito_Smile.jpg?v=1785345031&amp;width=1066 1066w,//glasscoffee.co.uk/cdn/shop/files/Bambito_Smile.jpg?v=1785345031 1170w
+            " width="1170"/><img alt="" class="motion-reduce product-card__image--secondary" height="1402" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/ChatGPT_Image_Jul_11_2026_12_33_57_PM.png?v=1783769764&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/ChatGPT_Image_Jul_11_2026_12_33_57_PM.png?v=1783769764&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/ChatGPT_Image_Jul_11_2026_12_33_57_PM.png?v=1783769764&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/ChatGPT_Image_Jul_11_2026_12_33_57_PM.png?v=1783769764&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/ChatGPT_Image_Jul_11_2026_12_33_57_PM.png?v=1783769764&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/ChatGPT_Image_Jul_11_2026_12_33_57_PM.png?v=1783769764 1122w
+              " width="1122"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--process">Washed</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-16150973972858">Bambito Estate - Caturra Catuai Blend</h3>
+<p class="product-card__meta"><span class="product-card__region">Volcán, Chiriquí, Panama</span><span class="product-card__price">From £11.00</span>
+</p>
+</div>
+</a>
+</div>
+</li>
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/bette-buna-duba-74112-74110-wild-guji-megadu" id="CardLink-template--26375396655482__product-grid-15944074723706"><div class="product-card__media">
+<img alt="Hester and Dawid standing beside raised drying beds at Bette Buna in Huila, surrounded by processing structures and vegetation" class="motion-reduce" height="1536" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/bette-buna-producers-drying-beds.png?v=1776256920&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/bette-buna-producers-drying-beds.png?v=1776256920&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/bette-buna-producers-drying-beds.png?v=1776256920&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/bette-buna-producers-drying-beds.png?v=1776256920&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/bette-buna-producers-drying-beds.png?v=1776256920&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/bette-buna-producers-drying-beds.png?v=1776256920&amp;width=940 940w,//glasscoffee.co.uk/cdn/shop/files/bette-buna-producers-drying-beds.png?v=1776256920 1024w
+            " width="1024"/><img alt="" class="motion-reduce product-card__image--secondary" height="1536" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/bette-buna-producer-cherry-selection-field.png?v=1776257189&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/bette-buna-producer-cherry-selection-field.png?v=1776257189&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/bette-buna-producer-cherry-selection-field.png?v=1776257189&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/bette-buna-producer-cherry-selection-field.png?v=1776257189&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/bette-buna-producer-cherry-selection-field.png?v=1776257189&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/bette-buna-producer-cherry-selection-field.png?v=1776257189 1024w
+              " width="1024"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--process">Natural</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-15944074723706">Bette Buna - 74112, 74110</h3>
+<p class="product-card__meta"><span class="product-card__region">Guji, Ethiopia</span><span class="product-card__price">From £6.80</span>
+</p>
+</div>
+</a>
+</div>
+</li>
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/chevas-reactor-geisha" id="CardLink-template--26375396655482__product-grid-16157416882554"><div class="product-card__media">
+<img alt="Chevas - Reactor Mosto · Geisha" class="motion-reduce" height="2048" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/DSC01568_ecf5394e-e5f7-49bf-a451-c16b74e7269b.jpg?v=1790368991&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/DSC01568_ecf5394e-e5f7-49bf-a451-c16b74e7269b.jpg?v=1790368991&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/DSC01568_ecf5394e-e5f7-49bf-a451-c16b74e7269b.jpg?v=1790368991&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/DSC01568_ecf5394e-e5f7-49bf-a451-c16b74e7269b.jpg?v=1790368991&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/DSC01568_ecf5394e-e5f7-49bf-a451-c16b74e7269b.jpg?v=1790368991&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/DSC01568_ecf5394e-e5f7-49bf-a451-c16b74e7269b.jpg?v=1790368991&amp;width=940 940w,//glasscoffee.co.uk/cdn/shop/files/DSC01568_ecf5394e-e5f7-49bf-a451-c16b74e7269b.jpg?v=1790368991&amp;width=1066 1066w,//glasscoffee.co.uk/cdn/shop/files/DSC01568_ecf5394e-e5f7-49bf-a451-c16b74e7269b.jpg?v=1790368991 1365w
+            " width="1365"/><img alt="" class="motion-reduce product-card__image--secondary" height="2048" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/DSC01628.jpg?v=1790368884&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/DSC01628.jpg?v=1790368884&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/DSC01628.jpg?v=1790368884&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/DSC01628.jpg?v=1790368884&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/DSC01628.jpg?v=1790368884&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/DSC01628.jpg?v=1790368884 1365w
+              " width="1365"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--process">Washed, Mosto</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-16157416882554">Chevas - Reactor Mosto · Geisha</h3>
+<p class="product-card__meta"><span class="product-card__region">El Salto, Panama</span><span class="product-card__price">From £23.20</span>
+</p>
+</div>
+</a>
+</div>
+</li>
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/nintai" id="CardLink-template--26375396655482__product-grid-15391682265466"><div class="product-card__media">
+<img alt="Hachi - Nintai (忍耐) · Gesha" class="motion-reduce" height="2048" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/Nintai.jpg?v=1759331006&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/Nintai.jpg?v=1759331006&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/Nintai.jpg?v=1759331006&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/Nintai.jpg?v=1759331006&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/Nintai.jpg?v=1759331006&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/Nintai.jpg?v=1759331006&amp;width=940 940w,//glasscoffee.co.uk/cdn/shop/files/Nintai.jpg?v=1759331006&amp;width=1066 1066w,//glasscoffee.co.uk/cdn/shop/files/Nintai.jpg?v=1759331006 2048w
+            " width="2048"/><img alt="" class="motion-reduce product-card__image--secondary" height="2048" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/Nintai2.jpg?v=1759336698&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/Nintai2.jpg?v=1759336698&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/Nintai2.jpg?v=1759336698&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/Nintai2.jpg?v=1759336698&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/Nintai2.jpg?v=1759336698&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/Nintai2.jpg?v=1759336698 2048w
+              " width="2048"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--process">Symbiotic</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-15391682265466">Hachi - Nintai (忍耐) · Gesha</h3>
+<p class="product-card__meta"><span class="product-card__region">Jurutungo, Panama</span><span class="product-card__price">From £35.00</span>
+</p>
+</div>
+</a>
+</div>
+</li>
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/hacienda-copey-itadaki-gesha-natural" id="CardLink-template--26375396655482__product-grid-16210428100986"><div class="product-card__media">
+<img alt="Hacienda Copey - ITADAKI · Gesha" class="motion-reduce" height="2500" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-natural-drying-beds.jpg?v=1791996802&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-natural-drying-beds.jpg?v=1791996802&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-natural-drying-beds.jpg?v=1791996802&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-natural-drying-beds.jpg?v=1791996802&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-natural-drying-beds.jpg?v=1791996802&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-natural-drying-beds.jpg?v=1791996802&amp;width=940 940w,//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-natural-drying-beds.jpg?v=1791996802&amp;width=1066 1066w,//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-natural-drying-beds.jpg?v=1791996802 2000w
+            " width="2000"/><img alt="" class="motion-reduce product-card__image--secondary" height="2500" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/03_Ripening_Cherries.jpg?v=1790099524&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/03_Ripening_Cherries.jpg?v=1790099524&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/03_Ripening_Cherries.jpg?v=1790099524&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/03_Ripening_Cherries.jpg?v=1790099524&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/03_Ripening_Cherries.jpg?v=1790099524&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/03_Ripening_Cherries.jpg?v=1790099524 2000w
+              " width="2000"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--process">Natural</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-16210428100986">Hacienda Copey - ITADAKI · Gesha</h3>
+<p class="product-card__meta"><span class="product-card__region">Tarrazu, Costa Rica</span><span class="product-card__price">From £23.20</span>
+</p>
+</div>
+</a>
+</div>
+</li>
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/hacienda-copey-itadaki-gesha-honey" id="CardLink-template--26375396655482__product-grid-16216453644666"><div class="product-card__media">
+<img alt="Hacienda Copey - ITADAKI · Gesha" class="motion-reduce" height="2500" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-honey-farm-walk.jpg?v=1791996767&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-honey-farm-walk.jpg?v=1791996767&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-honey-farm-walk.jpg?v=1791996767&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-honey-farm-walk.jpg?v=1791996767&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-honey-farm-walk.jpg?v=1791996767&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-honey-farm-walk.jpg?v=1791996767&amp;width=940 940w,//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-honey-farm-walk.jpg?v=1791996767&amp;width=1066 1066w,//glasscoffee.co.uk/cdn/shop/files/hacienda-copey-itadaki-gesha-honey-farm-walk.jpg?v=1791996767 2000w
+            " width="2000"/><img alt="" class="motion-reduce product-card__image--secondary" height="2500" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/02_Green_Cherry_Detail.jpg?v=1790099523&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/02_Green_Cherry_Detail.jpg?v=1790099523&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/02_Green_Cherry_Detail.jpg?v=1790099523&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/02_Green_Cherry_Detail.jpg?v=1790099523&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/02_Green_Cherry_Detail.jpg?v=1790099523&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/02_Green_Cherry_Detail.jpg?v=1790099523 2000w
+              " width="2000"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--process">Honey</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-16216453644666">Hacienda Copey - ITADAKI · Gesha</h3>
+<p class="product-card__meta"><span class="product-card__region">Tarrazu, Costa Rica</span><span class="product-card__price">From £18.80</span>
+</p>
+</div>
+</a>
+</div>
+</li>
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/hacienda-copey" id="CardLink-template--26375396655482__product-grid-15525940953466"><div class="product-card__media">
+<img alt="Hacienda Copey - Takara · Gesha" class="motion-reduce" height="1536" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/Maninspectingcoffeeplantsinplantation.png?v=1769015194&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/Maninspectingcoffeeplantsinplantation.png?v=1769015194&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/Maninspectingcoffeeplantsinplantation.png?v=1769015194&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/Maninspectingcoffeeplantsinplantation.png?v=1769015194&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/Maninspectingcoffeeplantsinplantation.png?v=1769015194&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/Maninspectingcoffeeplantsinplantation.png?v=1769015194&amp;width=940 940w,//glasscoffee.co.uk/cdn/shop/files/Maninspectingcoffeeplantsinplantation.png?v=1769015194 1024w
+            " width="1024"/><img alt="" class="motion-reduce product-card__image--secondary" height="1536" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/ResplendentQuetzalinforestlight.png?v=1769015283&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/ResplendentQuetzalinforestlight.png?v=1769015283&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/ResplendentQuetzalinforestlight.png?v=1769015283&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/ResplendentQuetzalinforestlight.png?v=1769015283&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/ResplendentQuetzalinforestlight.png?v=1769015283&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/ResplendentQuetzalinforestlight.png?v=1769015283 1024w
+              " width="1024"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--process">Washed</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-15525940953466">Hacienda Copey - Takara · Gesha</h3>
+<p class="product-card__meta"><span class="product-card__region">Tarrazu, Costa Rica</span><span class="product-card__price">From £22.00</span>
+</p>
+</div>
+</a>
+</div>
+</li>
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/julio-madrid-uba-geisha-logan" id="CardLink-template--26375396655482__product-grid-16119923212666"><div class="product-card__media">
+<img alt="Julio Madrid - UBA · Logan · Geisha" class="motion-reduce" height="3581" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/UBA17.jpg?v=1780506294&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/UBA17.jpg?v=1780506294&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/UBA17.jpg?v=1780506294&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/UBA17.jpg?v=1780506294&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/UBA17.jpg?v=1780506294&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/UBA17.jpg?v=1780506294&amp;width=940 940w,//glasscoffee.co.uk/cdn/shop/files/UBA17.jpg?v=1780506294&amp;width=1066 1066w,//glasscoffee.co.uk/cdn/shop/files/UBA17.jpg?v=1780506294 2865w
+            " width="2865"/><img alt="" class="motion-reduce product-card__image--secondary" height="4000" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/Q_16.jpg?v=1780506632&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/Q_16.jpg?v=1780506632&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/Q_16.jpg?v=1780506632&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/Q_16.jpg?v=1780506632&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/Q_16.jpg?v=1780506632&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/Q_16.jpg?v=1780506632 3200w
+              " width="3200"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--process">Culturing</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-16119923212666">Julio Madrid - UBA · Logan · Geisha</h3>
+<p class="product-card__meta"><span class="product-card__region">Risaralda, Colombia</span><span class="product-card__price">From £19.00</span>
+</p>
+</div>
+</a>
+</div>
+</li>
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/red-fruits" id="CardLink-template--26375396655482__product-grid-14805939880314"><div class="product-card__media">
+<img alt="Pink Symphony Strawberries Cream Blend Sebastian Ramirez El Placer" class="motion-reduce" height="800" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/Pink_Symphony_Strawberries_Cream_Blend_Sebastian_Ramirez_El_Placer_Coffee_Bags.jpg?v=1749822129&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/Pink_Symphony_Strawberries_Cream_Blend_Sebastian_Ramirez_El_Placer_Coffee_Bags.jpg?v=1749822129&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/Pink_Symphony_Strawberries_Cream_Blend_Sebastian_Ramirez_El_Placer_Coffee_Bags.jpg?v=1749822129&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/Pink_Symphony_Strawberries_Cream_Blend_Sebastian_Ramirez_El_Placer_Coffee_Bags.jpg?v=1749822129&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/Pink_Symphony_Strawberries_Cream_Blend_Sebastian_Ramirez_El_Placer_Coffee_Bags.jpg?v=1749822129&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/Pink_Symphony_Strawberries_Cream_Blend_Sebastian_Ramirez_El_Placer_Coffee_Bags.jpg?v=1749822129 800w
+            " width="800"/><img alt="" class="motion-reduce product-card__image--secondary" height="2048" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/Pink_Symphony_Strawberries_Cream_Blend_Sebastian_Ramirez_El_Placer.jpg?v=1749822080&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/Pink_Symphony_Strawberries_Cream_Blend_Sebastian_Ramirez_El_Placer.jpg?v=1749822080&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/Pink_Symphony_Strawberries_Cream_Blend_Sebastian_Ramirez_El_Placer.jpg?v=1749822080&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/Pink_Symphony_Strawberries_Cream_Blend_Sebastian_Ramirez_El_Placer.jpg?v=1749822080&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/Pink_Symphony_Strawberries_Cream_Blend_Sebastian_Ramirez_El_Placer.jpg?v=1749822080&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/Pink_Symphony_Strawberries_Cream_Blend_Sebastian_Ramirez_El_Placer.jpg?v=1749822080 2048w
+              " width="2048"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--sold-out">Sold out</span><span class="product-card__tag product-card__tag--process">Co-Fermented Honey</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-14805939880314">Sebastian Ramirez - Red Fruits · Pink Bourbon</h3>
+<p class="product-card__meta"><span class="product-card__region">Quindío, Colombia</span><span class="product-card__price">From £13.25</span>
+</p>
+</div>
+</a>
+</div>
+</li>
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/tnt-coffee-lab-talamanca-mosto-geisha-hot-november-rain" id="CardLink-template--26375396655482__product-grid-16011288281466"><div class="product-card__media">
+<img alt="TNT Coffee Lab x MamaCata - Mosto · Geisha" class="motion-reduce" height="1500" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/F01_Jose_David_Garrido_Portrait__COLOUR_MATCHED_4X5__USAGE_CLEARED.jpg?v=1789833383&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/F01_Jose_David_Garrido_Portrait__COLOUR_MATCHED_4X5__USAGE_CLEARED.jpg?v=1789833383&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/F01_Jose_David_Garrido_Portrait__COLOUR_MATCHED_4X5__USAGE_CLEARED.jpg?v=1789833383&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/F01_Jose_David_Garrido_Portrait__COLOUR_MATCHED_4X5__USAGE_CLEARED.jpg?v=1789833383&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/F01_Jose_David_Garrido_Portrait__COLOUR_MATCHED_4X5__USAGE_CLEARED.jpg?v=1789833383&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/F01_Jose_David_Garrido_Portrait__COLOUR_MATCHED_4X5__USAGE_CLEARED.jpg?v=1789833383&amp;width=940 940w,//glasscoffee.co.uk/cdn/shop/files/F01_Jose_David_Garrido_Portrait__COLOUR_MATCHED_4X5__USAGE_CLEARED.jpg?v=1789833383&amp;width=1066 1066w,//glasscoffee.co.uk/cdn/shop/files/F01_Jose_David_Garrido_Portrait__COLOUR_MATCHED_4X5__USAGE_CLEARED.jpg?v=1789833383 1200w
+            " width="1200"/><img alt="" class="motion-reduce product-card__image--secondary" height="1402" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/TNT_Hot_November_Rain_Adrian_1_dc2f7269-d389-4953-8551-45676bb6b1d6.png?v=1790067295&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/TNT_Hot_November_Rain_Adrian_1_dc2f7269-d389-4953-8551-45676bb6b1d6.png?v=1790067295&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/TNT_Hot_November_Rain_Adrian_1_dc2f7269-d389-4953-8551-45676bb6b1d6.png?v=1790067295&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/TNT_Hot_November_Rain_Adrian_1_dc2f7269-d389-4953-8551-45676bb6b1d6.png?v=1790067295&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/TNT_Hot_November_Rain_Adrian_1_dc2f7269-d389-4953-8551-45676bb6b1d6.png?v=1790067295&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/TNT_Hot_November_Rain_Adrian_1_dc2f7269-d389-4953-8551-45676bb6b1d6.png?v=1790067295 1122w
+              " width="1122"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--process">Natural, Mosto</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-16011288281466">TNT Coffee Lab x MamaCata - Mosto · Geisha</h3>
+<p class="product-card__meta"><span class="product-card__region">Chiriquí, Panama</span><span class="product-card__price">From £21.00</span>
+</p>
+</div>
+</a>
+</div>
+</li>
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/tnt-coffee-lab-talamanca-honey-kefir-geisha" id="CardLink-template--26375396655482__product-grid-16115899367802"><div class="product-card__media">
+<img alt="TNT Coffee Lab x Talamanca - Kefir · Geisha" class="motion-reduce" height="3750" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/TNT_Lab_Kefir_Processing_cbe930e8-cb7a-48f9-a63f-b3fda42ba3b1.png?v=1779972850&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/TNT_Lab_Kefir_Processing_cbe930e8-cb7a-48f9-a63f-b3fda42ba3b1.png?v=1779972850&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/TNT_Lab_Kefir_Processing_cbe930e8-cb7a-48f9-a63f-b3fda42ba3b1.png?v=1779972850&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/TNT_Lab_Kefir_Processing_cbe930e8-cb7a-48f9-a63f-b3fda42ba3b1.png?v=1779972850&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/TNT_Lab_Kefir_Processing_cbe930e8-cb7a-48f9-a63f-b3fda42ba3b1.png?v=1779972850&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/TNT_Lab_Kefir_Processing_cbe930e8-cb7a-48f9-a63f-b3fda42ba3b1.png?v=1779972850&amp;width=940 940w,//glasscoffee.co.uk/cdn/shop/files/TNT_Lab_Kefir_Processing_cbe930e8-cb7a-48f9-a63f-b3fda42ba3b1.png?v=1779972850&amp;width=1066 1066w,//glasscoffee.co.uk/cdn/shop/files/TNT_Lab_Kefir_Processing_cbe930e8-cb7a-48f9-a63f-b3fda42ba3b1.png?v=1779972850 3000w
+            " width="3000"/><img alt="" class="motion-reduce product-card__image--secondary" height="3750" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/TNT_Kefir_Processing_Bucket_4154a265-0a27-4d14-be08-8c098da8ae92.png?v=1779972848&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/TNT_Kefir_Processing_Bucket_4154a265-0a27-4d14-be08-8c098da8ae92.png?v=1779972848&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/TNT_Kefir_Processing_Bucket_4154a265-0a27-4d14-be08-8c098da8ae92.png?v=1779972848&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/TNT_Kefir_Processing_Bucket_4154a265-0a27-4d14-be08-8c098da8ae92.png?v=1779972848&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/TNT_Kefir_Processing_Bucket_4154a265-0a27-4d14-be08-8c098da8ae92.png?v=1779972848&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/TNT_Kefir_Processing_Bucket_4154a265-0a27-4d14-be08-8c098da8ae92.png?v=1779972848 3000w
+              " width="3000"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--process">Honey, Kefir</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-16115899367802">TNT Coffee Lab x Talamanca - Kefir · Geisha</h3>
+<p class="product-card__meta"><span class="product-card__region">Chiriquí, Panama</span><span class="product-card__price">From £21.00</span>
+</p>
+</div>
+</a>
+</div>
+</li>
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/tnt-coffee-lab-talamanca-geisha" id="CardLink-template--26375396655482__product-grid-16010199826810"><div class="product-card__media">
+<img alt="TNT Coffee Lab x Talamanca - Koji · Geisha" class="motion-reduce" height="1402" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/F02_Digna_Nunez_Walking_the_Talamanca_Coffee_Plot__ORIGINAL__USAGE_CLEARED.jpg?v=1789808252&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/F02_Digna_Nunez_Walking_the_Talamanca_Coffee_Plot__ORIGINAL__USAGE_CLEARED.jpg?v=1789808252&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/F02_Digna_Nunez_Walking_the_Talamanca_Coffee_Plot__ORIGINAL__USAGE_CLEARED.jpg?v=1789808252&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/F02_Digna_Nunez_Walking_the_Talamanca_Coffee_Plot__ORIGINAL__USAGE_CLEARED.jpg?v=1789808252&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/F02_Digna_Nunez_Walking_the_Talamanca_Coffee_Plot__ORIGINAL__USAGE_CLEARED.jpg?v=1789808252&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/F02_Digna_Nunez_Walking_the_Talamanca_Coffee_Plot__ORIGINAL__USAGE_CLEARED.jpg?v=1789808252 935w
+            " width="935"/><img alt="" class="motion-reduce product-card__image--secondary" height="1280" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/TNTCoffeeLabPanamaCoffeeFermentationTeam.png?v=1780398635&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/TNTCoffeeLabPanamaCoffeeFermentationTeam.png?v=1780398635&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/TNTCoffeeLabPanamaCoffeeFermentationTeam.png?v=1780398635&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/TNTCoffeeLabPanamaCoffeeFermentationTeam.png?v=1780398635&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/TNTCoffeeLabPanamaCoffeeFermentationTeam.png?v=1780398635&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/TNTCoffeeLabPanamaCoffeeFermentationTeam.png?v=1780398635 1024w
+              " width="1024"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--process">Natural, Koji</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-16010199826810">TNT Coffee Lab x Talamanca - Koji · Geisha</h3>
+<p class="product-card__meta"><span class="product-card__region">Chiriquí, Panama</span><span class="product-card__price">From £19.80</span>
+</p>
+</div>
+</a>
+</div>
+</li>
+<li class="grid__item">
+<link href="//glasscoffee.co.uk/cdn/shop/t/40/assets/component-product-card.css?v=150184873732080703321792752314" media="all" rel="stylesheet" type="text/css"/>
+<div class="card-wrapper product-card-wrapper">
+<a class="product-card" href="/products/wilder-lazo-bella-alejandria-gesha" id="CardLink-template--26375396655482__product-grid-16119928357242"><div class="product-card__media">
+<img alt="Wilder Lazo · Gesha" class="motion-reduce" height="4220" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/Image_from_Dropbox_1.jpg?v=1780507770&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/Image_from_Dropbox_1.jpg?v=1780507770&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/Image_from_Dropbox_1.jpg?v=1780507770&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/Image_from_Dropbox_1.jpg?v=1780507770&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/Image_from_Dropbox_1.jpg?v=1780507770&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/Image_from_Dropbox_1.jpg?v=1780507770&amp;width=940 940w,//glasscoffee.co.uk/cdn/shop/files/Image_from_Dropbox_1.jpg?v=1780507770&amp;width=1066 1066w,//glasscoffee.co.uk/cdn/shop/files/Image_from_Dropbox_1.jpg?v=1780507770 3376w
+            " width="3376"/><img alt="" class="motion-reduce product-card__image--secondary" height="3376" loading="lazy" sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" src="//glasscoffee.co.uk/cdn/shop/files/PhotofromDropbox_1.jpg?v=1780507724&amp;width=533" srcset="//glasscoffee.co.uk/cdn/shop/files/PhotofromDropbox_1.jpg?v=1780507724&amp;width=280 280w,//glasscoffee.co.uk/cdn/shop/files/PhotofromDropbox_1.jpg?v=1780507724&amp;width=400 400w,//glasscoffee.co.uk/cdn/shop/files/PhotofromDropbox_1.jpg?v=1780507724&amp;width=533 533w,//glasscoffee.co.uk/cdn/shop/files/PhotofromDropbox_1.jpg?v=1780507724&amp;width=720 720w,//glasscoffee.co.uk/cdn/shop/files/PhotofromDropbox_1.jpg?v=1780507724 2701w
+              " width="2701"/></div><div class="product-card__tags"><span class="product-card__tag product-card__tag--process">Extended, Natural</span></div><div class="product-card__overlay">
+<h3 class="product-card__title" id="title-template--26375396655482__product-grid-16119928357242">Wilder Lazo · Gesha</h3>
+<p class="product-card__meta"><span class="product-card__region">San Adolfo, Huila, Colombia</span><span class="product-card__price">From £12.85</span>
+</p>
+</div>
+</a>
+</div>
+</li></ul>

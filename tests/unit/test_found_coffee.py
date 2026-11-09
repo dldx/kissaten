@@ -60,7 +60,7 @@ async def test_registry_entry():
     assert info.currency == "CAD"
     assert info.country == "Canada"
     assert info.requires_api_key is True
-    assert info.status == "experimental"
+    assert info.status == "available"
 
 
 def test_roaster_name_matches_registry():

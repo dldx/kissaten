@@ -53,7 +53,7 @@ EXCLUDED_URL_PATTERNS = [
     requires_api_key=True,
     currency="AUD",
     country="Australia",
-    status="experimental",
+    status="available",
 )
 class ThatsWhyldScraper(BaseScraper):
     """Scraper for That's Whyld (thatswhyld.com.au) — a Squarespace storefront.

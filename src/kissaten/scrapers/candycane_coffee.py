@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="CZK",
     country="Czechia",
-    status="experimental",
+    status="available",
 )
 class CandycaneCoffeeScraper(BaseScraper):
     """Scraper for Candycane Coffee (candycane.coffee) with AI extraction."""

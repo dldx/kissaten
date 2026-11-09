@@ -35,7 +35,7 @@ API_PRODUCTS_URL = "https://buoncaffe.com.tw/wp-json/wc/store/v1/products"
     requires_api_key=True,
     currency="TWD",
     country="Taiwan",
-    status="experimental",
+    status="available",
 )
 class BuonCaffeScraper(BaseScraper):
     """Scraper for Buon Caffe (buoncaffe.com.tw) with AI-powered extraction."""

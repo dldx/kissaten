@@ -21,7 +21,7 @@ _COLLECTION_SEGMENT = "/collections/frontpage"
     requires_api_key=True,
     currency="EUR",
     country="Germany",
-    status="experimental",
+    status="available",
 )
 class PurpurCoffeeScraper(ShopifyJsonScraper):
     """Scraper for purpur Café & Kaffeerösterei (purpur.coffee) using Shopify products.json."""

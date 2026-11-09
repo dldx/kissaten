@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="NOK",
     country="Norway",
-    status="experimental",
+    status="available",
 )
 class BergenKaffebrenneriScraper(ShopifyJsonScraper):
     """Scraper for Kaffe Brenneri (bergenkaffebrenneri.no) using Shopify products.json."""

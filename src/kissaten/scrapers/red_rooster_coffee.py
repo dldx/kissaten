@@ -51,7 +51,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class RedRoosterCoffeeScraper(BaseScraper):
     """Scraper for Red Rooster Coffee (Next.js + Sanity) with AI-powered extraction."""

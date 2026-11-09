@@ -37,7 +37,7 @@ API_PRODUCTS_URL = "https://cityboycoffee.com/wp-json/wc/store/v1/products"
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class CityBoyCoffeeScraper(BaseScraper):
     """Scraper for City Boy Coffee (cityboycoffee.com) with AI extraction."""

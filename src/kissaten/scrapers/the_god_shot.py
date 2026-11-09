@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Belgium",
-    status="experimental",
+    status="available",
 )
 class TheGodShotScraper(BaseScraper):
     """Scraper for The God Shot (thegodshot.be) — an Odoo eCommerce storefront.

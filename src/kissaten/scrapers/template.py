@@ -56,7 +56,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,  # Set to True if using AI extraction (RECOMMENDED)
     currency="USD",  # Default currency for this roaster
     country="United States",  # Country where roaster is based
-    status="experimental",  # available, experimental, or deprecated
+    status="available",  # available, experimental, or deprecated
 )
 class ExampleCoffeeScraper(BaseScraper):
     """Example scraper template - replace with actual roaster implementation."""

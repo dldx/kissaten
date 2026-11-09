@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Coffee beans | Wanderlust Espresso</title></head>
+<body>
+  <!-- Current Wix product-widget gallery: one section per rendered card.
+       The stock signal is the card's product-widget-OutOfStock badge and/or
+       the action-button text/state. The quick-view modal templates below
+       contain "Out of Stock" text for every product, so whole-card text
+       sniffing must NOT be used. -->
+  <section class="-M081" data-hook="product-widget">
+    <a data-hook="product-widget-layout" href="https://www.wanderlust-espresso.com/product-page/house-blend">
+      <div data-hook="product-widget-image-component">
+        <span class="jMeVp" data-hook="product-widget-ribbon">House Blend</span>
+      </div>
+      <div data-hook="product-widget-content-area">
+        <div data-hook="product-widget-content">
+          <div data-hook="product-details">
+            <h3 data-hook="product-name">House Blend</h3>
+          </div>
+          <button aria-disabled="false" data-hook="action-button"><span>Add to Cart</span></button>
+        </div>
+      </div>
+    </a>
+  </section>
+  <!-- Sold-out card: carries the OutOfStock badge -->
+  <section class="-M081" data-hook="product-widget">
+    <a data-hook="product-widget-layout" href="https://www.wanderlust-espresso.com/product-page/cosmic-blend">
+      <div data-hook="product-widget-image-component">
+        <span class="jMeVp" data-hook="product-widget-ribbon">House Blend</span>
+      </div>
+      <div data-hook="product-widget-content-area">
+        <div data-hook="product-widget-content">
+          <div data-hook="product-details">
+            <h3 data-hook="product-name">Cosmic Blend</h3>
+            <div class="DDgM4" data-hook="product-widget-OutOfStock">Out of Stock</div>
+          </div>
+          <button aria-disabled="false" data-hook="action-button"><span>Add to Cart</span></button>
+        </div>
+      </div>
+    </a>
+  </section>
+
+  <!-- Hidden quick-view modal templates: every product carries "Out of Stock"
+       text here; these must not flip in-stock products to sold out. -->
+  <div data-hook="product-item-root" class="product-item">
+    <a href="https://www.wanderlust-espresso.com/product-page/house-blend" class="product-item-link"></a>
+    <div class="product-details"><span>Price £8.00</span>
+      <button data-hook="product-item-add-to-cart-button">Add to Cart</button>
+    </div>
+    <span>Quick View House Blend Price £8.00 Out of Stock</span>
+  </div>
+  <div data-hook="product-item-root" class="product-item">
+    <a href="https://www.wanderlust-espresso.com/product-page/cosmic-blend" class="product-item-link"></a>
+    <div class="product-details"><span>Price £8.25</span>
+      <button data-hook="product-item-add-to-cart-button">Out of Stock</button>
+    </div>
+    <span>Quick View Cosmic Blend Price £8.25 Out of Stock</span>
+  </div>
+</body>
+</html>

@@ -1,0 +1,878 @@
+{
+  "products": [
+    {
+      "id": "gid://shopify/Product/8452464181594",
+      "handle": "volcan-azul-costa-rica-washed-sl28",
+      "availableForSale": true,
+      "title": "Volcan Azul - Costa Rica - Washed SL28",
+      "description": "Varietal: SL28Processing: WashedTaste Description: Florals, Plum & Stone Fruit Roasted Coffee Beans (Ristede hele kaffebønner)",
+      "descriptionHtml": "<p><strong></strong><span style=\"font-weight: 400;\"></span><span style=\"font-weight: 400;\"><strong>Varietal:</strong><span> SL28</span></span><br><span style=\"font-weight: 400;\"><strong>Processing:</strong><span> Washed</span></span><br><span style=\"font-weight: 400;\"><strong>Taste Description:</strong><span> </span></span>Florals, Plum &amp; Stone Fruit</p>\n<p><br></p>\n<p style=\"font-size: 10px;\">Roasted Coffee Beans (Ristede hele kaffebønner)</p>",
+      "options": [
+        {
+          "id": "gid://shopify/ProductOption/11026462441818",
+          "name": "Roast Type & Size",
+          "values": [
+            "125g",
+            "250g",
+            "1kg"
+          ]
+        }
+      ],
+      "priceRange": {
+        "maxVariantPrice": {
+          "amount": "816.0",
+          "currencyCode": "DKK"
+        },
+        "minVariantPrice": {
+          "amount": "168.0",
+          "currencyCode": "DKK"
+        }
+      },
+      "featuredImage": {
+        "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250g.jpg?v=1788768632",
+        "altText": null,
+        "width": 3673,
+        "height": 3673
+      },
+      "seo": {
+        "description": null,
+        "title": null
+      },
+      "tags": [
+        "Filter Beans"
+      ],
+      "updatedAt": "2026-11-04T13:40:05Z",
+      "technicalDetails": null,
+      "sizeChart": null,
+      "recommendations": {
+        "value": "Rest the coffee for a minimum of 14 days before brewing.\nStore in a cool, dry place.\nYour Brewing water makes a difference  \nFor a detailed brewing recipe click on our Coffee Infos Page."
+      },
+      "supplierInformation": {
+        "value": "Volcan Azul is a truly remarkable coffee estate located in the Alajuela region of Costa Rica and overseen by Don Alejo Castro. The fifth generation of his family to tend to the land, Alejo is an incredibly knowledgeable farmer, and the estate has a rich history which can be clearly traced back to the late 19th century.The farm produces a vast variety of cultivars and varietals, such as Catuai, Cat …[truncated for fixture]"
+      },
+      "images": [
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250g.jpg?v=1788768632",
+          "altText": "Volcan Azul - Costa Rica - Washed SL28 - filter250g",
+          "width": 3673,
+          "height": 3673
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/125gsidesquare_4125b823-6ce3-4680-8b7b-d43d9a6f9cc9.jpg?v=1774943187",
+          "altText": "Volcan Azul - Costa Rica - Washed SL28 - 125gsidesquare_4125b823-6ce3-4680-8b7b-d43d9a6f9cc9",
+          "width": 1365,
+          "height": 1366
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250gboxsquare_1c468e49-7397-4dc4-a72b-2252b2bdc54c.jpg?v=1769603747",
+          "altText": "Volcan Azul - Costa Rica - Washed SL28 - filter250gboxsquare_1c468e49-7397-4dc4-a72b-2252b2bdc54c",
+          "width": 919,
+          "height": 920
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/1kgbagshelf2square_e1225311-e096-499a-95b4-287bc724dea5.jpg?v=1774943219",
+          "altText": "Volcan Azul - Costa Rica - Washed SL28 - 1kgbagshelf2square_e1225311-e096-499a-95b4-287bc724dea5",
+          "width": 971,
+          "height": 971
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/VolcanAzul_f76ffc25-013c-4cd0-9b4b-cbe9974f55d3.jpg?v=1793178838",
+          "altText": "Volcan Azul - Costa Rica - Washed SL28 - VolcanAzul_f76ffc25-013c-4cd0-9b4b-cbe9974f55d3",
+          "width": 1050,
+          "height": 1500
+        }
+      ],
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/50286972207450",
+          "title": "125g",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Roast Type & Size",
+              "value": "125g"
+            }
+          ],
+          "price": {
+            "amount": "168.0",
+            "currencyCode": "DKK"
+          }
+        },
+        {
+          "id": "gid://shopify/ProductVariant/46791956300122",
+          "title": "250g",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Roast Type & Size",
+              "value": "250g"
+            }
+          ],
+          "price": {
+            "amount": "249.0",
+            "currencyCode": "DKK"
+          }
+        },
+        {
+          "id": "gid://shopify/ProductVariant/46791956332890",
+          "title": "1kg",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Roast Type & Size",
+              "value": "1kg"
+            }
+          ],
+          "price": {
+            "amount": "816.0",
+            "currencyCode": "DKK"
+          }
+        }
+      ],
+      "collections": [
+        {
+          "handle": "everything",
+          "title": "everything"
+        },
+        {
+          "handle": "filter-coffee",
+          "title": "Filter Coffee"
+        }
+      ],
+      "sellingPlanGroups": []
+    },
+    {
+      "id": "gid://shopify/Product/8526933492058",
+      "handle": "el-morito-guatemala-washed-pacamara",
+      "availableForSale": true,
+      "title": "El Morito - Guatemala - Washed Red Pacamara",
+      "description": "Varietal: Red PacamaraProcessing: WashedTaste Description: Pomelo, Red Fruits, Florals Roasted Coffee Beans (Ristede hele kaffebønner)",
+      "descriptionHtml": "<p data-pm-slice=\"1 1 []\"><strong><span style=\"font-weight: 400;\">Varietal:<span> Red Pacamara</span></span><br><span style=\"font-weight: 400;\">Processing:<span> Washed</span></span><br><span style=\"font-weight: 400;\">Taste Description: <span>Pomelo, Red Fruits, Florals</span></span></strong></p>\n<p> </p>\n<p style=\"font-size: 10px;\">Roasted Coffee Beans (Ristede hele kaffebønner)</p>",
+      "options": [
+        {
+          "id": "gid://shopify/ProductOption/11113390637402",
+          "name": "Size",
+          "values": [
+            "125g",
+            "250g",
+            "1kg"
+          ]
+        }
+      ],
+      "priceRange": {
+        "maxVariantPrice": {
+          "amount": "918.0",
+          "currencyCode": "DKK"
+        },
+        "minVariantPrice": {
+          "amount": "171.0",
+          "currencyCode": "DKK"
+        }
+      },
+      "featuredImage": {
+        "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter_250g.jpg?v=1792673584",
+        "altText": null,
+        "width": 3673,
+        "height": 3673
+      },
+      "seo": {
+        "description": null,
+        "title": null
+      },
+      "tags": [
+        "Filter Beans"
+      ],
+      "updatedAt": "2026-11-02T21:37:54Z",
+      "technicalDetails": null,
+      "sizeChart": null,
+      "recommendations": {
+        "value": "Rest the coffee for a minimum of 14 days before brewing.\nStore in a cool, dry place.\nYour Brewing water makes a difference  \nFor a detailed brewing recipe click on our Coffee Infos Page."
+      },
+      "supplierInformation": {
+        "value": "Producer: Roberto Monterroso\nFarm: El Morito \nOrigin: Guatemala\nPartner since: 2023"
+      },
+      "images": [
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter_250g.jpg?v=1792673584",
+          "altText": "El Morito - Guatemala - Washed Red Pacamara - filter_250g",
+          "width": 3673,
+          "height": 3673
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter_125g.jpg?v=1792673583",
+          "altText": "El Morito - Guatemala - Washed Red Pacamara - filter_125g",
+          "width": 3406,
+          "height": 3406
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/125gsidesquare_23030f4f-3940-4f9e-abce-6cd62827af87.jpg?v=1774943219",
+          "altText": "El Morito - Guatemala - Washed Red Pacamara - 125gsidesquare_23030f4f-3940-4f9e-abce-6cd62827af87",
+          "width": 1365,
+          "height": 1366
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250gbox_fb63818c-69c1-48b9-9bbc-a42c73c73e76.jpg?v=1774943219",
+          "altText": "El Morito - Guatemala - Washed Red Pacamara - filter250gbox_fb63818c-69c1-48b9-9bbc-a42c73c73e76",
+          "width": 970,
+          "height": 970
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/1kgbagshelf2square_e1225311-e096-499a-95b4-287bc724dea5.jpg?v=1774943219",
+          "altText": "El Morito - Guatemala - Washed Red Pacamara - 1kgbagshelf2square_e1225311-e096-499a-95b4-287bc724dea5",
+          "width": 971,
+          "height": 971
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/IMG_8556.jpg?v=1792406773",
+          "altText": "El Morito - Guatemala - Washed Red Pacamara - IMG_8556",
+          "width": 1500,
+          "height": 1125
+        }
+      ],
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/49963576525146",
+          "title": "125g",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "125g"
+            }
+          ],
+          "price": {
+            "amount": "171.0",
+            "currencyCode": "DKK"
+          }
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47030190113114",
+          "title": "250g",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "250g"
+            }
+          ],
+          "price": {
+            "amount": "275.0",
+            "currencyCode": "DKK"
+          }
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47030190145882",
+          "title": "1kg",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "1kg"
+            }
+          ],
+          "price": {
+            "amount": "918.0",
+            "currencyCode": "DKK"
+          }
+        }
+      ],
+      "collections": [
+        {
+          "handle": "new",
+          "title": "New"
+        },
+        {
+          "handle": "everything",
+          "title": "everything"
+        },
+        {
+          "handle": "filter-coffee",
+          "title": "Filter Coffee"
+        }
+      ],
+      "sellingPlanGroups": []
+    },
+    {
+      "id": "gid://shopify/Product/10254573306202",
+      "handle": "tadesse-ethiopia-washed-krume-74158",
+      "availableForSale": true,
+      "title": "Tadesse - Ethiopia - Washed Krume 74158",
+      "description": "Varietal: Krume 74158Processing: WashedTaste Description: Peach, Jasmine & Candied Lemon Roasted Coffee Beans (Ristede hele kaffebønner)",
+      "descriptionHtml": "<p><strong></strong><span style=\"font-weight: 400;\"></span><span style=\"font-weight: 400;\"><strong>Varietal:</strong><span> Krume 74158</span></span><br><span style=\"font-weight: 400;\"><strong>Processing:</strong><span> Washed</span></span><br><span style=\"font-weight: 400;\"><strong>Taste Description:</strong><span> Peach, Jasmine &amp; Candied Lemon</span></span></p>\n<p><br></p>\n<p style=\"font-size: 10px;\">Roasted Coffee Beans (Ristede hele kaffebønner)</p>",
+      "options": [
+        {
+          "id": "gid://shopify/ProductOption/12800068387162",
+          "name": "Size",
+          "values": [
+            "125g",
+            "250g",
+            "1kg"
+          ]
+        }
+      ],
+      "priceRange": {
+        "maxVariantPrice": {
+          "amount": "757.0",
+          "currencyCode": "DKK"
+        },
+        "minVariantPrice": {
+          "amount": "146.0",
+          "currencyCode": "DKK"
+        }
+      },
+      "featuredImage": {
+        "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250g.jpg?v=1788768632",
+        "altText": null,
+        "width": 3673,
+        "height": 3673
+      },
+      "seo": {
+        "description": null,
+        "title": null
+      },
+      "tags": [
+        "Filter Beans"
+      ],
+      "updatedAt": "2026-11-04T13:40:04Z",
+      "technicalDetails": null,
+      "sizeChart": null,
+      "recommendations": {
+        "value": "Rest the coffee for a minimum of 14 days before brewing.\nStore in a cool, dry place.\nYour Brewing water makes a difference  \nFor a detailed brewing recipe click on our Coffee Infos Page."
+      },
+      "supplierInformation": {
+        "value": "Producer: Tadesse Hanka\nFarm: Tadesse \nOrigin: Ethiopia \nPartner since: 2025 "
+      },
+      "images": [
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250g.jpg?v=1788768632",
+          "altText": "Tadesse - Ethiopia - Washed Krume 74158 - filter250g",
+          "width": 3673,
+          "height": 3673
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250gboxsquare.jpg?v=1769603694",
+          "altText": "Tadesse - Ethiopia - Washed Krume 74158 - filter250gboxsquare",
+          "width": 919,
+          "height": 920
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/125gfrontsquare.jpg?v=1769603694",
+          "altText": "Tadesse - Ethiopia - Washed Krume 74158 - 125gfrontsquare",
+          "width": 1293,
+          "height": 1293
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/1kgbagsquare.jpg?v=1769603694",
+          "altText": "Tadesse - Ethiopia - Washed Krume 74158 - 1kgbagsquare",
+          "width": 1299,
+          "height": 1299
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/Screenshot_2025-12-21_at_20.04.46.png?v=1769603694",
+          "altText": "Tadesse - Ethiopia - Washed Krume 74158 - Screenshot_2025-12-21_at_20.04.46",
+          "width": 1524,
+          "height": 1006
+        }
+      ],
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/51473848303962",
+          "title": "125g",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "125g"
+            }
+          ],
+          "price": {
+            "amount": "146.0",
+            "currencyCode": "DKK"
+          }
+        },
+        {
+          "id": "gid://shopify/ProductVariant/51473848336730",
+          "title": "250g",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "250g"
+            }
+          ],
+          "price": {
+            "amount": "234.0",
+            "currencyCode": "DKK"
+          }
+        },
+        {
+          "id": "gid://shopify/ProductVariant/51473848369498",
+          "title": "1kg",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "1kg"
+            }
+          ],
+          "price": {
+            "amount": "757.0",
+            "currencyCode": "DKK"
+          }
+        }
+      ],
+      "collections": [
+        {
+          "handle": "everything",
+          "title": "everything"
+        },
+        {
+          "handle": "filter-coffee",
+          "title": "Filter Coffee"
+        }
+      ],
+      "sellingPlanGroups": []
+    },
+    {
+      "id": "gid://shopify/Product/8562756551002",
+      "handle": "el-socorro-guatemala-washed-maracaturra-1",
+      "availableForSale": true,
+      "title": "El Socorro - Guatemala - Red Honey Maracaturra",
+      "description": "Varietal: MaracaturraProcessing: Red Honey Taste Description: Prune, Macadamia Nut, Cane Sugar Roasted Coffee Beans (Ristede hele kaffebønner)",
+      "descriptionHtml": "<p><strong></strong><span style=\"font-weight: 400;\"></span><span style=\"font-weight: 400;\"><strong>Varietal:</strong><span> Maracaturra</span></span><br><span style=\"font-weight: 400;\"><strong>Processing:</strong><span> Red Honey </span></span><br><span style=\"font-weight: 400;\"><strong>Taste Description:</strong><span> Prune, Macadamia Nut, Cane Sugar<br><br></span></span></p>\n<p style=\"font-size: 10px;\">Roasted Coffee Beans (Ristede hele kaffebønner)</p>",
+      "options": [
+        {
+          "id": "gid://shopify/ProductOption/11157411299674",
+          "name": "Roast & Size",
+          "values": [
+            "125g",
+            "250g",
+            "1kg"
+          ]
+        }
+      ],
+      "priceRange": {
+        "maxVariantPrice": {
+          "amount": "691.0",
+          "currencyCode": "DKK"
+        },
+        "minVariantPrice": {
+          "amount": "136.0",
+          "currencyCode": "DKK"
+        }
+      },
+      "featuredImage": {
+        "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter_250g.jpg?v=1792673584",
+        "altText": null,
+        "width": 3673,
+        "height": 3673
+      },
+      "seo": {
+        "description": null,
+        "title": null
+      },
+      "tags": [
+        "Filter Beans"
+      ],
+      "updatedAt": "2026-11-02T21:37:09Z",
+      "technicalDetails": null,
+      "sizeChart": null,
+      "recommendations": {
+        "value": "Rest the coffee for a minimum of 14 days before brewing.\nStore in a cool, dry place.\nYour Brewing water makes a difference\nFor a detailed brewing recipe click on our Coffee Infos Page."
+      },
+      "supplierInformation": {
+        "value": "Producer: Juan Diego de la Cerda\nFarm: El Socorro \nOrigin: Guatemala\nPartner since: 2023"
+      },
+      "images": [
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter_250g.jpg?v=1792673584",
+          "altText": "El Socorro - Guatemala - Red Honey Maracaturra - filter_250g",
+          "width": 3673,
+          "height": 3673
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter_125g.jpg?v=1792673583",
+          "altText": "El Socorro - Guatemala - Red Honey Maracaturra - filter_125g",
+          "width": 3406,
+          "height": 3406
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/125gsidesquare_4125b823-6ce3-4680-8b7b-d43d9a6f9cc9.jpg?v=1774943187",
+          "altText": "El Socorro - Guatemala - Red Honey Maracaturra - 125gsidesquare_4125b823-6ce3-4680-8b7b-d43d9a6f9cc9",
+          "width": 1365,
+          "height": 1366
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250gboxsquare_2ff5d672-88cc-472b-a1bc-57637aff113e.jpg?v=1774943187",
+          "altText": "El Socorro - Guatemala - Red Honey Maracaturra - filter250gboxsquare_2ff5d672-88cc-472b-a1bc-57637aff113e",
+          "width": 919,
+          "height": 920
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/1kgbagshelf2square_e1225311-e096-499a-95b4-287bc724dea5.jpg?v=1774943219",
+          "altText": "El Socorro - Guatemala - Red Honey Maracaturra - 1kgbagshelf2square_e1225311-e096-499a-95b4-287bc724dea5",
+          "width": 971,
+          "height": 971
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/AYE_7461.jpg?v=1792406792",
+          "altText": "El Socorro - Guatemala - Red Honey Maracaturra - AYE_7461",
+          "width": 1000,
+          "height": 1500
+        }
+      ],
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/53491311673690",
+          "title": "125g",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Roast & Size",
+              "value": "125g"
+            }
+          ],
+          "price": {
+            "amount": "136.0",
+            "currencyCode": "DKK"
+          }
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47156748321114",
+          "title": "250g",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Roast & Size",
+              "value": "250g"
+            }
+          ],
+          "price": {
+            "amount": "217.0",
+            "currencyCode": "DKK"
+          }
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47156748353882",
+          "title": "1kg",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Roast & Size",
+              "value": "1kg"
+            }
+          ],
+          "price": {
+            "amount": "691.0",
+            "currencyCode": "DKK"
+          }
+        }
+      ],
+      "collections": [
+        {
+          "handle": "new",
+          "title": "New"
+        },
+        {
+          "handle": "everything",
+          "title": "everything"
+        },
+        {
+          "handle": "filter-coffee",
+          "title": "Filter Coffee"
+        }
+      ],
+      "sellingPlanGroups": []
+    },
+    {
+      "id": "gid://shopify/Product/10219663327578",
+      "handle": "kamavindi-kenya-washed-mixed-varietals-aa",
+      "availableForSale": true,
+      "title": "Kamavindi - Kenya - Washed SL28 & SL34 (AB)",
+      "description": "Varietal: SL34 & SL28 (AB)Processing: WashedTaste Description: Berries, Red Apple, Plum Roasted Coffee Beans (Ristede hele kaffebønner)",
+      "descriptionHtml": "<p><strong></strong><span style=\"font-weight: 400;\"></span><span style=\"font-weight: 400;\"><strong>Varietal:</strong><span> SL34 &amp; SL28 (AB)</span></span><br><span style=\"font-weight: 400;\"><strong>Processing:</strong><span> Washed</span></span><br><span style=\"font-weight: 400;\"><strong>Taste Description:</strong><span> Berries, Red Apple, Plum</span></span></p>\n<p><br></p>\n<p style=\"font-size: 10px;\">Roasted Coffee Beans (Ristede hele kaffebønner)</p>",
+      "options": [
+        {
+          "id": "gid://shopify/ProductOption/12757193163098",
+          "name": "Size",
+          "values": [
+            "125g",
+            "250g",
+            "1kg"
+          ]
+        }
+      ],
+      "priceRange": {
+        "maxVariantPrice": {
+          "amount": "759.0",
+          "currencyCode": "DKK"
+        },
+        "minVariantPrice": {
+          "amount": "140.0",
+          "currencyCode": "DKK"
+        }
+      },
+      "featuredImage": {
+        "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250g.jpg?v=1788768632",
+        "altText": null,
+        "width": 3673,
+        "height": 3673
+      },
+      "seo": {
+        "description": null,
+        "title": null
+      },
+      "tags": [
+        "Filter Beans"
+      ],
+      "updatedAt": "2026-11-03T14:31:03Z",
+      "technicalDetails": null,
+      "sizeChart": null,
+      "recommendations": {
+        "value": "Rest the coffee for a minimum of 14 days before brewing.\nStore in a cool, dry place.\nYour Brewing water makes a difference  \nFor a detailed brewing recipe click on our Coffee Infos Page."
+      },
+      "supplierInformation": {
+        "value": "Producer: Peter Mbature\nFarm: Kamavindi \nOrigin: Kenya \nPartner since: 2024 "
+      },
+      "images": [
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250g.jpg?v=1788768632",
+          "altText": "Kamavindi - Kenya - Washed SL28 & SL34 (AB) - filter250g",
+          "width": 3673,
+          "height": 3673
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/125gsidesquare.jpg?v=1774942822",
+          "altText": "Kamavindi - Kenya - Washed SL28 & SL34 (AB) - 125gsidesquare",
+          "width": 1365,
+          "height": 1366
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250gboxsquare_6b5ea7f9-9122-4af8-9d67-1cd2c985ee43.jpg?v=1774942822",
+          "altText": "Kamavindi - Kenya - Washed SL28 & SL34 (AB) - filter250gboxsquare_6b5ea7f9-9122-4af8-9d67-1cd2c985ee43",
+          "width": 919,
+          "height": 920
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/1kgbagsquare_404b6468-fb66-40ed-b58b-4e80faec56ba.jpg?v=1774942822",
+          "altText": "Kamavindi - Kenya - Washed SL28 & SL34 (AB) - 1kgbagsquare_404b6468-fb66-40ed-b58b-4e80faec56ba",
+          "width": 1299,
+          "height": 1299
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/KHJ09745.jpg?v=1792137858",
+          "altText": "Kamavindi - Kenya - Washed SL28 & SL34 (AB) - KHJ09745",
+          "width": 1500,
+          "height": 1500
+        }
+      ],
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/51334237946202",
+          "title": "125g",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "125g"
+            }
+          ],
+          "price": {
+            "amount": "140.0",
+            "currencyCode": "DKK"
+          }
+        },
+        {
+          "id": "gid://shopify/ProductVariant/51334237978970",
+          "title": "250g",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "250g"
+            }
+          ],
+          "price": {
+            "amount": "225.0",
+            "currencyCode": "DKK"
+          }
+        },
+        {
+          "id": "gid://shopify/ProductVariant/51334238011738",
+          "title": "1kg",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "1kg"
+            }
+          ],
+          "price": {
+            "amount": "759.0",
+            "currencyCode": "DKK"
+          }
+        }
+      ],
+      "collections": [
+        {
+          "handle": "everything",
+          "title": "everything"
+        },
+        {
+          "handle": "filter-coffee",
+          "title": "Filter Coffee"
+        }
+      ],
+      "sellingPlanGroups": []
+    },
+    {
+      "id": "gid://shopify/Product/10793094742362",
+      "handle": "kamavindi-kenya-washed-sl34-ab",
+      "availableForSale": true,
+      "title": "Kamavindi - Kenya - Washed SL34 (AA)",
+      "description": "Varietal: SL34 (AA)Processing: WashedTaste Description: Berries, Florals, Red Apple & Plum Roasted Coffee Beans (Ristede hele kaffebønner)",
+      "descriptionHtml": "<p><strong></strong><span style=\"font-weight: 400;\"></span><span style=\"font-weight: 400;\"><strong>Varietal:</strong><span> SL34 (AA)</span></span><br><span style=\"font-weight: 400;\"><strong>Processing:</strong><span> Washed</span></span><br><span style=\"font-weight: 400;\"><strong>Taste Description:</strong><span> <meta charset=\"utf-8\">Berries, Florals, Red Apple &amp; Plum</span></span></p>\n<p><br></p>\n<p style=\"font-size: 10px;\">Roasted Coffee Beans (Ristede hele kaffebønner)</p>",
+      "options": [
+        {
+          "id": "gid://shopify/ProductOption/13468003467610",
+          "name": "Size",
+          "values": [
+            "125g",
+            "250g",
+            "1kg"
+          ]
+        }
+      ],
+      "priceRange": {
+        "maxVariantPrice": {
+          "amount": "899.0",
+          "currencyCode": "DKK"
+        },
+        "minVariantPrice": {
+          "amount": "150.0",
+          "currencyCode": "DKK"
+        }
+      },
+      "featuredImage": {
+        "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250g.jpg?v=1788768632",
+        "altText": null,
+        "width": 3673,
+        "height": 3673
+      },
+      "seo": {
+        "description": null,
+        "title": null
+      },
+      "tags": [
+        "Filter Beans"
+      ],
+      "updatedAt": "2026-11-03T14:30:53Z",
+      "technicalDetails": null,
+      "sizeChart": null,
+      "recommendations": {
+        "value": "Rest the coffee for a minimum of 14 days before brewing.\nStore in a cool, dry place.\nYour Brewing water makes a difference  \nFor a detailed brewing recipe click on our Coffee Infos Page."
+      },
+      "supplierInformation": {
+        "value": "Producer: Peter Mbature\nFarm: Kamavindi \nOrigin: Kenya \nPartner since: 2024 "
+      },
+      "images": [
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250g.jpg?v=1788768632",
+          "altText": "Kamavindi - Kenya - Washed SL34 (AA) - filter250g",
+          "width": 3673,
+          "height": 3673
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/filter250gbox.jpg?v=1769603685",
+          "altText": "Kamavindi - Kenya - Washed SL34 (AA) - filter250gbox",
+          "width": 1365,
+          "height": 1365
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/125gsidesquare_32ea8f38-ccff-4bc9-9235-d891234d8d5f.jpg?v=1769603685",
+          "altText": "Kamavindi - Kenya - Washed SL34 (AA) - 125gsidesquare_32ea8f38-ccff-4bc9-9235-d891234d8d5f",
+          "width": 1365,
+          "height": 1366
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/1kgbagshelf2square.jpg?v=1769603685",
+          "altText": "Kamavindi - Kenya - Washed SL34 (AA) - 1kgbagshelf2square",
+          "width": 971,
+          "height": 971
+        },
+        {
+          "url": "https://cdn.shopify.com/s/files/1/1510/0358/files/KHJ09745.jpg?v=1792137858",
+          "altText": "Kamavindi - Kenya - Washed SL34 (AA) - KHJ09745",
+          "width": 1500,
+          "height": 1500
+        }
+      ],
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/53836910657882",
+          "title": "125g",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "125g"
+            }
+          ],
+          "price": {
+            "amount": "150.0",
+            "currencyCode": "DKK"
+          }
+        },
+        {
+          "id": "gid://shopify/ProductVariant/53836910690650",
+          "title": "250g",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "250g"
+            }
+          ],
+          "price": {
+            "amount": "242.0",
+            "currencyCode": "DKK"
+          }
+        },
+        {
+          "id": "gid://shopify/ProductVariant/53836910723418",
+          "title": "1kg",
+          "availableForSale": true,
+          "selectedOptions": [
+            {
+              "name": "Size",
+              "value": "1kg"
+            }
+          ],
+          "price": {
+            "amount": "899.0",
+            "currencyCode": "DKK"
+          }
+        }
+      ],
+      "collections": [
+        {
+          "handle": "new",
+          "title": "New"
+        },
+        {
+          "handle": "everything",
+          "title": "everything"
+        },
+        {
+          "handle": "filter-coffee",
+          "title": "Filter Coffee"
+        }
+      ],
+      "sellingPlanGroups": []
+    }
+  ],
+  "pageInfo": {
+    "hasNextPage": false,
+    "endCursor": "eyJsYXN0X2lkIjoxMDc5MzA5NDc0MjM2Miwib2Zmc2V0Ijo1fQ=="
+  }
+}

@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class MeritCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Merit Coffee (meritcoffee.com) using Shopify products.json.

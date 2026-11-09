@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="DKK",
     country="Denmark",
-    status="experimental",
+    status="available",
 )
 class BeanMachineScraper(BaseScraper):
     """Scraper for Bean Machine (beanmachine.dk) with AI extraction."""

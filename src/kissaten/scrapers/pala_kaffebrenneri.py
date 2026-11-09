@@ -1,8 +1,21 @@
-"""Pala Kaffebrenneri scraper implementation with AI extraction."""
+"""Pala Kaffebrenneri scraper implementation with AI extraction.
+
+Pala Kaffebrenneri (pala.no) migrated off Squarespace to a custom **Next.js**
+storefront on Vercel (verified live 2026-11: ``/butikk`` returns a Next.js
+error page, while the catalogue lives at ``https://pala.no/products/coffee``).
+
+The coffee listing page embeds a ``schema.org/ItemList`` JSON-LD block with
+one entry per coffee (name + canonical ``/products/<handle>`` URL), so that is
+the primary URL source; ``<a href^="/products/">`` links serve as a fallback.
+Product pages still emit Squarespace-style ``og:*`` and ``product:price:*`` /
+``product:availability`` meta tags plus a ``schema.org/Product`` JSON-LD whose
+``offers`` array carries per-variant (size) prices — we leverage the meta tags
+and the offers JSON alongside page screenshots to extract CoffeeBean models.
+"""
 
 import json
 import logging
-import re
+from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup, Tag
 
@@ -12,6 +25,8 @@ from .base import BaseScraper
 from .registry import register_scraper
 
 logger = logging.getLogger(__name__)
+
+STORE_URL = "https://pala.no/products/coffee"
 
 
 @register_scraper(
@@ -29,11 +44,12 @@ logger = logging.getLogger(__name__)
     status="available",
 )
 class PalaKaffebrenneriScraper(BaseScraper):
-    """Scraper for Pala Kaffebrenneri (pala.no) — a Squarespace storefront.
+    """Scraper for Pala Kaffebrenneri (pala.no) — a custom Next.js storefront.
 
-    We lever the Squarespace product-page meta tags (og:title, og:description,
-    product:price:*, product:availability) and static-context variants JSON
-    alongside page screenshots to extract CoffeeBean models.
+    We lever the product-page meta tags (og:title, og:description,
+    product:price:*, product:availability) and the ``schema.org/Product``
+    JSON-LD offers array (per-variant size/price) alongside page screenshots
+    to extract CoffeeBean models.
     """
 
     def __init__(self, api_key: str | None = None):
@@ -49,64 +65,63 @@ class PalaKaffebrenneriScraper(BaseScraper):
         self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
     async def get_store_urls(self) -> list[str]:
-        """Return the Squarespace shop (butikk) listing URL."""
-        return ["https://pala.no/butikk"]
+        """Return the Next.js coffee listing (butikk) URL."""
+        return [STORE_URL]
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract coffee product URLs from the Squarespace listing page.
+        """Extract coffee product URLs from the Next.js listing page.
 
-        # Sold-out detection: text check on each product card. Squarespace marks
-        # sold-out products with "Utsolgt" on the card, so we skip those cards.
+        The listing page embeds a ``schema.org/ItemList`` JSON-LD block with
+        the coffee catalogue; ``<a href^="/products/">`` links are a fallback.
+        Cards may carry an "Utsolgt" (sold-out) badge, so any card containing
+        that marker is skipped.
         """
         soup = await self.fetch_page(store_url)
         if not soup:
             return []
 
-        product_urls = []
-        for item in soup.select(".ProductList-item, a[href*='/butikk/p/']"):
-            if item.name == "a":
-                card_text = " ".join(item.get_text(" ", strip=True).split()).lower()
+        product_urls: list[str] = []
+        seen: set[str] = set()
+
+        def add_url(url: str) -> None:
+            normalized = url.split("?")[0].split("#")[0]
+            if normalized in seen:
+                return
+            seen.add(normalized)
+            product_urls.append(normalized)
+
+        # Primary source: schema.org/ItemList JSON-LD (one entry per coffee).
+        for script in soup.find_all("script", type="application/ld+json"):
+            try:
+                data = json.loads(script.string or "")
+            except (json.JSONDecodeError, TypeError):
+                continue
+            if data.get("@type") != "ItemList":
+                continue
+            for entry in data.get("itemListElement", []):
+                url = entry.get("url") if isinstance(entry, dict) else None
+                if url and self.is_coffee_product_url(url, required_path_patterns=["/products/"]):
+                    add_url(url)
+
+        # Fallback: anchor links into product pages (excluding the listing
+        # page itself and non-coffee categories such as /products/utstyr).
+        if not product_urls:
+            for a in soup.select("a[href^='/products/']"):
+                href = a.get("href")
+                if not href or not isinstance(href, str):
+                    continue
+                url = self.resolve_url(href)
+                if not self.is_coffee_product_url(url, required_path_patterns=["/products/"]):
+                    continue
+                if urlparse(url).path.rstrip("/") == urlparse(store_url).path.rstrip("/"):
+                    continue
+                card_text = " ".join(a.get_text(" ", strip=True).split()).lower()
                 if "utsolgt" in card_text:
                     continue
-                product_urls.append(self.resolve_url(item["href"]))
-            else:
-                for a in item.find_all("a", href=True):
-                    if "/butikk/p/" not in a["href"]:
-                        continue
-                    card_text = " ".join(item.get_text(" ", strip=True).split()).lower()
-                    if "utsolgt" in card_text:
-                        continue
-                    product_urls.append(self.resolve_url(a["href"]))
+                add_url(url)
 
-        product_urls = list(dict.fromkeys(product_urls))
-
-        # Exclude shop-specific non-coffee items: courses, coffee subscriptions,
-        # and brewing hardware (filters, brewers, drippers, kits).
-        excluded = [
-            "abonnement",
-            "kurs",
-            "bryggekurs",
-            "latte-art",
-            "barista",
-            "aeropress",
-            "hario",
-            "filter",
-            "brygger",
-            "v60",
-            "kit",
-            "gave",
-            "utstyr",
-        ]
-        coffee_urls = [
-            url
-            for url in product_urls
-            if self.is_coffee_product_url(url, required_path_patterns=["/butikk/p/"])
-            and not any(ex in url.lower() for ex in excluded)
-        ]
-        logger.info(
-            f"Found {len(coffee_urls)} coffee product URLs out of {len(product_urls)} total from {store_url}"
-        )
-        return coffee_urls
+        logger.info(f"Found {len(product_urls)} coffee product URLs out of {len(seen)} total from {store_url}")
+        return product_urls
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction + page screenshot."""
@@ -125,7 +140,7 @@ class PalaKaffebrenneriScraper(BaseScraper):
         )
 
     async def take_screenshot(self, url: str, full_page: bool = True) -> bytes | None:
-        """Take screenshot after dismissing Squarespace cookie banner."""
+        """Take screenshot after dismissing the cookie banner."""
         browser = await self._get_browser()
         page = await browser.new_page()
 
@@ -139,10 +154,12 @@ class PalaKaffebrenneriScraper(BaseScraper):
             if not response or not response.ok:
                 raise Exception(f"Failed to load page: {response.status if response else 'No response'}")
 
-            # Dismiss Squarespace cookie banner if present
+            # Dismiss cookie banner if present (generic selectors)
             try:
                 accept_btn = await page.wait_for_selector(
-                    ".sqs-cookie-banner-v2-accept, button.accept", timeout=3000
+                    ".sqs-cookie-banner-v2-accept, button.accept, "
+                    "[data-testid='cookie-accept'], button:has-text('Godta')",
+                    timeout=3000,
                 )
                 if accept_btn:
                     await accept_btn.click()
@@ -175,11 +192,15 @@ class PalaKaffebrenneriScraper(BaseScraper):
             await page.close()
 
     async def fetch_page(self, *args, **kwargs):
-        """Send the product-page meta tags plus the parsed size/price variants to
+        """Send the product-page meta tags plus the parsed variant offers to
         the extractor — visual/roast info comes from the page screenshot."""
         soup = await super().fetch_page(*args, **kwargs)
         url = kwargs.get("url") or (args[0] if args else "")
-        if "/butikk/p/" not in url:
+        # Compaction applies to product pages: the Next.js storefront lists them
+        # under ``/products/<slug>``, the legacy Squarespace site used
+        # ``/butikk/p/<slug>``. Listing/category pages pass through untouched.
+        is_product_page = "/products/" in url or "/butikk/p/" in url
+        if not is_product_page or urlparse(url).path.rstrip("/") == urlparse(STORE_URL).path.rstrip("/"):
             return soup
 
         # Pala's structured data lives in <head> meta tags. The og:description
@@ -187,8 +208,14 @@ class PalaKaffebrenneriScraper(BaseScraper):
         # currency and availability. The visual/roast info comes from the screenshot.
         compact = BeautifulSoup("<html><head></head><body></body></html>", "html.parser")
         keep_meta = {
-            "og:title", "og:description", "og:url", "og:type", "og:image",
-            "product:price:amount", "product:price:currency", "product:availability",
+            "og:title",
+            "og:description",
+            "og:url",
+            "og:type",
+            "og:image",
+            "product:price:amount",
+            "product:price:currency",
+            "product:availability",
         }
         for meta in soup.find_all("meta"):
             key = meta.get("property") or meta.get("itemprop") or meta.get("name")
@@ -203,47 +230,48 @@ class PalaKaffebrenneriScraper(BaseScraper):
 
     @staticmethod
     def _extract_variants(soup: BeautifulSoup) -> Tag:
-        """Parse the Squarespace static-context script for per-variant size/price.
+        """Parse the schema.org/Product JSON-LD offers array for per-variant price.
 
-        Squarespace embeds the product's variants (size, price, currency, stock)
-        inside a <script data-name="static-context"> as the JSON blob
-        "Static.SQUARESPACE_CONTEXT = {...}". We surface those alongside the meta
-        tags so the AI can record the size and price-per-variant accurately.
+        The Next.js storefront embeds a ``<script type="application/ld+json">``
+        with ``@type: Product`` whose ``offers`` array lists each packaging
+        variant (name, price, currency, availability, sku). We surface those
+        alongside the meta tags so the AI can record the size and
+        price-per-variant accurately.
         """
         container = BeautifulSoup("<div></div>", "html.parser").div
-        script = soup.find("script", {"data-name": "static-context"})
-        if script is None:
+        for script in soup.find_all("script", type="application/ld+json"):
+            try:
+                data = json.loads(script.string or "")
+            except (json.JSONDecodeError, TypeError):
+                continue
+            if data.get("@type") != "Product":
+                continue
+
+            offers = data.get("offers") or []
+            if not isinstance(offers, list) or not offers:
+                return container
+
+            lines = ["Variants:"]
+            for offer in offers:
+                if not isinstance(offer, dict):
+                    continue
+                size = offer.get("name") or "n/a"
+                price = offer.get("price")
+                currency = offer.get("priceCurrency")
+                availability = str(offer.get("availability") or "")
+                stock = "instock" if availability.endswith("InStock") else "unknown"
+                sku = offer.get("sku") or ""
+                line = f"- {size} | Price: {price} {currency} | Stock: {stock}"
+                if sku:
+                    line += f" | SKU: {sku}"
+                lines.append(line)
+            container.string = "\n".join(lines)
             return container
 
-        blob = script.string or script.get_text() or ""
-        match = re.search(r"Static\.SQUARESPACE_CONTEXT\s*=\s*(\{.*?\})\s*;\s*$", blob, re.DOTALL)
-        if not match:
-            return container
-
-        try:
-            data = json.loads(match.group(1))
-        except json.JSONDecodeError:
-            return container
-
-        product = data.get("product") or {}
-        variants = product.get("variants") or []
-        if not variants:
-            return container
-
-        lines = ["Variants:"]
-        for v in variants:
-            attrs = v.get("attributes") or {}
-            size = "; ".join(str(val) for val in attrs.values()) or "n/a"
-            price = (v.get("price") or {}).get("decimalValue")
-            currency = (v.get("price") or {}).get("currencyCode")
-            stock = "instock" if (v.get("stock") or {}).get("unlimited") else "unknown"
-            line = f"- Size: {size} | Price: {price} {currency} | Stock: {stock}"
-            lines.append(line)
-        container.string = "\n".join(lines)
         return container
 
     def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
-        """Hardcode NOK as the store currency (Pala does not emit og:price:currency)."""
+        """Hardcode NOK as the store currency (Pala sells exclusively in NOK)."""
         bean.currency = "NOK"
         return bean
 

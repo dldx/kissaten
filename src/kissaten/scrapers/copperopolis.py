@@ -39,7 +39,7 @@ API_PRODUCTS_URL = "https://copperopolis.coffee/wp-json/wc/store/v1/products"
     requires_api_key=True,
     currency="GBP",
     country="United Kingdom",
-    status="experimental",
+    status="available",
 )
 class CopperopolisScraper(BaseScraper):
     """Scraper for Copperopolis Coffee (copperopolis.coffee) with AI extraction."""

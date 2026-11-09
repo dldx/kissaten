@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="CAD",
     country="Canada",
-    status="experimental",
+    status="available",
 )
 class FoundCoffeeScraper(BaseScraper):
     """Scraper for Found Coffee (found.coffee) with AI-powered extraction.

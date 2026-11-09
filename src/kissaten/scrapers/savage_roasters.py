@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="France",
-    status="experimental",
+    status="available",
 )
 class SavageRoastersScraper(BaseScraper):
     """Scraper for Savage Roasters (savageroasters.coffee).

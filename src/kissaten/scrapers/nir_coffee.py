@@ -123,7 +123,7 @@ def _parse_altitude(altitude: str | None) -> tuple[int, int]:
     requires_api_key=True,
     currency="IDR",
     country="Indonesia",
-    status="experimental",
+    status="available",
 )
 class NirCoffeeScraper(BaseScraper):
     """Scraper for NiR Coffee (nircoffee.id) using the public store JSON API."""

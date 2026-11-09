@@ -25,7 +25,7 @@ _MARKET_PARAM = "country=GB"
     requires_api_key=True,
     currency="GBP",
     country="United Kingdom",
-    status="experimental",
+    status="available",
 )
 class OmraCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Ómra Coffee (omra.coffee) using Shopify products.json."""

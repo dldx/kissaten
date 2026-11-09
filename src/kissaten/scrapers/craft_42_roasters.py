@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="CAD",
     country="Canada",
-    status="experimental",
+    status="available",
 )
 class Craft42RoastersScraper(ShopifyJsonScraper):
     """Scraper for Craft 42 Coffee Roasters (craft42roasters.ca) using Shopify products.json."""

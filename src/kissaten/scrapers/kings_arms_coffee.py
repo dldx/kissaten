@@ -23,7 +23,7 @@ _MARKET_PARAM = "country=US"
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class KingsArmsCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Kings Arms Coffee (kingsarmscoffee.com) using Shopify products.json.

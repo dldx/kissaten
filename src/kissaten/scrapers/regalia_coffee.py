@@ -24,7 +24,7 @@ _MARKET_PARAM = "country=US"
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class RegaliaCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Regalia (regaliacoffee.com) using Shopify products.json."""

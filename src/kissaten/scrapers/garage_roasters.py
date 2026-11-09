@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="AUD",
     country="Australia",
-    status="experimental",
+    status="available",
 )
 class GarageRoastersScraper(ShopifyJsonScraper):
     """Scraper for Garage Roasters (garageroasters.com.au) using Shopify products.json."""

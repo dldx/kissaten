@@ -46,7 +46,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="HUF",
     country="Hungary",
-    status="experimental",
+    status="available",
 )
 class RoastopusScraper(BaseScraper):
     """Scraper for Roastopus (roastopus.com) with AI-powered extraction."""

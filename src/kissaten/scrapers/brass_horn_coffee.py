@@ -48,7 +48,7 @@ def _has_product_class(classes) -> bool:
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class BrassHornCoffeeScraper(BaseScraper):
     """Scraper for Brass Horn Coffee Roasters (brasshorncoffee.com) with AI extraction."""

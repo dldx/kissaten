@@ -2,8 +2,6 @@
 
 import logging
 
-from bs4 import BeautifulSoup
-
 from ..schemas import CoffeeBean
 from .base import BaseScraper
 from .registry import register_scraper
@@ -59,18 +57,20 @@ class CoffeeLabScraper(BaseScraper):
     async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
 
-        Coffee Lab has paginated coffee listings and multiple categories.
+        Coffee Lab moved from PrestaShop to WooCommerce. Products are listed
+        under the ``coffee-en`` product category at ``/en/product-cat/`` and
+        paginated with WooCommerce-style ``/page/N/`` paths.
 
         Returns:
             List containing the store URLs to scrape
         """
         return [
-            # Main coffee page (page 1)
-            "https://coffeelab.pl/en/3-coffee",
-            # Page 2 of coffee
-            "https://coffeelab.pl/en/3-coffee?page=2",
-            # We could also scrape specific categories, but the main coffee page
-            # seems to include all products across categories
+            # Main coffee category (WooCommerce, page 1)
+            "https://coffeelab.pl/en/product-cat/coffee-en/",
+            # Page 2 of the coffee category
+            "https://coffeelab.pl/en/product-cat/coffee-en/page/2/",
+            # The coffee-en category includes all coffee subcategories
+            # (espresso, filter, decaf, cascara, brewlab, magic beans)
         ]
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -110,24 +110,16 @@ class CoffeeLabScraper(BaseScraper):
         # Use the base class method with Coffee Lab specific patterns
         return self.extract_product_urls_from_soup(
             soup,
-            # Coffee Lab URL patterns - products are in different categories
+            # Coffee Lab URL patterns - WooCommerce products live under /en/product/
             url_path_patterns=[
-                "/en/filter/",
-                "/en/espresso/",
-                "/en/magic-beans/",
-                "/en/brewlab/",
-                "/en/cascara/",
-                "/en/omniroast/",
+                "/en/product/",
             ],
             selectors=[
-                # Try specific selectors for Coffee Lab
-                'a[href*="/en/filter/"]',
-                'a[href*="/en/espresso/"]',
-                'a[href*="/en/magic-beans/"]',
-                'a[href*="/en/brewlab/"]',
-                'a[href*="/en/cascara/"]',
-                'a[href*="/en/omniroast/"]',
+                # WooCommerce product cards (server-rendered <li class="product">)
+                "li.product a",
+                "a.product-card__body",
                 # Fallback selectors
+                'a[href*="/en/product/"]',
                 ".product-item a",
                 "a.product-link",
             ],

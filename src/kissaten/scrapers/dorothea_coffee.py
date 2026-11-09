@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class DorotheaCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Dorothea Coffee (dorotheacoffee.com) using Shopify products.json."""

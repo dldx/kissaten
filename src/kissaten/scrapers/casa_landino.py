@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="COP",
     country="Colombia",
-    status="experimental",
+    status="available",
 )
 class CasaLandinoScraper(ShopifyJsonScraper):
     """Scraper for Casa Landino (casalandino.com) using Shopify products.json."""

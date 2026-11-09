@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Germany",
-    status="experimental",
+    status="available",
 )
 class GourmonautenScraper(BaseScraper):
     """Scraper for GourmoNauten (gourmonauten.club) with AI-powered extraction."""

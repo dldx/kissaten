@@ -19,12 +19,13 @@ logger = logging.getLogger(__name__)
     website="https://mrwushwush.com",
     description="Coffee roastery based in Chile",
     requires_api_key=True,
-    currency="CLP", # Chilean Peso
+    currency="CLP",  # Chilean Peso
     country="Chile",
     status="available",
 )
 class MrWushWushCoffeeScraper(BaseScraper):
     """Scraper for Mr Wush Wush Coffee (mrwushwush.com) with AI-powered extraction."""
+
     def __init__(self, api_key: str | None = None):
         """Initialize Mr Wush Wush Coffee scraper.
 
@@ -48,7 +49,16 @@ class MrWushWushCoffeeScraper(BaseScraper):
         Returns:
             List containing the store URL
         """
-        return ["https://mrwushwush.com/tradicionales-cafes-mr-wush-wush/", "https://mrwushwush.com/exoticos-cafes-mr-wush-wush/", "https://mrwushwush.com/elite-cafes-mr-wush-wush/", "https://mrwushwush.com/culturing-cafes-mr-wush-wush/"]
+        # The storefront moved to Shopify. The old Wix-style slugs
+        # (e.g. /tradicionales-cafes-mr-wush-wush/) still return HTTP 200 but
+        # now render a JS-only shell with no product links, so the real
+        # Shopify collection pages must be used instead.
+        return [
+            "https://mrwushwush.com/collections/tradicionales",
+            "https://mrwushwush.com/collections/exoticos",
+            "https://mrwushwush.com/collections/elite",
+            "https://mrwushwush.com/collections/culturing",
+        ]
 
     def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
         """Postprocess extracted CoffeeBean object."""
@@ -58,8 +68,7 @@ class MrWushWushCoffeeScraper(BaseScraper):
         # All coffees are 340g bags
         bean.weight = 340
         # Recurse over all bean options
-        bean.price_options = [
-            PriceOption(weight=340, price=option.price) for option in bean.price_options]
+        bean.price_options = [PriceOption(weight=340, price=option.price) for option in bean.price_options]
         return bean
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -97,19 +106,20 @@ class MrWushWushCoffeeScraper(BaseScraper):
         if not soup:
             return []
 
-        # Get all product URLs using the base class method
+        # Get all product URLs using the base class method.
+        # The Shopify storefront links products as /products/<handle>, so the
+        # path pattern and selector must match /products/ (not /product/).
         product_urls = self.extract_product_urls_from_soup(
             soup,
-            url_path_patterns=["/product/"],
+            url_path_patterns=["/products/"],
             selectors=[
-                # Wix-based store selectors
-                'a[href*="/product/"]',
+                # Shopify-based store selectors
+                'a[href*="/products/"]',
             ],
         )
 
         # Filter out excluded products (merchandise and non-coffee items)
-        excluded_products = [
-        ]
+        excluded_products = []
 
         filtered_urls = []
         for url in product_urls:

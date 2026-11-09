@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Netherlands",
-    status="experimental",
+    status="available",
 )
 class SproutCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Sprout Coffee Roasters (sproutcoffeeroasters.art) using Shopify products.json."""

@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Slovenia",
-    status="experimental",
+    status="available",
 )
 class BanibeansScraper(ShopifyJsonScraper):
     """Scraper for Banibeans (banibeans.si) using Shopify products.json."""

@@ -1,0 +1,1583 @@
+[
+ {
+  "id": 9538,
+  "name": "Choco Loco",
+  "slug": "choco-loco",
+  "parent": 0,
+  "type": "variable",
+  "variation": "",
+  "permalink": "https://www.dakcoffeeroasters.com/product/choco-loco/",
+  "sku": "COF-CHOCOLOCO",
+  "short_description": "",
+  "description": "<p data-pm-slice=\"1 1 []\">Choco Loco is a lovely Brazilian coffee from Edir José de Carvalho and his family at Sítio Portella in Minas Gerais. It&#8217;s everything we enjoy about a classic Brazilian profile: plenty of sweetness, a round body and delicious notes of milk chocolate, nougat and raisins.</p>",
+  "on_sale": false,
+  "prices": {
+   "price": "1780",
+   "regular_price": "1780",
+   "sale_price": "1780",
+   "price_range": {
+    "min_amount": "1780",
+    "max_amount": "5230"
+   },
+   "currency_code": "EUR",
+   "currency_symbol": "€",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ",",
+   "currency_thousand_separator": ".",
+   "currency_prefix": "€",
+   "currency_suffix": ""
+  },
+  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\" dir=\"auto\">&euro;</span>17,80</span>",
+  "average_rating": "0",
+  "review_count": 0,
+  "images": [
+   {
+    "id": 9546,
+    "src": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Choco_Loco_Front-Main-Image_2048x1434-1.png",
+    "thumbnail": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Choco_Loco_Front-Main-Image_2048x1434-1-600x450.png",
+    "srcset": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Choco_Loco_Front-Main-Image_2048x1434-1.png 2048w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Choco_Loco_Front-Main-Image_2048x1434-1-571x400.png 571w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Choco_Loco_Front-Main-Image_2048x1434-1-1024x717.png 1024w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Choco_Loco_Front-Main-Image_2048x1434-1-768x538.png 768w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Choco_Loco_Front-Main-Image_2048x1434-1-1536x1076.png 1536w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Choco_Loco_Front-Main-Image_2048x1434-1-600x420.png 600w",
+    "sizes": "(max-width: 2048px) 100vw, 2048px",
+    "thumbnail_srcset": "",
+    "thumbnail_sizes": "(max-width: 600px) 100vw, 600px",
+    "name": "Choco_Loco_Front-Main-Image_2048x1434 (1)",
+    "alt": ""
+   }
+  ],
+  "categories": [
+   {
+    "id": 42,
+    "name": "Espresso",
+    "slug": "espresso",
+    "link": "https://www.dakcoffeeroasters.com/product-category/coffee/espresso/"
+   }
+  ],
+  "tags": [
+   {
+    "id": 242,
+    "name": "New",
+    "slug": "new",
+    "link": "https://www.dakcoffeeroasters.com/product-tag/new/"
+   }
+  ],
+  "brands": [],
+  "attributes": [
+   {
+    "id": 30,
+    "name": "Flavor Profile",
+    "taxonomy": "pa_flavor-profile",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 288,
+      "name": "Round",
+      "slug": "round"
+     },
+     {
+      "id": 289,
+      "name": "Sweet",
+      "slug": "sweet"
+     }
+    ]
+   },
+   {
+    "id": 6,
+    "name": "Origin",
+    "taxonomy": "pa_origin",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 320,
+      "name": "Brazil",
+      "slug": "brazil"
+     }
+    ]
+   },
+   {
+    "id": 12,
+    "name": "Region",
+    "taxonomy": "pa_region",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 453,
+      "name": "Sul de Minas",
+      "slug": "sul-de-minas"
+     }
+    ]
+   },
+   {
+    "id": 0,
+    "name": "Producer / Farm",
+    "taxonomy": null,
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 0,
+      "name": "Produced by Edir José de Carvalho",
+      "slug": "Produced by Edir José de Carvalho"
+     }
+    ]
+   },
+   {
+    "id": 13,
+    "name": "Harvest",
+    "taxonomy": "pa_harvest",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 421,
+      "name": "2025",
+      "slug": "2025"
+     }
+    ]
+   },
+   {
+    "id": 4,
+    "name": "Tasting notes",
+    "taxonomy": "pa_tasting-notes",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 53,
+      "name": "Milk Chocolate",
+      "slug": "milk-chocolate"
+     },
+     {
+      "id": 454,
+      "name": "Nougat",
+      "slug": "nougat"
+     },
+     {
+      "id": 455,
+      "name": "Raisins",
+      "slug": "raisins"
+     }
+    ]
+   },
+   {
+    "id": 11,
+    "name": "Altitude",
+    "taxonomy": "pa_altitude",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 456,
+      "name": "1260masl",
+      "slug": "1260masl"
+     }
+    ]
+   },
+   {
+    "id": 7,
+    "name": "Varietal",
+    "taxonomy": "pa_varietal",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 443,
+      "name": "Yellow Catuai",
+      "slug": "yellow-catuai"
+     }
+    ]
+   },
+   {
+    "id": 5,
+    "name": "Process",
+    "taxonomy": "pa_process",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 35,
+      "name": "Natural",
+      "slug": "natural"
+     }
+    ]
+   },
+   {
+    "id": 0,
+    "name": "Intervention Level",
+    "taxonomy": null,
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 0,
+      "name": "Low",
+      "slug": "Low"
+     }
+    ]
+   },
+   {
+    "id": 3,
+    "name": "Weight",
+    "taxonomy": "pa_weight",
+    "has_variations": true,
+    "terms": [
+     {
+      "id": 21,
+      "name": "1kg",
+      "slug": "1kg",
+      "default": false
+     },
+     {
+      "id": 28,
+      "name": "250g",
+      "slug": "250g",
+      "default": true
+     }
+    ]
+   },
+   {
+    "id": 1,
+    "name": "Roast Profile",
+    "taxonomy": "pa_roast-profile",
+    "has_variations": true,
+    "terms": [
+     {
+      "id": 18,
+      "name": "Espresso",
+      "slug": "espresso",
+      "default": true
+     }
+    ]
+   }
+  ],
+  "variations": [
+   {
+    "id": 9539,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "250g"
+     },
+     {
+      "name": "Roast Profile",
+      "value": "espresso"
+     }
+    ]
+   },
+   {
+    "id": 9540,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "1kg"
+     },
+     {
+      "name": "Roast Profile",
+      "value": "espresso"
+     }
+    ]
+   }
+  ],
+  "grouped_products": [],
+  "has_options": true,
+  "is_purchasable": true,
+  "is_in_stock": true,
+  "is_on_backorder": false,
+  "low_stock_remaining": null,
+  "stock_availability": {
+   "text": "",
+   "class": "in-stock"
+  },
+  "sold_individually": false,
+  "weight": "",
+  "dimensions": {
+   "length": "",
+   "width": "",
+   "height": ""
+  },
+  "formatted_weight": "N/A",
+  "formatted_dimensions": "N/A",
+  "add_to_cart": {
+   "text": "Select options",
+   "description": "Select options for &ldquo;Choco Loco&rdquo;",
+   "url": "https://www.dakcoffeeroasters.com/product/choco-loco/",
+   "single_text": "Add to cart",
+   "minimum": 1,
+   "maximum": 9999,
+   "multiple_of": 1
+  },
+  "is_password_protected": false,
+  "extensions": {},
+  "_links": {
+   "self": [
+    {
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products/9538",
+     "targetHints": {
+      "allow": [
+       "GET"
+      ]
+     }
+    }
+   ],
+   "collection": [
+    {
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products"
+    }
+   ],
+   "related": [
+    {
+     "embeddable": true,
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products?related=9538&per_page=10"
+    }
+   ]
+  }
+ },
+ {
+  "id": 8881,
+  "name": "Lady in Red",
+  "slug": "lady-in-red",
+  "parent": 0,
+  "type": "variable",
+  "variation": "",
+  "permalink": "https://www.dakcoffeeroasters.com/product/lady-in-red/",
+  "sku": "COF-LADYRED",
+  "short_description": "",
+  "description": "<p data-pm-slice=\"1 1 []\">This advanced anaerobic natural Pacamara comes from Finca Zarza, a family project in the mountains of Bruselas, Huila, run by three generations of the Gasca family. The cherries go through an extended anaerobic fermentation, followed by thermal conditioning and slow drying. The result is a juicy, candy-like cup with black cherry, lollipop and citrus. Extremely sweet, fruity and wild.</p>",
+  "on_sale": false,
+  "prices": {
+   "price": "4490",
+   "regular_price": "4490",
+   "sale_price": "4490",
+   "price_range": null,
+   "currency_code": "EUR",
+   "currency_symbol": "€",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ",",
+   "currency_thousand_separator": ".",
+   "currency_prefix": "€",
+   "currency_suffix": ""
+  },
+  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\" dir=\"auto\">&euro;</span>44,90</span>",
+  "average_rating": "0",
+  "review_count": 0,
+  "images": [
+   {
+    "id": 8890,
+    "src": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Lady_in_Red_Front-Main-Image_4724x3307-scaled.png",
+    "thumbnail": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Lady_in_Red_Front-Main-Image_4724x3307-600x450.png",
+    "srcset": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Lady_in_Red_Front-Main-Image_4724x3307-scaled.png 2560w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Lady_in_Red_Front-Main-Image_4724x3307-571x400.png 571w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Lady_in_Red_Front-Main-Image_4724x3307-1024x717.png 1024w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Lady_in_Red_Front-Main-Image_4724x3307-768x538.png 768w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Lady_in_Red_Front-Main-Image_4724x3307-1536x1075.png 1536w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Lady_in_Red_Front-Main-Image_4724x3307-2048x1434.png 2048w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/10/Lady_in_Red_Front-Main-Image_4724x3307-600x420.png 600w",
+    "sizes": "(max-width: 2560px) 100vw, 2560px",
+    "thumbnail_srcset": "",
+    "thumbnail_sizes": "(max-width: 600px) 100vw, 600px",
+    "name": "Lady_in_Red_Front-Main-Image_4724x3307",
+    "alt": ""
+   }
+  ],
+  "categories": [
+   {
+    "id": 43,
+    "name": "Filter",
+    "slug": "filter",
+    "link": "https://www.dakcoffeeroasters.com/product-category/coffee/filter/"
+   }
+  ],
+  "tags": [
+   {
+    "id": 243,
+    "name": "Back in Stock",
+    "slug": "back-in-stock",
+    "link": "https://www.dakcoffeeroasters.com/product-tag/back-in-stock/"
+   },
+   {
+    "id": 242,
+    "name": "New",
+    "slug": "new",
+    "link": "https://www.dakcoffeeroasters.com/product-tag/new/"
+   }
+  ],
+  "brands": [],
+  "attributes": [
+   {
+    "id": 30,
+    "name": "Flavor Profile",
+    "taxonomy": "pa_flavor-profile",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 283,
+      "name": "Funky",
+      "slug": "funky"
+     },
+     {
+      "id": 284,
+      "name": "Unusual",
+      "slug": "unusual"
+     }
+    ]
+   },
+   {
+    "id": 6,
+    "name": "Origin",
+    "taxonomy": "pa_origin",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 67,
+      "name": "Colombia",
+      "slug": "colombia"
+     }
+    ]
+   },
+   {
+    "id": 12,
+    "name": "Region",
+    "taxonomy": "pa_region",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 451,
+      "name": "Bruselas",
+      "slug": "bruselas"
+     }
+    ]
+   },
+   {
+    "id": 0,
+    "name": "Producer / Farm",
+    "taxonomy": null,
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 0,
+      "name": "Produced by Finca Zarza",
+      "slug": "Produced by Finca Zarza"
+     }
+    ]
+   },
+   {
+    "id": 13,
+    "name": "Harvest",
+    "taxonomy": "pa_harvest",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 112,
+      "name": "2026",
+      "slug": "2026"
+     }
+    ]
+   },
+   {
+    "id": 4,
+    "name": "Tasting notes",
+    "taxonomy": "pa_tasting-notes",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 418,
+      "name": "Black Cherry",
+      "slug": "black-cherry"
+     },
+     {
+      "id": 137,
+      "name": "Citrus",
+      "slug": "citrus"
+     },
+     {
+      "id": 341,
+      "name": "Strawberry Candy",
+      "slug": "strawberry-candy"
+     }
+    ]
+   },
+   {
+    "id": 11,
+    "name": "Altitude",
+    "taxonomy": "pa_altitude",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 302,
+      "name": "1800masl",
+      "slug": "1800masl"
+     }
+    ]
+   },
+   {
+    "id": 7,
+    "name": "Varietal",
+    "taxonomy": "pa_varietal",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 452,
+      "name": "Pacamara",
+      "slug": "pacamara"
+     }
+    ]
+   },
+   {
+    "id": 5,
+    "name": "Process",
+    "taxonomy": "pa_process",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 428,
+      "name": "Advanced Anaerobic Natural",
+      "slug": "advanced-anaerobic-natural"
+     }
+    ]
+   },
+   {
+    "id": 0,
+    "name": "Intervention Level",
+    "taxonomy": null,
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 0,
+      "name": "High",
+      "slug": "High"
+     }
+    ]
+   },
+   {
+    "id": 3,
+    "name": "Weight",
+    "taxonomy": "pa_weight",
+    "has_variations": true,
+    "terms": [
+     {
+      "id": 23,
+      "name": "125g",
+      "slug": "125g"
+     }
+    ]
+   },
+   {
+    "id": 1,
+    "name": "Roast Profile",
+    "taxonomy": "pa_roast-profile",
+    "has_variations": true,
+    "terms": [
+     {
+      "id": 19,
+      "name": "Filter",
+      "slug": "filter",
+      "default": true
+     }
+    ]
+   }
+  ],
+  "variations": [
+   {
+    "id": 8883,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "125g"
+     },
+     {
+      "name": "Roast Profile",
+      "value": "filter"
+     }
+    ]
+   }
+  ],
+  "grouped_products": [],
+  "has_options": true,
+  "is_purchasable": true,
+  "is_in_stock": true,
+  "is_on_backorder": false,
+  "low_stock_remaining": null,
+  "stock_availability": {
+   "text": "",
+   "class": "in-stock"
+  },
+  "sold_individually": false,
+  "weight": "",
+  "dimensions": {
+   "length": "",
+   "width": "",
+   "height": ""
+  },
+  "formatted_weight": "N/A",
+  "formatted_dimensions": "N/A",
+  "add_to_cart": {
+   "text": "Select options",
+   "description": "Select options for &ldquo;Lady in Red&rdquo;",
+   "url": "https://www.dakcoffeeroasters.com/product/lady-in-red/",
+   "single_text": "Add to cart",
+   "minimum": 1,
+   "maximum": 9999,
+   "multiple_of": 1
+  },
+  "is_password_protected": false,
+  "extensions": {},
+  "_links": {
+   "self": [
+    {
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products/8881",
+     "targetHints": {
+      "allow": [
+       "GET"
+      ]
+     }
+    }
+   ],
+   "collection": [
+    {
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products"
+    }
+   ],
+   "related": [
+    {
+     "embeddable": true,
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products?related=8881&per_page=10"
+    }
+   ]
+  }
+ },
+ {
+  "id": 7871,
+  "name": "Peachy Daze",
+  "slug": "peachy-daze",
+  "parent": 0,
+  "type": "variable",
+  "variation": "",
+  "permalink": "https://www.dakcoffeeroasters.com/product/peachy-daze/",
+  "sku": "COF-PEACHY",
+  "short_description": "",
+  "description": "<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-caSCKo lfLVbb\">\n<p>Peachy Daze is back, a clean washed Ethiopian from the Chelbesa washing station in Gedeb, where heirloom varieties grow at 2173 masl. The cup is light and delicate, with white peach and lemon up front, black tea through the middle and a soft elderflower finish.</p>\n</div>\n</div>\n</div>\n<div class=\"StyledBox-sc-13pk1d4-0 cLlFgz\">\n<div class=\"StyledBox-sc-13pk1d4-0 NlqKE sc-cMljjf kQRqJb\" tabindex=\"0\"></div>\n</div>\n</div>\n<div class=\"StyledBox-sc-13pk1d4-0 cLlFgz\">\n<div class=\"StyledBox-sc-13pk1d4-0 NlqKE sc-cMljjf kQRqJb\" tabindex=\"0\"></div>\n</div>\n</div>\n</div>\n</div>\n</div>\n<div class=\"StyledBox-sc-13pk1d4-0 cLlFgz\">\n<div class=\"StyledBox-sc-13pk1d4-0 NlqKE sc-cMljjf kQRqJb\" tabindex=\"0\"></div>\n</div>\n</div>\n<div class=\"StyledBox-sc-13pk1d4-0 cLlFgz\">\n<div class=\"StyledBox-sc-13pk1d4-0 NlqKE sc-cMljjf kQRqJb\" tabindex=\"0\"></div>\n</div>",
+  "on_sale": false,
+  "prices": {
+   "price": "2400",
+   "regular_price": "2400",
+   "sale_price": "2400",
+   "price_range": {
+    "min_amount": "2400",
+    "max_amount": "8270"
+   },
+   "currency_code": "EUR",
+   "currency_symbol": "€",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ",",
+   "currency_thousand_separator": ".",
+   "currency_prefix": "€",
+   "currency_suffix": ""
+  },
+  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\" dir=\"auto\">&euro;</span>24,00</span>",
+  "average_rating": "0",
+  "review_count": 0,
+  "images": [
+   {
+    "id": 11416,
+    "src": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/11/Peachy-Daze_Render_Front_89x89_White-Box_WS-scaled.png",
+    "thumbnail": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/11/Peachy-Daze_Render_Front_89x89_White-Box_WS-600x450.png",
+    "srcset": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/11/Peachy-Daze_Render_Front_89x89_White-Box_WS-scaled.png 2560w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/11/Peachy-Daze_Render_Front_89x89_White-Box_WS-571x400.png 571w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/11/Peachy-Daze_Render_Front_89x89_White-Box_WS-1024x717.png 1024w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/11/Peachy-Daze_Render_Front_89x89_White-Box_WS-768x538.png 768w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/11/Peachy-Daze_Render_Front_89x89_White-Box_WS-1536x1075.png 1536w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/11/Peachy-Daze_Render_Front_89x89_White-Box_WS-2048x1434.png 2048w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/11/Peachy-Daze_Render_Front_89x89_White-Box_WS-600x420.png 600w",
+    "sizes": "(max-width: 2560px) 100vw, 2560px",
+    "thumbnail_srcset": "",
+    "thumbnail_sizes": "(max-width: 600px) 100vw, 600px",
+    "name": "Peachy-Daze_Render_Front_89x89_White-Box_WS",
+    "alt": ""
+   }
+  ],
+  "categories": [
+   {
+    "id": 42,
+    "name": "Espresso",
+    "slug": "espresso",
+    "link": "https://www.dakcoffeeroasters.com/product-category/coffee/espresso/"
+   },
+   {
+    "id": 43,
+    "name": "Filter",
+    "slug": "filter",
+    "link": "https://www.dakcoffeeroasters.com/product-category/coffee/filter/"
+   }
+  ],
+  "tags": [
+   {
+    "id": 242,
+    "name": "New",
+    "slug": "new",
+    "link": "https://www.dakcoffeeroasters.com/product-tag/new/"
+   }
+  ],
+  "brands": [],
+  "attributes": [
+   {
+    "id": 30,
+    "name": "Flavor Profile",
+    "taxonomy": "pa_flavor-profile",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 285,
+      "name": "Bright",
+      "slug": "bright"
+     },
+     {
+      "id": 287,
+      "name": "Delicate",
+      "slug": "delicate"
+     }
+    ]
+   },
+   {
+    "id": 6,
+    "name": "Origin",
+    "taxonomy": "pa_origin",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 68,
+      "name": "Ethiopia",
+      "slug": "ethiopia"
+     }
+    ]
+   },
+   {
+    "id": 12,
+    "name": "Region",
+    "taxonomy": "pa_region",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 135,
+      "name": "Gedeb",
+      "slug": "gedeb"
+     }
+    ]
+   },
+   {
+    "id": 0,
+    "name": "Producer / Farm",
+    "taxonomy": null,
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 0,
+      "name": "Produced by Chelbesa Washing Station",
+      "slug": "Produced by Chelbesa Washing Station"
+     }
+    ]
+   },
+   {
+    "id": 13,
+    "name": "Harvest",
+    "taxonomy": "pa_harvest",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 112,
+      "name": "2026",
+      "slug": "2026"
+     }
+    ]
+   },
+   {
+    "id": 4,
+    "name": "Tasting notes",
+    "taxonomy": "pa_tasting-notes",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 351,
+      "name": "Black Tea",
+      "slug": "black-tea"
+     },
+     {
+      "id": 432,
+      "name": "Elderflower",
+      "slug": "elderflower"
+     },
+     {
+      "id": 411,
+      "name": "Lemon",
+      "slug": "lemon"
+     },
+     {
+      "id": 431,
+      "name": "White Peach",
+      "slug": "white-peach"
+     }
+    ]
+   },
+   {
+    "id": 11,
+    "name": "Altitude",
+    "taxonomy": "pa_altitude",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 433,
+      "name": "2173masl",
+      "slug": "2173masl"
+     }
+    ]
+   },
+   {
+    "id": 7,
+    "name": "Varietal",
+    "taxonomy": "pa_varietal",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 142,
+      "name": "Heirloom",
+      "slug": "heirloom"
+     }
+    ]
+   },
+   {
+    "id": 5,
+    "name": "Process",
+    "taxonomy": "pa_process",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 143,
+      "name": "Washed",
+      "slug": "washed"
+     }
+    ]
+   },
+   {
+    "id": 0,
+    "name": "Intervention Level",
+    "taxonomy": null,
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 0,
+      "name": "Low",
+      "slug": "Low"
+     }
+    ]
+   },
+   {
+    "id": 3,
+    "name": "Weight",
+    "taxonomy": "pa_weight",
+    "has_variations": true,
+    "terms": [
+     {
+      "id": 21,
+      "name": "1kg",
+      "slug": "1kg",
+      "default": false
+     },
+     {
+      "id": 28,
+      "name": "250g",
+      "slug": "250g",
+      "default": true
+     }
+    ]
+   },
+   {
+    "id": 1,
+    "name": "Roast Profile",
+    "taxonomy": "pa_roast-profile",
+    "has_variations": true,
+    "terms": [
+     {
+      "id": 18,
+      "name": "Espresso",
+      "slug": "espresso",
+      "default": false
+     },
+     {
+      "id": 19,
+      "name": "Filter",
+      "slug": "filter",
+      "default": true
+     }
+    ]
+   }
+  ],
+  "variations": [
+   {
+    "id": 8740,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "250g"
+     },
+     {
+      "name": "Roast Profile",
+      "value": "filter"
+     }
+    ]
+   },
+   {
+    "id": 8741,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "1kg"
+     },
+     {
+      "name": "Roast Profile",
+      "value": "filter"
+     }
+    ]
+   },
+   {
+    "id": 7872,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "250g"
+     },
+     {
+      "name": "Roast Profile",
+      "value": "espresso"
+     }
+    ]
+   },
+   {
+    "id": 7873,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "1kg"
+     },
+     {
+      "name": "Roast Profile",
+      "value": "espresso"
+     }
+    ]
+   }
+  ],
+  "grouped_products": [],
+  "has_options": true,
+  "is_purchasable": true,
+  "is_in_stock": true,
+  "is_on_backorder": false,
+  "low_stock_remaining": null,
+  "stock_availability": {
+   "text": "",
+   "class": "in-stock"
+  },
+  "sold_individually": false,
+  "weight": "",
+  "dimensions": {
+   "length": "",
+   "width": "",
+   "height": ""
+  },
+  "formatted_weight": "N/A",
+  "formatted_dimensions": "N/A",
+  "add_to_cart": {
+   "text": "Select options",
+   "description": "Select options for &ldquo;Peachy Daze&rdquo;",
+   "url": "https://www.dakcoffeeroasters.com/product/peachy-daze/",
+   "single_text": "Add to cart",
+   "minimum": 1,
+   "maximum": 9999,
+   "multiple_of": 1
+  },
+  "is_password_protected": false,
+  "extensions": {},
+  "_links": {
+   "self": [
+    {
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products/7871",
+     "targetHints": {
+      "allow": [
+       "GET"
+      ]
+     }
+    }
+   ],
+   "collection": [
+    {
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products"
+    }
+   ],
+   "related": [
+    {
+     "embeddable": true,
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products?related=7871&per_page=10"
+    }
+   ]
+  }
+ },
+ {
+  "id": 7595,
+  "name": "DAK Sixth Anniversary Vintage White T-Shirt",
+  "slug": "dak-sixth-anniversary-vintage-white-t-shirt",
+  "parent": 0,
+  "type": "variable",
+  "variation": "",
+  "permalink": "https://www.dakcoffeeroasters.com/product/dak-sixth-anniversary-vintage-white-t-shirt/",
+  "sku": "TSH-6YR",
+  "short_description": "",
+  "description": "<p>To celebrate six years of DAK, we collaborated with Valéry Lemay on an illustration bringing together the milestones along the way. Created especially for our sixth anniversary, the artwork appears on the back alongside our written DCR logo. Crafted from heavyweight 100% organic cotton and made in Portugal.</p>",
+  "on_sale": false,
+  "prices": {
+   "price": "4395",
+   "regular_price": "4395",
+   "sale_price": "4395",
+   "price_range": null,
+   "currency_code": "EUR",
+   "currency_symbol": "€",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ",",
+   "currency_thousand_separator": ".",
+   "currency_prefix": "€",
+   "currency_suffix": ""
+  },
+  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\" dir=\"auto\">&euro;</span>43,95</span>",
+  "average_rating": "0",
+  "review_count": 0,
+  "images": [
+   {
+    "id": 7614,
+    "src": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0172.jpg",
+    "thumbnail": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0172-600x450.jpg",
+    "srcset": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0172.jpg 1365w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0172-267x400.jpg 267w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0172-683x1024.jpg 683w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0172-768x1152.jpg 768w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0172-1024x1536.jpg 1024w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0172-600x900.jpg 600w",
+    "sizes": "(max-width: 1365px) 100vw, 1365px",
+    "thumbnail_srcset": "",
+    "thumbnail_sizes": "(max-width: 600px) 100vw, 600px",
+    "name": "DSCF0172",
+    "alt": ""
+   },
+   {
+    "id": 7616,
+    "src": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0231.jpg",
+    "thumbnail": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0231-600x450.jpg",
+    "srcset": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0231.jpg 1365w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0231-267x400.jpg 267w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0231-683x1024.jpg 683w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0231-768x1152.jpg 768w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0231-1024x1536.jpg 1024w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0231-600x900.jpg 600w",
+    "sizes": "(max-width: 1365px) 100vw, 1365px",
+    "thumbnail_srcset": "",
+    "thumbnail_sizes": "(max-width: 600px) 100vw, 600px",
+    "name": "DSCF0231",
+    "alt": ""
+   },
+   {
+    "id": 7615,
+    "src": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0226.jpg",
+    "thumbnail": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0226-600x450.jpg",
+    "srcset": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0226.jpg 1365w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0226-267x400.jpg 267w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0226-683x1024.jpg 683w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0226-768x1152.jpg 768w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0226-1024x1536.jpg 1024w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/DSCF0226-600x900.jpg 600w",
+    "sizes": "(max-width: 1365px) 100vw, 1365px",
+    "thumbnail_srcset": "",
+    "thumbnail_sizes": "(max-width: 600px) 100vw, 600px",
+    "name": "DSCF0226",
+    "alt": ""
+   }
+  ],
+  "categories": [
+   {
+    "id": 46,
+    "name": "Wear",
+    "slug": "wear",
+    "link": "https://www.dakcoffeeroasters.com/product-category/wear/"
+   }
+  ],
+  "tags": [
+   {
+    "id": 242,
+    "name": "New",
+    "slug": "new",
+    "link": "https://www.dakcoffeeroasters.com/product-tag/new/"
+   }
+  ],
+  "brands": [],
+  "attributes": [
+   {
+    "id": 20,
+    "name": "Material",
+    "taxonomy": "pa_material",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 267,
+      "name": "100% Organic Cotton (GOTS)",
+      "slug": "100-organic-cotton-gots"
+     }
+    ]
+   },
+   {
+    "id": 24,
+    "name": "Construction",
+    "taxonomy": "pa_construction",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 248,
+      "name": "Dropped Shoulders",
+      "slug": "dropped-shoulders"
+     },
+     {
+      "id": 247,
+      "name": "Oversized Fit",
+      "slug": "oversized-fit"
+     }
+    ]
+   },
+   {
+    "id": 25,
+    "name": "Features",
+    "taxonomy": "pa_features",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 252,
+      "name": "240GSM",
+      "slug": "240gsm"
+     },
+     {
+      "id": 251,
+      "name": "Unisex Heavyweight Jersey",
+      "slug": "unisex-heavyweight-jersey"
+     }
+    ]
+   },
+   {
+    "id": 26,
+    "name": "Manufacture",
+    "taxonomy": "pa_manufacture",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 253,
+      "name": "Made in Portugal",
+      "slug": "made-in-portugal"
+     }
+    ]
+   },
+   {
+    "id": 28,
+    "name": "Finish",
+    "taxonomy": "pa_finish",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 261,
+      "name": "Front and Back Screen Print",
+      "slug": "front-and-back-screen-print"
+     },
+     {
+      "id": 260,
+      "name": "Ribbed Crew Neck",
+      "slug": "ribbed-crew-neck"
+     }
+    ]
+   },
+   {
+    "id": 17,
+    "name": "Care",
+    "taxonomy": "pa_care",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 262,
+      "name": "Machine Wash 30 degrees",
+      "slug": "machine-wash-with-30-degress"
+     }
+    ]
+   },
+   {
+    "id": 29,
+    "name": "Edition",
+    "taxonomy": "pa_edition",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 263,
+      "name": "Limited Production Run",
+      "slug": "limited-production-run"
+     }
+    ]
+   },
+   {
+    "id": 16,
+    "name": "Colors",
+    "taxonomy": "pa_colors",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 403,
+      "name": "Vintage White",
+      "slug": "vintage-white"
+     }
+    ]
+   },
+   {
+    "id": 15,
+    "name": "Size",
+    "taxonomy": "pa_size",
+    "has_variations": true,
+    "terms": [
+     {
+      "id": 166,
+      "name": "L",
+      "slug": "l",
+      "default": true
+     },
+     {
+      "id": 165,
+      "name": "M",
+      "slug": "m",
+      "default": false
+     },
+     {
+      "id": 164,
+      "name": "S",
+      "slug": "s",
+      "default": false
+     },
+     {
+      "id": 167,
+      "name": "XL",
+      "slug": "xl",
+      "default": false
+     },
+     {
+      "id": 163,
+      "name": "XS",
+      "slug": "xs",
+      "default": false
+     }
+    ]
+   }
+  ],
+  "variations": [
+   {
+    "id": 7596,
+    "attributes": [
+     {
+      "name": "Size",
+      "value": "l"
+     }
+    ]
+   },
+   {
+    "id": 7597,
+    "attributes": [
+     {
+      "name": "Size",
+      "value": "m"
+     }
+    ]
+   },
+   {
+    "id": 7598,
+    "attributes": [
+     {
+      "name": "Size",
+      "value": "s"
+     }
+    ]
+   },
+   {
+    "id": 7599,
+    "attributes": [
+     {
+      "name": "Size",
+      "value": "xl"
+     }
+    ]
+   },
+   {
+    "id": 7600,
+    "attributes": [
+     {
+      "name": "Size",
+      "value": "xs"
+     }
+    ]
+   }
+  ],
+  "grouped_products": [],
+  "has_options": true,
+  "is_purchasable": true,
+  "is_in_stock": true,
+  "is_on_backorder": false,
+  "low_stock_remaining": null,
+  "stock_availability": {
+   "text": "",
+   "class": "in-stock"
+  },
+  "sold_individually": false,
+  "weight": "",
+  "dimensions": {
+   "length": "",
+   "width": "",
+   "height": ""
+  },
+  "formatted_weight": "N/A",
+  "formatted_dimensions": "N/A",
+  "add_to_cart": {
+   "text": "Select options",
+   "description": "Select options for &ldquo;DAK Sixth Anniversary Vintage White T-Shirt&rdquo;",
+   "url": "https://www.dakcoffeeroasters.com/product/dak-sixth-anniversary-vintage-white-t-shirt/",
+   "single_text": "Add to cart",
+   "minimum": 1,
+   "maximum": 9999,
+   "multiple_of": 1
+  },
+  "is_password_protected": false,
+  "extensions": {},
+  "_links": {
+   "self": [
+    {
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products/7595",
+     "targetHints": {
+      "allow": [
+       "GET"
+      ]
+     }
+    }
+   ],
+   "collection": [
+    {
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products"
+    }
+   ],
+   "related": [
+    {
+     "embeddable": true,
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products?related=7595&per_page=10"
+    }
+   ]
+  }
+ },
+ {
+  "id": 7177,
+  "name": "Steeped",
+  "slug": "steeped",
+  "parent": 0,
+  "type": "variable",
+  "variation": "",
+  "permalink": "https://www.dakcoffeeroasters.com/product/steeped/",
+  "sku": "COF-STEEPED",
+  "short_description": "<p>We are thrilled to partner up with Steeped to offer for the first time in our lineup a (almost) ready-to-drink coffee. After testing out several different options, we are very happy with the result as the aromas and the coffee characteristics are retained. The coffee has been individually dosed, sealed in bags and nitrogen-flushed by Steeped and the coffee is roasted by us (of course!).</p>\n<p>Unlock the flavours of these delicious coffees by simply adding hot filtered water. These brew bags are ideal for home, travels or outdoor adventures without compromising on taste. The box contains 6 or 15 Steeped bags depending on the format you are choosing. In this first edition box, we have Cassis Steeped Bags, The Alchemist Steeped Bags and Milky Cake Steeped Bags.</p>",
+  "description": "<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-csuQGl ckeXDr\">\n<div class=\"StyledBox-sc-13pk1d4-0 ehClyn sc-caSCKo lfLVbb\">\n<p data-pm-slice=\"1 1 []\">For when a kettle and hot water are all you have. Our single-serve brew bags come in two sizes: 6 bags with three coffees, two of each, or 15 bags with three coffees, five of each. This edition features Cassis, The Alchemist and Milky Cake. We roast the coffee in Amsterdam, then Steeped grinds, portions and nitrogen seals each bag to keep the coffee fresh until you open it. Pour, dunk, steep. That’s it.</p>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n<div class=\"StyledBox-sc-13pk1d4-0 cLlFgz\">\n<div class=\"StyledBox-sc-13pk1d4-0 NlqKE sc-cMljjf kQRqJb\" tabindex=\"0\"></div>\n</div>",
+  "on_sale": false,
+  "prices": {
+   "price": "1495",
+   "regular_price": "1495",
+   "sale_price": "1495",
+   "price_range": {
+    "min_amount": "1495",
+    "max_amount": "3795"
+   },
+   "currency_code": "EUR",
+   "currency_symbol": "€",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ",",
+   "currency_thousand_separator": ".",
+   "currency_prefix": "€",
+   "currency_suffix": ""
+  },
+  "price_html": "<span class=\"woocommerce-Price-amount amount\"><span class=\"woocommerce-Price-currencySymbol\" dir=\"auto\">&euro;</span>14,95</span>",
+  "average_rating": "0",
+  "review_count": 0,
+  "images": [
+   {
+    "id": 7879,
+    "src": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/Steeped-6_Render_Front_89x89-1-scaled.png",
+    "thumbnail": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/Steeped-6_Render_Front_89x89-1-600x450.png",
+    "srcset": "https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/Steeped-6_Render_Front_89x89-1-scaled.png 2560w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/Steeped-6_Render_Front_89x89-1-571x400.png 571w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/Steeped-6_Render_Front_89x89-1-1024x717.png 1024w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/Steeped-6_Render_Front_89x89-1-768x538.png 768w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/Steeped-6_Render_Front_89x89-1-1536x1075.png 1536w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/Steeped-6_Render_Front_89x89-1-2048x1434.png 2048w, https://d1j9xh2330ho4m.cloudfront.net/uploads/2026/09/Steeped-6_Render_Front_89x89-1-600x420.png 600w",
+    "sizes": "(max-width: 2560px) 100vw, 2560px",
+    "thumbnail_srcset": "",
+    "thumbnail_sizes": "(max-width: 600px) 100vw, 600px",
+    "name": "Steeped 6_Render_Front_89x89",
+    "alt": ""
+   }
+  ],
+  "categories": [
+   {
+    "id": 42,
+    "name": "Espresso",
+    "slug": "espresso",
+    "link": "https://www.dakcoffeeroasters.com/product-category/coffee/espresso/"
+   },
+   {
+    "id": 43,
+    "name": "Filter",
+    "slug": "filter",
+    "link": "https://www.dakcoffeeroasters.com/product-category/coffee/filter/"
+   }
+  ],
+  "tags": [
+   {
+    "id": 97,
+    "name": "Bestseller",
+    "slug": "bestseller",
+    "link": "https://www.dakcoffeeroasters.com/product-tag/bestseller/"
+   }
+  ],
+  "brands": [],
+  "attributes": [
+   {
+    "id": 30,
+    "name": "Flavor Profile",
+    "taxonomy": "pa_flavor-profile",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 285,
+      "name": "Bright",
+      "slug": "bright"
+     },
+     {
+      "id": 289,
+      "name": "Sweet",
+      "slug": "sweet"
+     }
+    ]
+   },
+   {
+    "id": 6,
+    "name": "Origin",
+    "taxonomy": "pa_origin",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 67,
+      "name": "Colombia",
+      "slug": "colombia"
+     },
+     {
+      "id": 69,
+      "name": "Kenya",
+      "slug": "kenya"
+     },
+     {
+      "id": 71,
+      "name": "Rwanda",
+      "slug": "rwanda"
+     }
+    ]
+   },
+   {
+    "id": 13,
+    "name": "Harvest",
+    "taxonomy": "pa_harvest",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 112,
+      "name": "2026",
+      "slug": "2026"
+     }
+    ]
+   },
+   {
+    "id": 4,
+    "name": "Tasting notes",
+    "taxonomy": "pa_tasting-notes",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 371,
+      "name": "Various",
+      "slug": "various"
+     }
+    ]
+   },
+   {
+    "id": 5,
+    "name": "Process",
+    "taxonomy": "pa_process",
+    "has_variations": false,
+    "terms": [
+     {
+      "id": 436,
+      "name": "Mixed",
+      "slug": "mixed"
+     }
+    ]
+   },
+   {
+    "id": 31,
+    "name": "Quantity",
+    "taxonomy": "pa_quantity",
+    "has_variations": true,
+    "terms": [
+     {
+      "id": 398,
+      "name": "Pack of 15",
+      "slug": "15-pack",
+      "default": false
+     },
+     {
+      "id": 397,
+      "name": "Pack of 6",
+      "slug": "6-pack",
+      "default": true
+     }
+    ]
+   }
+  ],
+  "variations": [
+   {
+    "id": 7563,
+    "attributes": [
+     {
+      "name": "Quantity",
+      "value": "6-pack"
+     }
+    ]
+   },
+   {
+    "id": 7562,
+    "attributes": [
+     {
+      "name": "Quantity",
+      "value": "15-pack"
+     }
+    ]
+   }
+  ],
+  "grouped_products": [],
+  "has_options": true,
+  "is_purchasable": true,
+  "is_in_stock": true,
+  "is_on_backorder": false,
+  "low_stock_remaining": null,
+  "stock_availability": {
+   "text": "",
+   "class": "in-stock"
+  },
+  "sold_individually": false,
+  "weight": "",
+  "dimensions": {
+   "length": "",
+   "width": "",
+   "height": ""
+  },
+  "formatted_weight": "N/A",
+  "formatted_dimensions": "N/A",
+  "add_to_cart": {
+   "text": "Select options",
+   "description": "Select options for &ldquo;Steeped&rdquo;",
+   "url": "https://www.dakcoffeeroasters.com/product/steeped/",
+   "single_text": "Add to cart",
+   "minimum": 1,
+   "maximum": 9999,
+   "multiple_of": 1
+  },
+  "is_password_protected": false,
+  "extensions": {},
+  "_links": {
+   "self": [
+    {
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products/7177",
+     "targetHints": {
+      "allow": [
+       "GET"
+      ]
+     }
+    }
+   ],
+   "collection": [
+    {
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products"
+    }
+   ],
+   "related": [
+    {
+     "embeddable": true,
+     "href": "https://www.dakcoffeeroasters.com/wp-json/wc/store/v1/products?related=7177&per_page=10"
+    }
+   ]
+  }
+ }
+]

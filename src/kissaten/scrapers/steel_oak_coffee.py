@@ -25,7 +25,7 @@ _MARKET_PARAM = "country=US"
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class SteelOakCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Steel Oak Coffee (steeloakcoffee.com) using Shopify products.json."""

@@ -61,7 +61,7 @@ def _is_fermentation_project_kit(url: str) -> bool:
     requires_api_key=True,
     currency="EUR",
     country="Netherlands",
-    status="experimental",
+    status="available",
 )
 class EspressoWinkelScraper(BaseScraper):
     """Scraper for Espresso Winkel (espressowinkel.nl) — a Lightspeed eCom storefront.

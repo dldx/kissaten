@@ -1,0 +1,53 @@
+{
+  "products": [
+    {
+      "handle": "black-dog",
+      "title": "BLACK DOG",
+      "product_type": "Coffee",
+      "available": true,
+      "variants": [{"price": "12.50", "available": true}]
+    },
+    {
+      "handle": "black-rain",
+      "title": "BLACK RAIN",
+      "product_type": "Coffee",
+      "available": true,
+      "variants": [{"price": "13.00", "available": true}]
+    },
+    {
+      "handle": "cajamarca-peru",
+      "title": "CAJAMARCA - Peru",
+      "product_type": "Coffee",
+      "available": true,
+      "variants": [{"price": "14.00", "available": true}]
+    },
+    {
+      "handle": "decaf",
+      "title": "Decaf - Colombia",
+      "product_type": "Coffee",
+      "available": true,
+      "variants": [{"price": "12.00", "available": true}]
+    },
+    {
+      "handle": "gotiti-ethiopia",
+      "title": "GOTITI - Ethiopia",
+      "product_type": "Coffee",
+      "available": true,
+      "variants": [{"price": "15.50", "available": true}]
+    },
+    {
+      "handle": "la-bolsa-guatemala",
+      "title": "LA BOLSA - Guatemala",
+      "product_type": "Coffee",
+      "available": true,
+      "variants": [{"price": "13.50", "available": true}]
+    },
+    {
+      "handle": "lalesa-ethiopia-1",
+      "title": "LALESA - Ethiopia",
+      "product_type": "Coffee",
+      "available": true,
+      "variants": [{"price": "16.00", "available": true}]
+    }
+  ]
+}

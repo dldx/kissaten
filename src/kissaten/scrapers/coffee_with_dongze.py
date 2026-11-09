@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class CoffeeWithDongzeScraper(ShopifyJsonScraper):
     """Scraper for Coffee with Dongze (coffee-with-dongze.myshopify.com).

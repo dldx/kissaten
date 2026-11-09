@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Germany",
-    status="experimental",
+    status="available",
 )
 class OnomaKaffeeScraper(ShopifyJsonScraper):
     """Scraper for Onoma Kaffee (onoma.coffee) using Shopify products.json."""

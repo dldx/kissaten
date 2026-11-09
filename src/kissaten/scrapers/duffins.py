@@ -6,23 +6,27 @@ from "Mr Duffins Coffee" to "Duffin's" (the ``.co.uk``/``mrduffinscoffee.com``
 domains are dead). The wp-json REST API responds 200 but we scrape the
 server-rendered HTML per the non-Shopify skill.
 
-Coffee products live under ``/shop/coffee/<slug>/`` (e.g.
-``/shop/coffee/chin-wag-coffee-blend/``). The ``/shop/`` index lists all
-products as WooCommerce ``li.product`` cards, including duplicated
-"featured/related" cards and two stale pagination links (``/shop/page/2/``
-returns the same 19 cards), so we crawl only ``/shop/`` and deduplicate.
+Coffee products live under
+``/shop/freshly-roasted-speciality-coffee/<slug>/`` (e.g.
+``/shop/freshly-roasted-speciality-coffee/chin-wag-coffee-blend/``; the older
+``/shop/coffee/<slug>/`` paths are kept as an OR fallback in the required
+pattern list). The ``/shop/`` index lists all products as WooCommerce
+``li.product`` cards, including duplicated "featured/related" cards and two
+stale pagination links, so we crawl only ``/shop/`` and deduplicate.
 
-Two product cards (Juicy Gossip, Chit Chat) link to a taxonomy archive URL
+Some product cards may link to a taxonomy archive URL
 ``/shop/type/<taxonomy>/<slug>/`` rather than the canonical product page; we
-normalise those back to ``/shop/coffee/<slug>/`` (both resolve 200 to the same
-product).
+normalise those back to
+``/shop/freshly-roasted-speciality-coffee/<slug>/`` (both resolve 200 to the
+same product).
 
 Genuine non-coffee products to exclude are gift cards / gift sets / gift
 hampers (``duffins-gift-card``, ``ugandan-gift-set-...``, ``*-hamper``).
 Equipment, hot-chocolate and tea live on separate category paths
 (``/shop/equipment/``, ``/shop/hot-chocolate/``, ``/shop/tea/``) that we never
-crawl, and the ``/shop/coffee/`` required path pattern keeps any stragglers
-out. Tasting-kit/sampler tokens are NOT excluded.
+crawl, and the
+``/shop/freshly-roasted-speciality-coffee/`` required path pattern keeps any
+stragglers out. Tasting-kit/sampler tokens are NOT excluded.
 
 Sold-out detection: class-based on the ``li.product`` card (the
 ``outofstock`` / ``sold-out`` / ``oos`` classes), before URL filtering.
@@ -121,7 +125,11 @@ class DuffinsScraper(BaseScraper):
         """
         soup = await super().fetch_page(*args, **kwargs)
         url = kwargs.get("url") or (args[0] if args else "")
-        if not soup or ("/shop/coffee/" not in url and "/shop/type/" not in url):
+        if not soup or (
+            "/shop/freshly-roasted-speciality-coffee/" not in url
+            and "/shop/coffee/" not in url
+            and "/shop/type/" not in url
+        ):
             return soup
 
         product_container = soup.select_one("div.product")
@@ -159,14 +167,20 @@ class DuffinsScraper(BaseScraper):
                 continue
             href = self.resolve_url(href)
             # Normalise taxonomy archive links to the canonical product URL.
-            # /shop/type/<taxonomy>/<slug>/ -> /shop/coffee/<slug>/
+            # /shop/type/<taxonomy>/<slug>/ -> /shop/freshly-roasted-speciality-coffee/<slug>/
             if "/shop/type/" in href:
                 slug = href.rstrip("/").split("/")[-1]
-                href = f"{self.base_url}/shop/coffee/{slug}/"
+                href = f"{self.base_url}/shop/freshly-roasted-speciality-coffee/{slug}/"
             all_product_urls.append(href)
 
         # Filter non-coffee products using base class logic and the required
-        # /shop/coffee/ path pattern (keeps equipment/tea/hot-chocolate out).
+        # freshly-roasted-speciality-coffee path pattern (keeps
+        # equipment/tea/hot-chocolate out). /shop/coffee/ is the pre-rebrand
+        # path kept as an OR fallback.
+        required_patterns = [
+            "/shop/freshly-roasted-speciality-coffee/",
+            "/shop/coffee/",
+        ]
         filtered_urls = []
         for url in all_product_urls:
             if not url:
@@ -175,7 +189,7 @@ class DuffinsScraper(BaseScraper):
             if any(slug in url.lower() for slug in self.exclude_slugs):
                 logger.debug(f"Skipping excluded product slug: {url}")
                 continue
-            if self.is_coffee_product_url(url, required_path_patterns=["/shop/coffee/"]):
+            if self.is_coffee_product_url(url, required_path_patterns=required_patterns):
                 filtered_urls.append(url)
 
         filtered_urls = list(dict.fromkeys(filtered_urls))

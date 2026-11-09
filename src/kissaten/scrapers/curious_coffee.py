@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class CuriousCoffeeScraper(BaseScraper):
     """Scraper for Curious Coffee (curious-coffee.com) with AI-powered extraction.

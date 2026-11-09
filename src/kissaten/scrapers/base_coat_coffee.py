@@ -43,7 +43,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class BaseCoatCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Base Coat Coffee (basecoatcoffee.com) using Shopify products.json."""

@@ -1,14 +1,22 @@
-"""Northside Coffee Roasters scraper implementation with AI-powered extraction (Wix storefront).
+"""Northside Coffee Roasters scraper implementation with AI-powered extraction.
 
 Northside Coffee Roasters (www.northsidecoffee.co — note canonical ``.co``, not
-``.co.uk``) is a micro-roastery & coffee shop in Morpeth, Northumberland
-running a Wix storefront. The whole-bean catalogue lives on the single
-``/buy-coffee`` listing page. Product cards are
-``div[data-hook="product-item-root"]`` containers whose links point to
-``/product-page/<slug>``. Product detail pages embed all useful content inside
-``div[data-hook="product-page"]``.
+``.co.uk``) is a micro-roastery & coffee shop in Morpeth, Northumberland.
+The storefront was rebuilt on Wix headless with a fully custom, server-rendered
+theme (no ``data-hook`` Wix store widgets). The whole-bean catalogue lives on
+the ``/shop.html`` listing page (``/buy-coffee`` 301-redirects there). Product
+cards are plain ``<a href="/product-page/<slug>.html">`` links inside
+``<section id="coffee-range">``.
 
-The ``/buy-coffee`` listing also carries a handful of non-coffee items sold
+Product detail pages embed all useful coffee information inside
+``<section id="product-detail" class="product-shell">`` plus a
+``<script id="northside-seo" type="application/ld+json">`` Product schema
+(name, description, image, sku). Prices/options load via JavaScript (the
+static HTML shows "Enable JavaScript to check current options and shop
+online"), so the AI extractor relies on the ld+json data plus the rendered
+HTML text.
+
+The ``/shop.html`` listing also carries a handful of non-coffee items sold
 alongside the beans (Huskee cups, a camping mug, a cafiza machine-cleaning
 powder, and a single-origin hot chocolate). Those are excluded via a
 roaster-specific override of ``_get_excluded_url_patterns`` so only whole-bean
@@ -88,21 +96,25 @@ class NorthsideScraper(BaseScraper):
         ]
 
     async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape (the single /buy-coffee whole-bean listing).
+        """Get store URLs to scrape (the single /shop.html whole-bean listing).
+
+        The storefront was rebuilt; the old ``/buy-coffee`` path 301-redirects
+        to ``/shop.html``, which is the current canonical listing URL.
 
         Returns:
             List containing the coffee collection URL.
         """
-        return ["https://www.northsidecoffee.co/buy-coffee"]
+        return ["https://www.northsidecoffee.co/shop.html"]
 
     async def fetch_page(self, *args, **kwargs) -> BeautifulSoup | Tag | None:
-        """Fetch a page and narrow product detail pages to the Wix product container.
+        """Fetch a page and narrow product detail pages to the product shell container.
 
-        Wix product detail pages embed all useful content inside
-        ``div[data-hook="product-page"]``. Narrowing the soup to that container
-        strips nav, footer, JSON blobs, and unrelated markup before the HTML is
-        sent to the AI extractor, keeping token usage low. The listing page
-        (``/buy-coffee``) is left untouched.
+        Product detail pages embed all useful content inside
+        ``<section id="product-detail" class="product-shell">`` plus a
+        ``<script id="northside-seo">`` ld+json Product block. Narrowing the
+        soup to that container strips nav, footer, JSON blobs, and unrelated
+        markup before the HTML is sent to the AI extractor, keeping token usage
+        low. The listing page (``/shop.html``) is left untouched.
 
         Args:
             *args: Positional arguments forwarded to the base fetch_page.
@@ -111,24 +123,24 @@ class NorthsideScraper(BaseScraper):
         Returns:
             BeautifulSoup object (narrowed for product pages) or None if fetch failed.
         """
+        url = kwargs.get("url")
+        if not url and len(args) > 0:
+            url = args[0]
         try:
             soup = await super().fetch_page(*args, **kwargs)
-            url = kwargs.get("url")
-            if not url and len(args) > 0:
-                url = args[0]
             # Only narrow product detail pages, leave the listing page untouched
             if "/product-page/" not in (url or ""):
                 return soup
             if soup is None:
                 return None
-            product_el = soup.select("div[data-hook='product-page']")
+            product_el = soup.select("section#product-detail, section.product-shell")
             if len(product_el) == 1:
-                logger.debug(f"Narrowed soup to div[data-hook='product-page'] for {url}")
+                logger.debug(f"Narrowed soup to section#product-detail for {url}")
                 return product_el[0]
-            logger.warning(f"Expected 1 div[data-hook='product-page'] for {url}, found {len(product_el)}")
+            logger.warning(f"Expected 1 section#product-detail for {url}, found {len(product_el)}")
             return soup
         except Exception as e:
-            logger.error(f"Error fetching page {url if 'url' in dir() else '?'}: {e}")
+            logger.error(f"Error fetching page {url}: {e}")
             return None
 
     def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
@@ -137,9 +149,7 @@ class NorthsideScraper(BaseScraper):
         bean.currency = "GBP"
         return bean
 
-    async def _scrape_new_products(
-        self, product_urls: list[str], use_optimized_mode: bool = False
-    ) -> list[CoffeeBean]:
+    async def _scrape_new_products(self, product_urls: list[str], use_optimized_mode: bool = False) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
 
         Args:
@@ -162,18 +172,26 @@ class NorthsideScraper(BaseScraper):
             use_optimized_mode=use_optimized_mode,
         )
 
-    # Sold-out detection: Wix text detection on the product-item-root container.
-    # When a Wix product is sold out, the "Add to Cart" button text becomes
-    # "Unavailable" / "Sold out" / "Out of stock" inside the product-item-root
-    # container. We skip any product-item-root whose text contains those markers
-    # before applying is_coffee_product_url filtering, so excluded products
-    # don't leak past the stock check. The base-class exclusion patterns plus the
+    # Sold-out detection: text detection on the product card. When a product is
+    # sold out, the card text contains "Sold out" / "Unavailable" / "Out of
+    # stock" markers. We skip any card whose text contains those markers before
+    # applying is_coffee_product_url filtering, so excluded products don't leak
+    # past the stock check. The base-class exclusion patterns plus the
     # Northside-specific override drop non-bean items (cups, mugs, machine
     # cleaner, hot chocolate); tasting kits/samplers are deliberately NOT
     # excluded here and instead flow through to be flagged is_tasting_kit /
     # requires_review by the base class.
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract coffee product URLs from the Wix coffee listing, filtering sold-out items.
+        """Extract coffee product URLs from the /shop.html listing, filtering sold-out items.
+
+        The rebuilt storefront renders product cards as plain anchor tags inside
+        ``<section id="coffee-range">``; there are no Wix ``data-hook`` store
+        widgets anymore. Each card looks like::
+
+            <section id="coffee-range">
+              <a href="/product-page/<slug>.html"> ... </a>
+              ...
+            </section>
 
         Args:
             store_url: URL of the store/category page
@@ -188,10 +206,10 @@ class NorthsideScraper(BaseScraper):
         product_urls: list[str] = []
         seen: set[str] = set()
 
-        for item in soup.select('[data-hook="product-item-root"]'):
-            link = item.select_one('a[href*="/product-page/"]')
-            if not link:
-                continue
+        # The coffee range section holds the bean listing; links point to
+        # /product-page/<slug>.html product detail pages.
+        range_section = soup.select_one("section#coffee-range") or soup
+        for link in range_section.select('a[href*="/product-page/"]'):
             href = link.get("href")
             if not href or not isinstance(href, str):
                 continue
@@ -199,8 +217,10 @@ class NorthsideScraper(BaseScraper):
             # Strip query string and fragment to get the canonical product URL
             full_url = self.resolve_url(href.split("?")[0].split("#")[0])
 
-            # Skip sold-out products before URL-pattern filtering
-            item_text = item.get_text(" ", strip=True)
+            # Skip sold-out products before URL-pattern filtering. Sold-out
+            # cards render with an explicit "Sold out" / "Unavailable" badge in
+            # the link text.
+            item_text = link.get_text(" ", strip=True)
             if any(marker in item_text for marker in ("Unavailable", "Sold out", "Out of stock", "SOLD OUT")):
                 logger.debug(f"Skipping sold-out product: {full_url}")
                 continue

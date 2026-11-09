@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class CafeDomestiqueScraper(BaseScraper):
     """Scraper for Cafe Domestique (Big Cartel storefront) with AI extraction."""

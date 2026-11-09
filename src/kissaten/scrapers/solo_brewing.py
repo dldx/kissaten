@@ -26,7 +26,7 @@ _COFFEE_PRODUCT_TYPES = {"Specialty Coffee Beans", "Coffee Kit", "Drip Coffee", 
     requires_api_key=True,
     currency="EUR",
     country="Portugal",
-    status="experimental",
+    status="available",
 )
 class SoloBrewingScraper(ShopifyJsonScraper):
     """Scraper for SOLO Brewing (solobrewing.pt) using Shopify products.json."""

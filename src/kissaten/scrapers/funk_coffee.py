@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="CAD",
     country="Canada",
-    status="experimental",
+    status="available",
 )
 class FunkCoffeeScraper(ShopifyJsonScraper):
     """Scraper for FUNK Coffee (funk.coffee) using Shopify products.json."""

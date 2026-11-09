@@ -1,0 +1,2118 @@
+{
+ "products": [
+  {
+   "id": 8508036743215,
+   "title": "Tinganga AB",
+   "handle": "tinganga-ab",
+   "body_html": "",
+   "published_at": "2026-10-27T16:36:44+01:00",
+   "created_at": "2026-10-09T13:25:41+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "daily coffee",
+   "tags": [
+    "Daily"
+   ],
+   "variants": [
+    {
+     "id": 46890501537839,
+     "title": "250g / Espresso",
+     "option1": "250g",
+     "option2": "Espresso",
+     "option3": null,
+     "sku": "Tinganga AB - Espresso - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "23.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8508036743215,
+     "created_at": "2026-10-09T13:25:41+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 46890501570607,
+     "title": "250g / Filter",
+     "option1": "250g",
+     "option2": "Filter",
+     "option3": null,
+     "sku": "Tinganga AB- Filter - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "23.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8508036743215,
+     "created_at": "2026-10-09T13:25:41+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 46890501603375,
+     "title": "1kg / Espresso",
+     "option1": "1kg",
+     "option2": "Espresso",
+     "option3": null,
+     "sku": "Tinganga AB - Espresso - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "90.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 3,
+     "product_id": 8508036743215,
+     "created_at": "2026-10-09T13:25:41+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 46890501636143,
+     "title": "1kg / Filter",
+     "option1": "1kg",
+     "option2": "Filter",
+     "option3": null,
+     "sku": "Tinganga AB - Filter - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "90.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 4,
+     "product_id": 8508036743215,
+     "created_at": "2026-10-09T13:25:41+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40633838043183,
+     "created_at": "2026-10-09T13:59:02+02:00",
+     "position": 1,
+     "updated_at": "2026-10-09T13:59:04+02:00",
+     "product_id": 8508036743215,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Tinganga-AB-250g.jpg?v=1791547144",
+     "width": 3347,
+     "height": 4185
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "250g",
+      "1kg"
+     ]
+    },
+    {
+     "name": "Roast",
+     "position": 2,
+     "values": [
+      "Espresso",
+      "Filter"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8472954437679,
+   "title": "HARIO V60 Paper Filter",
+   "handle": "hario-v60-paper-filter",
+   "body_html": "<p>The papers available was oxygen bleached (and therefore chemical-free) versions. The paper allows you to <span class=\"words\">extract</span>\u00a0all the flavours and\u00a0<span class=\"words\">aromas</span>\u00a0fr",
+   "published_at": "2026-09-14T13:53:56+02:00",
+   "created_at": "2026-09-14T13:53:54+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "",
+   "tags": [
+    "Equipment"
+   ],
+   "variants": [
+    {
+     "id": 46175827525679,
+     "title": "01",
+     "option1": "01",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": {
+      "id": 40354459090991,
+      "product_id": 8472954437679,
+      "position": 1,
+      "created_at": "2026-09-14T13:54:08+02:00",
+      "updated_at": "2026-09-14T13:54:09+02:00",
+      "alt": null,
+      "width": 1279,
+      "height": 1598,
+      "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-V60-paper-01.jpg?v=1789386849",
+      "variant_ids": [
+       46175827525679
+      ]
+     },
+     "available": true,
+     "price": "9.00",
+     "grams": 0,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8472954437679,
+     "created_at": "2026-09-14T13:53:54+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 46175827558447,
+     "title": "02",
+     "option1": "02",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": {
+      "id": 40354459058223,
+      "product_id": 8472954437679,
+      "position": 2,
+      "created_at": "2026-09-14T13:54:08+02:00",
+      "updated_at": "2026-09-14T13:54:09+02:00",
+      "alt": null,
+      "width": 1279,
+      "height": 1599,
+      "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-V60-paper-02.jpg?v=1789386849",
+      "variant_ids": [
+       46175827558447
+      ]
+     },
+     "available": true,
+     "price": "9.00",
+     "grams": 0,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8472954437679,
+     "created_at": "2026-09-14T13:53:54+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40354459090991,
+     "created_at": "2026-09-14T13:54:08+02:00",
+     "position": 1,
+     "updated_at": "2026-09-14T13:54:09+02:00",
+     "product_id": 8472954437679,
+     "variant_ids": [
+      46175827525679
+     ],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-V60-paper-01.jpg?v=1789386849",
+     "width": 1279,
+     "height": 1598
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "01",
+      "02"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8469922644015,
+   "title": "Hario V60 01/02",
+   "handle": "hario-v60-01-02",
+   "body_html": "",
+   "published_at": "2026-09-10T20:27:23+02:00",
+   "created_at": "2026-09-10T20:27:21+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46158111342639,
+     "title": "01",
+     "option1": "01",
+     "option2": null,
+     "option3": null,
+     "sku": "HARIO V60 - 01",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": {
+      "id": 40307981615151,
+      "product_id": 8469922644015,
+      "position": 1,
+      "created_at": "2026-09-10T20:26:50+02:00",
+      "updated_at": "2026-09-10T20:26:52+02:00",
+      "alt": null,
+      "width": 1169,
+      "height": 1462,
+      "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Hario-V60-01.jpg?v=1789064812",
+      "variant_ids": [
+       46158111342639
+      ]
+     },
+     "available": true,
+     "price": "25.00",
+     "grams": 0,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8469922644015,
+     "created_at": "2026-09-10T20:27:22+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 46158111375407,
+     "title": "02",
+     "option1": "02",
+     "option2": null,
+     "option3": null,
+     "sku": "HARIO V60 - 02",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": {
+      "id": 40307981647919,
+      "product_id": 8469922644015,
+      "position": 2,
+      "created_at": "2026-09-10T20:26:50+02:00",
+      "updated_at": "2026-09-10T20:26:51+02:00",
+      "alt": null,
+      "width": 1176,
+      "height": 1472,
+      "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Hario-V60-02.jpg?v=1789064811",
+      "variant_ids": [
+       46158111375407
+      ]
+     },
+     "available": true,
+     "price": "35.00",
+     "grams": 0,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8469922644015,
+     "created_at": "2026-09-10T20:27:22+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40307981615151,
+     "created_at": "2026-09-10T20:26:50+02:00",
+     "position": 1,
+     "updated_at": "2026-09-10T20:26:52+02:00",
+     "product_id": 8469922644015,
+     "variant_ids": [
+      46158111342639
+     ],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Hario-V60-01.jpg?v=1789064812",
+     "width": 1169,
+     "height": 1462
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "01",
+      "02"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8429100990511,
+   "title": "UBA Sangria Omni",
+   "handle": "uba-sangria-omni",
+   "body_html": "",
+   "published_at": "2026-09-08T07:59:12+02:00",
+   "created_at": "2026-08-20T10:21:02+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "daily coffee",
+   "tags": [
+    "Daily"
+   ],
+   "variants": [
+    {
+     "id": 45848253857839,
+     "title": "250g",
+     "option1": "250g",
+     "option2": null,
+     "option3": null,
+     "sku": "UBA Sangria Omni - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": false,
+     "price": "38.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8429100990511,
+     "created_at": "2026-08-20T10:21:02+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45848253890607,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": "UBA Sangria Omni - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "150.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8429100990511,
+     "created_at": "2026-08-20T10:21:02+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40260785537071,
+     "created_at": "2026-09-08T07:59:07+02:00",
+     "position": 1,
+     "updated_at": "2026-09-08T08:09:44+02:00",
+     "product_id": 8429100990511,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-UBA-Sangria-250g.jpg?v=1788847784",
+     "width": 3347,
+     "height": 4185
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "250g",
+      "1kg"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8429106790447,
+   "title": "UBA Orange Omni",
+   "handle": "uba-orange-omni",
+   "body_html": "",
+   "published_at": "2026-09-08T07:58:33+02:00",
+   "created_at": "2026-08-20T10:25:38+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "daily coffee",
+   "tags": [
+    "Daily"
+   ],
+   "variants": [
+    {
+     "id": 45848647467055,
+     "title": "250g",
+     "option1": "250g",
+     "option2": null,
+     "option3": null,
+     "sku": "UBA Orange Omni - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": false,
+     "price": "32.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8429106790447,
+     "created_at": "2026-08-20T10:25:38+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45848647499823,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": "UBA Orange Omni - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "124.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8429106790447,
+     "created_at": "2026-08-20T10:25:38+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40260767907887,
+     "created_at": "2026-09-08T07:58:28+02:00",
+     "position": 1,
+     "updated_at": "2026-09-08T08:09:54+02:00",
+     "product_id": 8429106790447,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-UBA-Orange-250g.jpg?v=1788847794",
+     "width": 3347,
+     "height": 4185
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "250g",
+      "1kg"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8429134643247,
+   "title": "UBA Berry Omni",
+   "handle": "uba-berry-omni",
+   "body_html": "",
+   "published_at": "2026-09-08T07:32:02+02:00",
+   "created_at": "2026-08-20T10:59:09+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "daily coffee",
+   "tags": [
+    "Daily"
+   ],
+   "variants": [
+    {
+     "id": 45848832999471,
+     "title": "250g",
+     "option1": "250g",
+     "option2": null,
+     "option3": null,
+     "sku": "UBA Berry Omni - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "32.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8429134643247,
+     "created_at": "2026-08-20T10:59:09+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45848833032239,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": "UBA Berry Omni - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "124.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8429134643247,
+     "created_at": "2026-08-20T10:59:09+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40260757946415,
+     "created_at": "2026-09-08T07:58:04+02:00",
+     "position": 1,
+     "updated_at": "2026-09-08T08:10:03+02:00",
+     "product_id": 8429134643247,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-UBA-Berry-250g.jpg?v=1788847803",
+     "width": 3347,
+     "height": 4185
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "250g",
+      "1kg"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8456005779503,
+   "title": "HARIO Glass Server",
+   "handle": "hario-glass-server",
+   "body_html": "<p><meta charset=\"utf-8\"><span>The heatproof glass V60 Glass Server made from comes with a silicone insulated glass lid. <br><br>Glass Server 01 is ideal for 1-2 cups.<br>Glass Server 02 is ideal for ",
+   "published_at": "2026-09-01T09:25:46+02:00",
+   "created_at": "2026-09-01T09:25:45+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "",
+   "tags": [
+    "Equipment",
+    "HARIO"
+   ],
+   "variants": [
+    {
+     "id": 46037982281775,
+     "title": "360ML",
+     "option1": "360ML",
+     "option2": null,
+     "option3": null,
+     "sku": "HARIO Glass Server - 360ML",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": {
+      "id": 40262286213167,
+      "product_id": 8456005779503,
+      "position": 1,
+      "created_at": "2026-09-08T09:47:41+02:00",
+      "updated_at": "2026-09-08T09:47:42+02:00",
+      "alt": null,
+      "width": 1276,
+      "height": 1594,
+      "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Hario-V60-Server-300ml.jpg?v=1788853662",
+      "variant_ids": [
+       46037982281775
+      ]
+     },
+     "available": false,
+     "price": "33.00",
+     "grams": 0,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8456005779503,
+     "created_at": "2026-09-01T09:25:45+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 46037982314543,
+     "title": "600ML",
+     "option1": "600ML",
+     "option2": null,
+     "option3": null,
+     "sku": "HARIO Glass Server - 600 ML",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": {
+      "id": 40262286245935,
+      "product_id": 8456005779503,
+      "position": 2,
+      "created_at": "2026-09-08T09:47:41+02:00",
+      "updated_at": "2026-09-08T09:47:42+02:00",
+      "alt": null,
+      "width": 1345,
+      "height": 1680,
+      "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Hario-V60-Server-600ml.jpg?v=1788853662",
+      "variant_ids": [
+       46037982314543
+      ]
+     },
+     "available": true,
+     "price": "40.00",
+     "grams": 0,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8456005779503,
+     "created_at": "2026-09-01T09:25:45+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40262286213167,
+     "created_at": "2026-09-08T09:47:41+02:00",
+     "position": 1,
+     "updated_at": "2026-09-08T09:47:42+02:00",
+     "product_id": 8456005779503,
+     "variant_ids": [
+      46037982281775
+     ],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Hario-V60-Server-300ml.jpg?v=1788853662",
+     "width": 1276,
+     "height": 1594
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "360ML",
+      "600ML"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8448618102831,
+   "title": "Aeropress",
+   "handle": "aeropress",
+   "body_html": "<p>The AeroPress is a compact, versatile brewing device beloved by coffee enthusiasts worldwide. Its simplicity belies its ability to produce a rich, flavourful cup of coffee in mere minutes.</p>\n<p>I",
+   "published_at": "2026-08-31T09:43:01+02:00",
+   "created_at": "2026-08-31T09:42:59+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "",
+   "tags": [
+    "Equipment"
+   ],
+   "variants": [
+    {
+     "id": 45975039410223,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "50.00",
+     "grams": 0,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8448618102831,
+     "created_at": "2026-08-31T09:42:59+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40307784351791,
+     "created_at": "2026-09-10T20:16:32+02:00",
+     "position": 1,
+     "updated_at": "2026-09-10T20:16:34+02:00",
+     "product_id": 8448618102831,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Aeropress.jpg?v=1789064194",
+     "width": 1288,
+     "height": 1610
+    }
+   ],
+   "options": [
+    {
+     "name": "Title",
+     "position": 1,
+     "values": [
+      "Default Title"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8448541032495,
+   "title": "Ankomn Container",
+   "handle": "ankomn-container",
+   "body_html": "<div>Once you twist the lid to lock it, the seal strongly blocks the air, and humidity and is sturdy until the next time you open it.</div>\n<div>1.2L</div>\n<div><br></div>\n<div><strong>Material:</stro",
+   "published_at": "2026-08-31T09:27:15+02:00",
+   "created_at": "2026-08-31T09:27:13+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "",
+   "tags": [
+    "Equipment"
+   ],
+   "variants": [
+    {
+     "id": 45974678470703,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "45.00",
+     "grams": 0,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8448541032495,
+     "created_at": "2026-08-31T09:27:14+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40262303416367,
+     "created_at": "2026-09-08T09:58:44+02:00",
+     "position": 1,
+     "updated_at": "2026-09-08T09:58:46+02:00",
+     "product_id": 8448541032495,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Ankomn-Container.jpg?v=1788854326",
+     "width": 1350,
+     "height": 1687
+    }
+   ],
+   "options": [
+    {
+     "name": "Title",
+     "position": 1,
+     "values": [
+      "Default Title"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8448464814127,
+   "title": "MAME x HARIO Switch Purion 02",
+   "handle": "mame-x-hario-switch-purion-02",
+   "body_html": "<p class=\"p1\">The ceramic HARIO SWITCH made by HARIO TAIWAN, customised for MAME.<span class=\"Apple-converted-space\">\u00a0 <br><br></span>A perfect brewing device to combine immersion and drip in one brew",
+   "published_at": "2026-08-31T09:09:47+02:00",
+   "created_at": "2026-08-31T09:09:45+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "",
+   "tags": [
+    "Equipment"
+   ],
+   "variants": [
+    {
+     "id": 45974457057327,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": false,
+     "price": "80.00",
+     "grams": 0,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8448464814127,
+     "created_at": "2026-08-31T09:09:46+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40307804307503,
+     "created_at": "2026-09-10T20:19:24+02:00",
+     "position": 1,
+     "updated_at": "2026-09-10T20:19:26+02:00",
+     "product_id": 8448464814127,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Hario-Switch-Purion-02.jpg?v=1789064366",
+     "width": 1232,
+     "height": 1540
+    }
+   ],
+   "options": [
+    {
+     "name": "Title",
+     "position": 1,
+     "values": [
+      "Default Title"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8296029028399,
+   "title": "Brayan Smith",
+   "handle": "brayan-smith",
+   "body_html": "<p><meta charset=\"utf-8\"><span>Third generation Colombian producer from Huila, this geisha shows beautiful notes of White Flower, Citrus and Black tea.</span></p>",
+   "published_at": "2026-07-25T12:43:40+02:00",
+   "created_at": "2026-06-10T08:52:10+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "daily coffee",
+   "tags": [
+    "Daily"
+   ],
+   "variants": [
+    {
+     "id": 45453136724015,
+     "title": "250g / Espresso",
+     "option1": "250g",
+     "option2": "Espresso",
+     "option3": null,
+     "sku": "Brayan Smith - Espresso - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "36.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8296029028399,
+     "created_at": "2026-06-10T08:52:10+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45474861973551,
+     "title": "250g / Filter",
+     "option1": "250g",
+     "option2": "Filter",
+     "option3": null,
+     "sku": "Brayan Smith - Filter - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "36.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8296029028399,
+     "created_at": "2026-06-14T15:10:48+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45453136756783,
+     "title": "1kg / Espresso",
+     "option1": "1kg",
+     "option2": "Espresso",
+     "option3": null,
+     "sku": "Brayan Smith - Espresso - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "140.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 3,
+     "product_id": 8296029028399,
+     "created_at": "2026-06-10T08:52:10+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45474862006319,
+     "title": "1kg / Filter",
+     "option1": "1kg",
+     "option2": "Filter",
+     "option3": null,
+     "sku": "Brayan Smith - Filter - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "140.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 4,
+     "product_id": 8296029028399,
+     "created_at": "2026-06-14T15:10:48+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40260872175663,
+     "created_at": "2026-09-08T08:05:12+02:00",
+     "position": 1,
+     "updated_at": "2026-09-08T08:07:10+02:00",
+     "product_id": 8296029028399,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Brayan-Smith-250g.jpg?v=1788847630",
+     "width": 3347,
+     "height": 4185
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "250g",
+      "1kg"
+     ]
+    },
+    {
+     "name": "Roast",
+     "position": 2,
+     "values": [
+      "Espresso",
+      "Filter"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8382532190255,
+   "title": "El Placer Geisha White Honey Omni",
+   "handle": "el-placer-geisha-white-honey-omni",
+   "body_html": "",
+   "published_at": "2026-07-25T11:33:04+02:00",
+   "created_at": "2026-07-25T11:20:41+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "competition coffee",
+   "tags": [
+    "Competition"
+   ],
+   "variants": [
+    {
+     "id": 46157741391919,
+     "title": "60g",
+     "option1": "60g",
+     "option2": null,
+     "option3": null,
+     "sku": "El Placer Geisha White Honey Omni - 60g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": {
+      "id": 40400399073327,
+      "product_id": 8382532190255,
+      "position": 2,
+      "created_at": "2026-09-16T18:33:54+02:00",
+      "updated_at": "2026-09-16T18:33:55+02:00",
+      "alt": null,
+      "width": 3347,
+      "height": 4183,
+      "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-El-Placer-Geisha-White-Honey-60g.jpg?v=1789576435",
+      "variant_ids": [
+       46157741391919
+      ]
+     },
+     "available": true,
+     "price": "25.00",
+     "grams": 82,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8382532190255,
+     "created_at": "2026-09-10T18:34:41+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45670168035375,
+     "title": "150g",
+     "option1": "150g",
+     "option2": null,
+     "option3": null,
+     "sku": "El Placer Geisha White Honey Omni - 150g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": {
+      "id": 40257366622255,
+      "product_id": 8382532190255,
+      "position": 1,
+      "created_at": "2026-09-08T04:52:31+02:00",
+      "updated_at": "2026-09-08T04:52:33+02:00",
+      "alt": null,
+      "width": 3347,
+      "height": 4183,
+      "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-El-Placer-Geisha-White-Honey-150g.jpg?v=1788835953",
+      "variant_ids": [
+       45670168035375
+      ]
+     },
+     "available": true,
+     "price": "62.00",
+     "grams": 186,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8382532190255,
+     "created_at": "2026-07-25T11:20:41+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45670168068143,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": "El Placer Geisha White Honey Omni - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "390.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 3,
+     "product_id": 8382532190255,
+     "created_at": "2026-07-25T11:20:41+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40257366622255,
+     "created_at": "2026-09-08T04:52:31+02:00",
+     "position": 1,
+     "updated_at": "2026-09-08T04:52:33+02:00",
+     "product_id": 8382532190255,
+     "variant_ids": [
+      45670168035375
+     ],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-El-Placer-Geisha-White-Honey-150g.jpg?v=1788835953",
+     "width": 3347,
+     "height": 4183
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "60g",
+      "150g",
+      "1kg"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8296094138415,
+   "title": "Adaura Geisha Natural DF Omni",
+   "handle": "adaura-geisha-natural-df-omni",
+   "body_html": "",
+   "published_at": "2026-07-25T10:57:54+02:00",
+   "created_at": "2026-06-10T09:56:17+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "competition coffee",
+   "tags": [
+    "Competition"
+   ],
+   "variants": [
+    {
+     "id": 46157707706415,
+     "title": "60g",
+     "option1": "60g",
+     "option2": null,
+     "option3": null,
+     "sku": "Adaura Geisha Natural DF Omni - 60g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": {
+      "id": 40400404185135,
+      "product_id": 8296094138415,
+      "position": 2,
+      "created_at": "2026-09-16T18:35:14+02:00",
+      "updated_at": "2026-09-16T18:35:16+02:00",
+      "alt": null,
+      "width": 3347,
+      "height": 4183,
+      "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Adaura-Geisha-Natural-DF-60g.jpg?v=1789576516",
+      "variant_ids": [
+       46157707706415
+      ]
+     },
+     "available": false,
+     "price": "32.00",
+     "grams": 82,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8296094138415,
+     "created_at": "2026-09-10T18:06:22+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45453542948911,
+     "title": "150g",
+     "option1": "150g",
+     "option2": null,
+     "option3": null,
+     "sku": "Adaura Geisha Natural DF Omni - 150g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": {
+      "id": 40257369735215,
+      "product_id": 8296094138415,
+      "position": 1,
+      "created_at": "2026-09-08T04:54:18+02:00",
+      "updated_at": "2026-09-08T04:54:20+02:00",
+      "alt": null,
+      "width": 3347,
+      "height": 4183,
+      "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Adaura-Geisha-Natural-DF-150g.jpg?v=1788836060",
+      "variant_ids": [
+       45453542948911
+      ]
+     },
+     "available": true,
+     "price": "78.00",
+     "grams": 186,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8296094138415,
+     "created_at": "2026-06-10T09:56:18+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45453542981679,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": "Adaura Geisha Natural DF Omni - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": false,
+     "price": "490.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 3,
+     "product_id": 8296094138415,
+     "created_at": "2026-06-10T09:56:18+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40257369735215,
+     "created_at": "2026-09-08T04:54:18+02:00",
+     "position": 1,
+     "updated_at": "2026-09-08T04:54:20+02:00",
+     "product_id": 8296094138415,
+     "variant_ids": [
+      45453542948911
+     ],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Adaura-Geisha-Natural-DF-150g.jpg?v=1788836060",
+     "width": 3347,
+     "height": 4183
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "60g",
+      "150g",
+      "1kg"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8319696240687,
+   "title": "Coffee Subscription",
+   "handle": "coffee-subscription",
+   "body_html": "",
+   "published_at": "2026-06-23T08:31:27+02:00",
+   "created_at": "2026-06-23T08:31:26+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "",
+   "tags": [
+    "Subscription"
+   ],
+   "variants": [
+    {
+     "id": 45513285369903,
+     "title": "Espresso / Every Week / 250g",
+     "option1": "Espresso",
+     "option2": "Every Week",
+     "option3": "250g",
+     "sku": "Coffee Subscription - Espresso - Every Week - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "20.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285402671,
+     "title": "Espresso / Every Week / 500g",
+     "option1": "Espresso",
+     "option2": "Every Week",
+     "option3": "500g",
+     "sku": "Coffee Subscription - Espresso - Every Week - 500g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "38.00",
+     "grams": 600,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285435439,
+     "title": "Espresso / Every Week / 1kg",
+     "option1": "Espresso",
+     "option2": "Every Week",
+     "option3": "1kg",
+     "sku": "Coffee Subscription - Espresso - Every Week - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "75.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 3,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285468207,
+     "title": "Espresso / Every 2 Weeks / 250g",
+     "option1": "Espresso",
+     "option2": "Every 2 Weeks",
+     "option3": "250g",
+     "sku": "Coffee Subscription - Espresso - Every 2 Week - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "21.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 4,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285500975,
+     "title": "Espresso / Every 2 Weeks / 500g",
+     "option1": "Espresso",
+     "option2": "Every 2 Weeks",
+     "option3": "500g",
+     "sku": "Coffee Subscription - Espresso - Every 2 Week - 500g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "40.00",
+     "grams": 600,
+     "compare_at_price": null,
+     "position": 5,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285533743,
+     "title": "Espresso / Every 2 Weeks / 1kg",
+     "option1": "Espresso",
+     "option2": "Every 2 Weeks",
+     "option3": "1kg",
+     "sku": "Coffee Subscription - Espresso - Every 2 Week - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "79.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 6,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285566511,
+     "title": "Espresso / Monthly / 250g",
+     "option1": "Espresso",
+     "option2": "Monthly",
+     "option3": "250g",
+     "sku": "Coffee Subscription - Espresso - Monthly - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "22.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 7,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285599279,
+     "title": "Espresso / Monthly / 500g",
+     "option1": "Espresso",
+     "option2": "Monthly",
+     "option3": "500g",
+     "sku": "Coffee Subscription - Espresso - Monthly - 500g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "42.00",
+     "grams": 600,
+     "compare_at_price": null,
+     "position": 8,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285632047,
+     "title": "Espresso / Monthly / 1kg",
+     "option1": "Espresso",
+     "option2": "Monthly",
+     "option3": "1kg",
+     "sku": "Coffee Subscription - Espresso - Monthly - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "83.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 9,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285664815,
+     "title": "Filter / Every Week / 250g",
+     "option1": "Filter",
+     "option2": "Every Week",
+     "option3": "250g",
+     "sku": "Coffee Subscription - Filter - Every Week - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "20.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 10,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285697583,
+     "title": "Filter / Every Week / 500g",
+     "option1": "Filter",
+     "option2": "Every Week",
+     "option3": "500g",
+     "sku": "Coffee Subscription - Filter - Every Week - 500g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "38.00",
+     "grams": 600,
+     "compare_at_price": null,
+     "position": 11,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285730351,
+     "title": "Filter / Every Week / 1kg",
+     "option1": "Filter",
+     "option2": "Every Week",
+     "option3": "1kg",
+     "sku": "Coffee Subscription - Filter - Every Week - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "75.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 12,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285763119,
+     "title": "Filter / Every 2 Weeks / 250g",
+     "option1": "Filter",
+     "option2": "Every 2 Weeks",
+     "option3": "250g",
+     "sku": "Coffee Subscription - Filter - Every 2 Week - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "21.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 13,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285795887,
+     "title": "Filter / Every 2 Weeks / 500g",
+     "option1": "Filter",
+     "option2": "Every 2 Weeks",
+     "option3": "500g",
+     "sku": "Coffee Subscription - Filter - Every 2 Week - 500g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "40.00",
+     "grams": 600,
+     "compare_at_price": null,
+     "position": 14,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285828655,
+     "title": "Filter / Every 2 Weeks / 1kg",
+     "option1": "Filter",
+     "option2": "Every 2 Weeks",
+     "option3": "1kg",
+     "sku": "Coffee Subscription - Filter - Every 2 Week - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "79.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 15,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285861423,
+     "title": "Filter / Monthly / 250g",
+     "option1": "Filter",
+     "option2": "Monthly",
+     "option3": "250g",
+     "sku": "Coffee Subscription - Filter - Monthly - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "22.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 16,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285894191,
+     "title": "Filter / Monthly / 500g",
+     "option1": "Filter",
+     "option2": "Monthly",
+     "option3": "500g",
+     "sku": "Coffee Subscription - Filter - Monthly - 500g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "42.00",
+     "grams": 600,
+     "compare_at_price": null,
+     "position": 17,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45513285926959,
+     "title": "Filter / Monthly / 1kg",
+     "option1": "Filter",
+     "option2": "Monthly",
+     "option3": "1kg",
+     "sku": "Coffee Subscription - Filter - Monthly - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "83.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 18,
+     "product_id": 8319696240687,
+     "created_at": "2026-06-23T08:33:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40308221837359,
+     "created_at": "2026-09-10T20:44:43+02:00",
+     "position": 1,
+     "updated_at": "2026-09-10T20:44:44+02:00",
+     "product_id": 8319696240687,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/mame__subscription-visual_1920x_1.webp?v=1789065884",
+     "width": 1920,
+     "height": 1920
+    }
+   ],
+   "options": [
+    {
+     "name": "Roast",
+     "position": 1,
+     "values": [
+      "Espresso",
+      "Filter"
+     ]
+    },
+    {
+     "name": "Frequency",
+     "position": 2,
+     "values": [
+      "Every Week",
+      "Every 2 Weeks",
+      "Monthly"
+     ]
+    },
+    {
+     "name": "Size",
+     "position": 3,
+     "values": [
+      "250g",
+      "500g",
+      "1kg"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8319557828655,
+   "title": "Competition Subscription",
+   "handle": "competition-subscription",
+   "body_html": "",
+   "published_at": "2026-06-23T05:31:52+02:00",
+   "created_at": "2026-06-23T05:31:51+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "",
+   "tags": [
+    "Subscription"
+   ],
+   "variants": [
+    {
+     "id": 45512952381487,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "Competition Subscription - Roasted Coffee 150g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "50.00",
+     "grams": 186,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8319557828655,
+     "created_at": "2026-06-23T05:31:51+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40308221837359,
+     "created_at": "2026-09-10T20:44:43+02:00",
+     "position": 1,
+     "updated_at": "2026-09-10T20:44:44+02:00",
+     "product_id": 8319557828655,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/mame__subscription-visual_1920x_1.webp?v=1789065884",
+     "width": 1920,
+     "height": 1920
+    }
+   ],
+   "options": [
+    {
+     "name": "Title",
+     "position": 1,
+     "values": [
+      "Default Title"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8296068186159,
+   "title": "Decaf Omni",
+   "handle": "decaf-omni",
+   "body_html": "<p>Espresso shot of this decaf is extremely smooth, with the flavour of marzipan and some sugarcane notes. It also goes really well with both cow and plant-based milks.</p>\n<p>This is our one and only",
+   "published_at": "2026-06-10T09:44:35+02:00",
+   "created_at": "2026-06-10T09:44:35+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "daily coffee",
+   "tags": [
+    "Daily"
+   ],
+   "variants": [
+    {
+     "id": 45453387825199,
+     "title": "250g",
+     "option1": "250g",
+     "option2": null,
+     "option3": null,
+     "sku": "Decaf Omni - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "19.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8296068186159,
+     "created_at": "2026-06-10T09:44:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45453387857967,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": "Decaf Omni - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "76.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8296068186159,
+     "created_at": "2026-06-10T09:44:35+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40260837081135,
+     "created_at": "2026-09-08T08:01:21+02:00",
+     "position": 1,
+     "updated_at": "2026-09-08T08:09:16+02:00",
+     "product_id": 8296068186159,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Decaf-250g.jpg?v=1788847756",
+     "width": 3347,
+     "height": 4185
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "250g",
+      "1kg"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8296063696943,
+   "title": "Pearl",
+   "handle": "pearl",
+   "body_html": "<p>Part of the \"Daterra Classic\" series.<br><br>If you like your coffee to be gentle, easy, and chocolatey, Pearl is your buddy. Pearl is named after its round and cute shape, as it\u2019s pea berry.</p>\n<",
+   "published_at": "2026-06-10T09:43:02+02:00",
+   "created_at": "2026-06-10T09:43:02+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "daily coffee",
+   "tags": [
+    "Daily"
+   ],
+   "variants": [
+    {
+     "id": 45453354729519,
+     "title": "250g / Espresso",
+     "option1": "250g",
+     "option2": "Espresso",
+     "option3": null,
+     "sku": "Pearl - Espresso - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "18.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8296063696943,
+     "created_at": "2026-06-10T09:43:02+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45651864027183,
+     "title": "250g / Filter",
+     "option1": "250g",
+     "option2": "Filter",
+     "option3": null,
+     "sku": "Pearl - Filter - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "18.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8296063696943,
+     "created_at": "2026-07-22T07:01:02+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45453354762287,
+     "title": "1kg / Espresso",
+     "option1": "1kg",
+     "option2": "Espresso",
+     "option3": null,
+     "sku": "Pearl - Espresso - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "70.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 3,
+     "product_id": 8296063696943,
+     "created_at": "2026-06-10T09:43:02+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45651864059951,
+     "title": "1kg / Filter",
+     "option1": "1kg",
+     "option2": "Filter",
+     "option3": null,
+     "sku": "Pearl - Filter - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "70.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 4,
+     "product_id": 8296063696943,
+     "created_at": "2026-07-22T07:01:02+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40260847435823,
+     "created_at": "2026-09-08T08:01:45+02:00",
+     "position": 1,
+     "updated_at": "2026-09-08T08:08:43+02:00",
+     "product_id": 8296063696943,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Pearl-250g.jpg?v=1788847723",
+     "width": 3347,
+     "height": 4185
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "250g",
+      "1kg"
+     ]
+    },
+    {
+     "name": "Roast",
+     "position": 2,
+     "values": [
+      "Espresso",
+      "Filter"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8296055963695,
+   "title": "Full Bloom",
+   "handle": "full-bloom",
+   "body_html": "<p>Part of \"Daterra Collection\" Series.<br><br>You will have sweet almond biscotti and walnuts notes. Velvety mouthfeel goes all the way. Enjoyable also with milk and plant-based milk.</p>\n<p>MAME met",
+   "published_at": "2026-06-10T09:40:49+02:00",
+   "created_at": "2026-06-10T09:40:49+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "daily coffee",
+   "tags": [
+    "Daily"
+   ],
+   "variants": [
+    {
+     "id": 45453321044015,
+     "title": "250g / Espresso",
+     "option1": "250g",
+     "option2": "Espresso",
+     "option3": null,
+     "sku": "Full Bloom - Espresso - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "19.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8296055963695,
+     "created_at": "2026-06-10T09:40:49+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45651851116591,
+     "title": "250g / Filter",
+     "option1": "250g",
+     "option2": "Filter",
+     "option3": null,
+     "sku": "Full Bloom - Filter - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "19.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8296055963695,
+     "created_at": "2026-07-22T06:59:50+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45453321076783,
+     "title": "1kg / Espresso",
+     "option1": "1kg",
+     "option2": "Espresso",
+     "option3": null,
+     "sku": "Full Bloom - Espresso - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "76.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 3,
+     "product_id": 8296055963695,
+     "created_at": "2026-06-10T09:40:49+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45651851149359,
+     "title": "1kg / Filter",
+     "option1": "1kg",
+     "option2": "Filter",
+     "option3": null,
+     "sku": "Full Bloom - Filter - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "76.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 4,
+     "product_id": 8296055963695,
+     "created_at": "2026-07-22T06:59:50+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40260852088879,
+     "created_at": "2026-09-08T08:02:19+02:00",
+     "position": 1,
+     "updated_at": "2026-09-08T08:07:58+02:00",
+     "product_id": 8296055963695,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Full-Bloom-250g.jpg?v=1788847678",
+     "width": 3347,
+     "height": 4185
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "250g",
+      "1kg"
+     ]
+    },
+    {
+     "name": "Roast",
+     "position": 2,
+     "values": [
+      "Espresso",
+      "Filter"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8296031027247,
+   "title": "Pink Bourbon",
+   "handle": "pink-bourbon",
+   "body_html": "<p><meta charset=\"utf-8\"><span>What a coffee for summer, refreshing and reminding me of peach ice tea. You will find tea qualities such as white tea when hot, and black tea when cold.</span></p>",
+   "published_at": "2026-06-10T08:57:08+02:00",
+   "created_at": "2026-06-10T08:57:08+02:00",
+   "updated_at": "2026-11-04T22:25:55+01:00",
+   "vendor": "MAME Specialty Coffee",
+   "product_type": "daily coffee",
+   "tags": [
+    "Daily"
+   ],
+   "variants": [
+    {
+     "id": 45453150224431,
+     "title": "250g / Espresso",
+     "option1": "250g",
+     "option2": "Espresso",
+     "option3": null,
+     "sku": "Pink Bourbon - Espresso - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "30.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8296031027247,
+     "created_at": "2026-06-10T08:57:08+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45651785416751,
+     "title": "250g / Filter",
+     "option1": "250g",
+     "option2": "Filter",
+     "option3": null,
+     "sku": "Pink Bourbon - Filter - 250g",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "30.00",
+     "grams": 300,
+     "compare_at_price": null,
+     "position": 2,
+     "product_id": 8296031027247,
+     "created_at": "2026-07-22T06:54:23+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45453150257199,
+     "title": "1kg / Espresso",
+     "option1": "1kg",
+     "option2": "Espresso",
+     "option3": null,
+     "sku": "Pink Bourbon - Espresso - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "118.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 3,
+     "product_id": 8296031027247,
+     "created_at": "2026-06-10T08:57:08+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    },
+    {
+     "id": 45651785449519,
+     "title": "1kg / Filter",
+     "option1": "1kg",
+     "option2": "Filter",
+     "option3": null,
+     "sku": "Pink Bourbon - Filter - 1kg",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "118.00",
+     "grams": 1025,
+     "compare_at_price": null,
+     "position": 4,
+     "product_id": 8296031027247,
+     "created_at": "2026-07-22T06:54:23+02:00",
+     "updated_at": "2026-11-04T22:25:55+01:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 40260853202991,
+     "created_at": "2026-09-08T08:02:53+02:00",
+     "position": 1,
+     "updated_at": "2026-09-08T08:07:46+02:00",
+     "product_id": 8296031027247,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0761/2412/7279/files/MAME-Coffee-Pink-Bourbon-250g.jpg?v=1788847666",
+     "width": 3347,
+     "height": 4185
+    }
+   ],
+   "options": [
+    {
+     "name": "Size",
+     "position": 1,
+     "values": [
+      "250g",
+      "1kg"
+     ]
+    },
+    {
+     "name": "Roast",
+     "position": 2,
+     "values": [
+      "Espresso",
+      "Filter"
+     ]
+    }
+   ]
+  }
+ ]
+}

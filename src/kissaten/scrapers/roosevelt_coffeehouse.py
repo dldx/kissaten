@@ -45,7 +45,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class RooseveltCoffeehouseScraper(BaseScraper):
     """Scraper for Roosevelt Coffeehouse using the WooCommerce Store API."""

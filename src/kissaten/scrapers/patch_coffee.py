@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class PatchCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Patch Coffee (patchcoffee.shop) using Shopify products.json.

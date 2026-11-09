@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="AUD",
     country="Australia",
-    status="experimental",
+    status="available",
 )
 class MicrologyScraper(ShopifyJsonScraper):
     """Scraper for Micrology Coffee Roasters (micrology.com.au) using Shopify products.json."""

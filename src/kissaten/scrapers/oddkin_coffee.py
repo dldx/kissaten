@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="GBP",
     country="United Kingdom",
-    status="experimental",
+    status="available",
 )
 class OddkinCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Oddkin Coffee (oddkincoffee.com) using Shopify products.json."""

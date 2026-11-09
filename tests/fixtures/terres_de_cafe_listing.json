@@ -1,0 +1,106 @@
+{
+  "url": "https://www.terresdecafe.com/en/13-speciality-coffees",
+  "stape_products": [
+    {
+      "id_product": "2124",
+      "id_category_default": "10",
+      "category_name": "Beans Coffee",
+      "name": "Jose Jijón - Fincas del Putushio - Typica Merojado - Légendes",
+      "link_rewrite": "jose-jijon-fincas-del-putushio-typica-merojado-legendes",
+      "link": "https://www.terresdecafe.com/en/beans-coffee/2124-jose-jijon-fincas-del-putushio-typica-merojado-legendes.html"
+    },
+    {
+      "id_product": "2117",
+      "id_category_default": "310",
+      "category_name": "Gamme Légendes",
+      "name": "Alejo Castro - Volcan Azul Estate - Cardamono SL28 Washed - Légendes",
+      "link_rewrite": "alejo-castro-volcan-azul-estate-cardamono-sl28-washed-legendes",
+      "link": "https://www.terresdecafe.com/en/gamme-legendes/2117-alejo-castro-volcan-azul-estate-cardamono-sl28-washed-legendes.html"
+    },
+    {
+      "id_product": "2116",
+      "id_category_default": "310",
+      "category_name": "Gamme Légendes",
+      "name": "Alejo Castro – Volcan Azul Estate – Almacigal SL28 Natural – Légendes",
+      "link_rewrite": "alejo-castro-volcan-azul-estate-almacigal-sl28-natural-legendes",
+      "link": "https://www.terresdecafe.com/en/gamme-legendes/2116-alejo-castro-volcan-azul-estate-almacigal-sl28-natural-legendes.html"
+    },
+    {
+      "id_product": "2118",
+      "id_category_default": "310",
+      "category_name": "Gamme Légendes",
+      "name": "Alejo Castro - Volcan Azul Estate - Galeron Geisha Anaerobic Natural - Légendes",
+      "link_rewrite": "alejo-castro-volcan-azul-estate-galeron-geisha-anaerobic-natural-legendes",
+      "link": "https://www.terresdecafe.com/en/gamme-legendes/2118-alejo-castro-volcan-azul-estate-galeron-geisha-anaerobic-natural-legendes.html"
+    },
+    {
+      "id_product": "1700",
+      "id_category_default": "10",
+      "category_name": "Beans Coffee",
+      "name": "Coffee Lechuza Geisha",
+      "link_rewrite": "coffee-lechuza-geisha",
+      "link": "https://www.terresdecafe.com/en/beans-coffee/1700-coffee-lechuza-geisha-3700926147236.html"
+    },
+    {
+      "id_product": "2107",
+      "id_category_default": "13",
+      "category_name": "Speciality Coffee",
+      "name": "Coffee KSF Limmu Bedaye Washed Bio",
+      "link_rewrite": "coffee-ksf-limmu-bedaye-washed-bio",
+      "link": "https://www.terresdecafe.com/en/speciality-coffees/2107-coffee-ksf-limmu-bedaye-washed-bio-3700926146482.html"
+    },
+    {
+      "id_product": "2108",
+      "id_category_default": "13",
+      "category_name": "Speciality Coffee",
+      "name": "Coffee Alto del Bijao Bourbon Red Semi-Washed Organic",
+      "link_rewrite": "coffee-alto-del-bijao-bourbon-red-semi-washed-organic-",
+      "link": "https://www.terresdecafe.com/en/speciality-coffees/2108-coffee-alto-del-bijao-bourbon-red-semi-washed-organic-.html"
+    },
+    {
+      "id_product": "394",
+      "id_category_default": "13",
+      "category_name": "Speciality Coffee",
+      "name": "Coffee Dipilto Viejo",
+      "link_rewrite": "coffee-dipilto-viejo",
+      "link": "https://www.terresdecafe.com/en/speciality-coffees/394-coffee-dipilto-viejo.html"
+    },
+    {
+      "id_product": "1938",
+      "id_category_default": "13",
+      "category_name": "Speciality Coffee",
+      "name": "Coffee Fazendas",
+      "link_rewrite": "coffee-fazendas",
+      "link": "https://www.terresdecafe.com/en/speciality-coffees/1938-coffee-fazendas-3700926145379.html"
+    },
+    {
+      "id_product": "1978",
+      "id_category_default": "13",
+      "category_name": "Speciality Coffee",
+      "name": "Coffee Felix Project Caranavi Bio",
+      "link_rewrite": "coffee-felix-project-caranavi-bio",
+      "link": "https://www.terresdecafe.com/en/speciality-coffees/1978-coffee-felix-project-caranavi-bio.html"
+    },
+    {
+      "id_product": "1966",
+      "id_category_default": "13",
+      "category_name": "Speciality Coffee",
+      "name": "Coffee Altos de Bijao Estate Project Bio",
+      "link_rewrite": "coffee-altos-de-bijao-estate-project-bio",
+      "link": "https://www.terresdecafe.com/en/speciality-coffees/1966-coffee-altos-de-bijao-estate-project-bio.html"
+    },
+    {
+      "id_product": "1445",
+      "id_category_default": "13",
+      "category_name": "Speciality Coffee",
+      "name": "Coffee KSF Goma Forest Bio",
+      "link_rewrite": "coffee-ksf-goma-forest-bio",
+      "link": "https://www.terresdecafe.com/en/speciality-coffees/1445-coffee-ksf-goma-forest-bio.html"
+    }
+  ],
+  "next_page_links": [
+    "https://www.terresdecafe.com/en/13-speciality-coffees?page=2",
+    "https://www.terresdecafe.com/en/13-speciality-coffees?page=3",
+    "https://www.terresdecafe.com/en/13-speciality-coffees?page=8"
+  ]
+}

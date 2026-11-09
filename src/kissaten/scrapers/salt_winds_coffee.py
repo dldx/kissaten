@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="CAD",
     country="Canada",
-    status="experimental",
+    status="available",
 )
 class SaltWindsCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Salt Winds Coffee (saltwindscoffee.com) using Shopify products.json."""

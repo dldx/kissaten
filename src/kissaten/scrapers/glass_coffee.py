@@ -1,7 +1,6 @@
 """Elsewhere Coffee scraper implementation with AI-powered extraction."""
 
 import logging
-from pathlib import Path
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
@@ -48,8 +47,12 @@ class GlassCoffeeScraper(BaseScraper):
         Returns:
             List containing the coffee category URL
         """
-        return ["https://glasscoffee.co.uk/collections/coffee?filter.v.availability=1#coffee", "https://glasscoffee.co.uk/collections/coffee?page=2&filter.v.availability=1#coffee"]
-
+        # Plain collection URL: the ``?filter.v.availability=1`` variant renders
+        # an empty grid on page 2 and the ``#coffee`` fragment is inert, so the
+        # unfiltered listing (one page, all products) is the robust choice.
+        # Sold-out products are filtered client-side in
+        # _extract_product_urls_from_store.
+        return ["https://glasscoffee.co.uk/collections/coffee"]
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -71,7 +74,7 @@ class GlassCoffeeScraper(BaseScraper):
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
             use_playwright=False,
-            use_optimized_mode=False
+            use_optimized_mode=False,
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
@@ -88,15 +91,23 @@ class GlassCoffeeScraper(BaseScraper):
             return []
 
         # Extract all product URLs using the base class method
-        product_grids = soup.select('.product-grid')
+        product_grids = soup.select(".product-grid")
         if not product_grids:
             logger.warning(f"No product grid found on store page: {store_url}")
             return []
-        all_product_url_el = soup.select('.product-grid')[0].select('a[href*="/products/"][aria-labelledby*="CardLink-template"]')
+        # Current theme renders product cards as ``<a class="product-card"
+        # id="CardLink-template--...">`` inside ``.product-card-wrapper``
+        # (previously the link carried an ``aria-labelledby`` attribute).
+        all_product_url_el = soup.select('.product-grid a.product-card[href*="/products/"]')
         all_product_urls = []
+        seen_urls = set()
         for el in all_product_url_el:
-            if not "Sold out" in el.parent.text:
-                all_product_urls.append(f"{self.base_url}{el['href'].split('?')[0]}")
+            if "Sold out" in el.parent.text:
+                continue
+            product_url = f"{self.base_url}{el['href'].split('?')[0]}"
+            if product_url not in seen_urls:
+                seen_urls.add(product_url)
+                all_product_urls.append(product_url)
 
         # Filter coffee products using base class method
         excluded_patterns = []

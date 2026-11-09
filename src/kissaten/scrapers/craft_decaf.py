@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="GBP",
     country="United Kingdom",
-    status="experimental",
+    status="available",
 )
 class CraftDecafScraper(ShopifyJsonScraper):
     """Scraper for Craft Decaf (craftdecaf.com) using Shopify products.json."""

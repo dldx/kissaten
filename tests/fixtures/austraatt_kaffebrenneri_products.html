@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="no">
+<head><title>Austrått Kaffebrenneri AS</title></head>
+<body>
+<main>
+  <div class="product-grid">
+    <!-- In-stock coffee (no stock badge = in stock) -->
+    <div>
+      <div class="text-card-foreground rounded-lg border shadow-sm flex h-full flex-col overflow-hidden transition-all duration-300 border-border bg-card hover:border-primary/20 hover:shadow-xl">
+        <div class="flex flex-col space-y-1.5 p-0">
+          <a href="/products/kenya-kirinyaga-aa">
+            <div class="product-image-box relative overflow-hidden bg-muted">
+              <img alt="Kenya, Kirinyaga AA" class="h-full w-full object-cover" src="/_next/image?url=test.png" />
+            </div>
+          </a>
+          <div class="mb-4 flex-1 space-y-2">
+            <p>Opprinnelse: Kenya Smaksnoter: Solbær Blåbær Honey Fra 220 kr uten mva</p>
+            <button>Kjøp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Equipment bundle with UUID slug (must be excluded via normalized title) -->
+    <div>
+      <div class="text-card-foreground rounded-lg border shadow-sm flex h-full flex-col overflow-hidden transition-all duration-300 border-border bg-card hover:border-primary/20 hover:shadow-xl">
+        <div class="flex flex-col space-y-1.5 p-0">
+          <a href="/products/83f2ab3a-d2e8-494c-9d73-7d2bbafe3690">
+            <div class="product-image-box relative overflow-hidden bg-muted">
+              <img alt="Espresso og baristamaskin" class="h-full w-full object-cover" src="/_next/image?url=test.png" />
+            </div>
+          </a>
+          <div class="mb-4 flex-1 space-y-2">
+            <p>Kaffe Sør- og Mellom Amerika Abonnement + 2 490 kr uten mva Engangskjøp Abonner Kjøp</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Subscription-only product (must be excluded via normalized title) -->
+    <div>
+      <div class="text-card-foreground rounded-lg border shadow-sm flex h-full flex-col overflow-hidden transition-all duration-300 border-border bg-card hover:border-primary/20 hover:shadow-xl">
+        <div class="flex flex-col space-y-1.5 p-0">
+          <a href="/products/abonnement-tilgjengelig">
+            <div class="product-image-box relative overflow-hidden bg-muted">
+              <img alt="Abonnement tilgjengelig" class="h-full w-full object-cover" src="/_next/image?url=test.png" />
+            </div>
+          </a>
+          <div class="mb-4 flex-1 space-y-2">
+            <p>Abonnement 549 kr uten mva Abonner Kjøp</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Sold-out coffee (Ikke på lager = must be skipped) -->
+    <div>
+      <div class="text-card-foreground rounded-lg border shadow-sm flex h-full flex-col overflow-hidden transition-all duration-300 border-border bg-card hover:border-primary/20 hover:shadow-xl">
+        <div class="flex flex-col space-y-1.5 p-0">
+          <a href="/products/utsolgt-kaffe">
+            <div class="product-image-box relative overflow-hidden bg-muted">
+              <img alt="Utsolgt Kaffe" class="h-full w-full object-cover" src="/_next/image?url=test.png" />
+            </div>
+          </a>
+          <div class="mb-4 flex-1 space-y-2">
+            <span>Ikke på lager</span>
+            <button>Kjøp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Sold-out coffee (Utsolgt = must be skipped) -->
+    <div>
+      <div class="text-card-foreground rounded-lg border shadow-sm flex h-full flex-col overflow-hidden transition-all duration-300 border-border bg-card hover:border-primary/20 hover:shadow-xl">
+        <div class="flex flex-col space-y-1.5 p-0">
+          <a href="/products/solgt-ut-kaffe">
+            <div class="product-image-box relative overflow-hidden bg-muted">
+              <img alt="Solgt ut Kaffe" class="h-full w-full object-cover" src="/_next/image?url=test.png" />
+            </div>
+          </a>
+          <div class="mb-4 flex-1 space-y-2">
+            <span>Utsolgt</span>
+            <button>Kjøp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- In-stock coffee with UUID slug (must be kept, proves title-based exclusion works) -->
+    <div>
+      <div class="text-card-foreground rounded-lg border shadow-sm flex h-full flex-col overflow-hidden transition-all duration-300 border-border bg-card hover:border-primary/20 hover:shadow-xl">
+        <div class="flex flex-col space-y-1.5 p-0">
+          <a href="/products/404e7fb8-c9ea-4a65-a41f-20b68adbec72">
+            <div class="product-image-box relative overflow-hidden bg-muted">
+              <img alt="Kaffe fra Sør- og Mellom Amerika 1kg" class="h-full w-full object-cover" src="/_next/image?url=test.png" />
+            </div>
+          </a>
+          <div class="mb-4 flex-1 space-y-2">
+            <p>Abonnement tilgjengelig Varierer med innhøsting. Smaksnoter: Chocolate Nuts Spice 549 kr uten mva Engangskjøp Abonner Kjøp</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class LibsMarketScraper(BaseScraper):
     """Scraper for LiB's Market (libsmarket.com) — a Square Online storefront.

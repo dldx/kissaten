@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class LumeRoastersScraper(ShopifyJsonScraper):
     """Scraper for Lume Roasters (lumeroasters.coffee) using Shopify products.json.

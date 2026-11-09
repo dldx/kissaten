@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class ThankfullyCoffeeScraper(BaseScraper):
     """Scraper for Thankfully Coffee (thankfullycoffee.com).

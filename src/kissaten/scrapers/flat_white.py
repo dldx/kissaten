@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
     display_name="Flat&White",
     roaster_name="Flat&White",
     website="https://flatnwhite.com",
-    description="Argentinian specialty coffee roaster founded in 2016, with multiple cafés in Buenos Aires and a Diedrich roastery",
+    description="Argentinian specialty coffee roaster with cafés in Buenos Aires and a Diedrich roastery",
     requires_api_key=True,
     currency="ARS",
     country="Argentina",
@@ -50,6 +50,10 @@ class FlatWhiteScraper(BaseScraper):
         """
         return [
             "https://flatnwhite.com/cafe-de-especialidad-flatwhite-argentina/",
+            "https://flatnwhite.com/cafe-de-especialidad-colombia/",
+            "https://flatnwhite.com/cafe-especialidad-etiopia/",
+            "https://flatnwhite.com/cafe-especialidad-burundi/",
+            "https://flatnwhite.com/cafe-especialidad-ruanda/",
         ]
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -176,10 +180,15 @@ class FlatWhiteScraper(BaseScraper):
         if not soup:
             return []
 
-        # Sold-out detection: WooCommerce adds an "outofstock" CSS class to
-        # the product container when the product is not available.
+        # Sold-out detection: the legacy WooCommerce theme marked sold-out
+        # products with an "outofstock" CSS class on the product container.
+        # The current TiendaPocket theme (2026 redesign) renders each product
+        # as an <article class="tp-product-card"> with the primary link in
+        # a.tp-product-card__img-link; sold-out items show a "Sin stock" badge
+        # / label inside the card.
         product_urls = []
         selectors = [
+            "a.tp-product-card__img-link",
             "a.woocommerce-LoopProduct-link",
             "a.woocommerce-loop-product__link",
         ]
@@ -194,10 +203,18 @@ class FlatWhiteScraper(BaseScraper):
                     if not href or not isinstance(href, str):
                         continue
 
-                    # Sold-out detection: check product container for outofstock class
-                    product_block = link.find_parent(
-                        class_=lambda x: x and "product" in (x.lower().split() if x else [])
-                    )
+                    # Sold-out detection: check the product card container for
+                    # outofstock classes or "Sin stock" / "Agotado" text.
+                    # The TiendaPocket theme wraps every product in an
+                    # <article class="tp-product-card">; the legacy theme used
+                    # a container with the exact "product" class token. Prefer
+                    # the article ancestor so the whole card (title, badges,
+                    # stock note) is inspected, not just the image wrapper.
+                    product_block = link.find_parent("article")
+                    if product_block is None:
+                        product_block = link.find_parent(
+                            class_=lambda x: x and "product" in (x.lower().split() if x else [])
+                        )
                     if product_block and isinstance(product_block, Tag):
                         block_classes = product_block.get("class", [])
                         if isinstance(block_classes, str):
@@ -205,9 +222,19 @@ class FlatWhiteScraper(BaseScraper):
                         if any("outofstock" in cls.lower() for cls in block_classes if isinstance(cls, str)):
                             logger.debug(f"Skipping sold-out product: {href}")
                             continue
+                        block_text = product_block.get_text(" ", strip=True).lower()
+                        if "sin stock" in block_text or "agotado" in block_text:
+                            logger.debug(f"Skipping sold-out product (card text): {href}")
+                            continue
 
                     full_url = self.resolve_url(href)
-                    if self.is_coffee_product_url(full_url, ["/cafe-de-especialidad", "/cafe-especialidad"]):
+                    # "/3-cafes-de-especialidad" (plural "cafes") is the Box
+                    # 3 bundle: it's a curated sampler, so it must NOT be
+                    # dropped here — the pipeline flags tasting kits with
+                    # is_tasting_kit / requires_review instead.
+                    if self.is_coffee_product_url(
+                        full_url, ["/cafe-de-especialidad", "/cafe-especialidad", "/3-cafes-de-especialidad"]
+                    ):
                         product_urls.append(full_url)
 
                 break

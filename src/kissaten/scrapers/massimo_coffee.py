@@ -65,7 +65,7 @@ _EXTRA_EXCLUDED_SLUGS = (
     # Kazakhstan is not present in roaster_location_codes.csv; Asia is the
     # closest supported location (the store is based in Almaty, Kazakhstan).
     country="Kazakhstan",
-    status="experimental",
+    status="available",
 )
 class MassimoCoffeeScraper(BaseScraper):
     """Scraper for Massimo Coffee (icoffee.store) with AI-powered extraction."""

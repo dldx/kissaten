@@ -25,7 +25,7 @@ _MARKET_PARAM = "country=US"
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class MoongoatScraper(ShopifyJsonScraper):
     """Scraper for Moongoat (moongoat.com) using Shopify products.json."""

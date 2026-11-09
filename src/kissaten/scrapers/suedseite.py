@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Germany",
-    status="experimental",
+    status="available",
 )
 class SuedseiteScraper(ShopifyJsonScraper):
     """Scraper for Suedseite (suedseite.coffee) using Shopify products.json."""

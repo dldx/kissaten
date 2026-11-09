@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class GostCoffeeScraper(BaseScraper):
     """Scraper for Gost Coffee Roasters (gostcoffee.com) with AI-powered extraction.

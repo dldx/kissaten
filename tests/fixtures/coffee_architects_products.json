@@ -1,0 +1,114 @@
+{
+  "products": [
+    {
+      "id": 10974588371287,
+      "title": "Keza",
+      "handle": "keza",
+      "product_type": "Filter",
+      "tags": [],
+      "body_html": "<p data-path-to-node=\"1\">Vibrant and winey, Keza brings purple fruit and raisin notes from the highlands of Rwanda<b data-path-to-node=\"1\" data-index-in-node=\"0\">.</b> This fully washed experimental Red Bourbon is crafted for bold body and clarity, <meta charset=\"utf-8\">scoring 87 on the SCA scale. ",
+      "variants": [
+        {
+          "title": "250g",
+          "price": "17.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "id": 10922022994263,
+      "title": "Tamu",
+      "handle": "tamu",
+      "product_type": "Filter",
+      "tags": [
+        "Black Tea",
+        "Citrus",
+        "Floral",
+        "Grape"
+      ],
+      "body_html": "<p><meta charset=\"utf-8\">Bright and excited, Tamu brings citrus, floral, black tea and grape notes from Kenya. Grown at up to 1,550 m to 1,700m and washed for clarity, it’s a clean, expressive cup with an SCA score of 88. Pure flavour, crafted with purpose.</p>",
+      "variants": [
+        {
+          "title": "250g",
+          "price": "19.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "id": 10104170316119,
+      "title": "Ligéro (Decaf)",
+      "handle": "ligero-decaf",
+      "product_type": "Espresso",
+      "tags": [],
+      "body_html": "<p class=\"p1\">Smooth, sweet, and full of flavour – this Arabica from Peru brings notes of chocolate, malt, and berry. Grown at high altitudes and fully washed for clarity, it’s a decaf that doesn’t compromise on taste. Sustainably sourced for consistency and quality, all year round, it scores 84 poi",
+      "variants": [
+        {
+          "title": "250g",
+          "price": "16.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "id": 10104140464471,
+      "title": "Fusão",
+      "handle": "fusao",
+      "product_type": "Espresso",
+      "tags": [],
+      "body_html": "<p class=\"p1\">Smooth and comforting, Fusão blends fully washed Honduran and naturally processed Brazilian Arabicas for a rich cup with notes of dark chocolate, malt, nuts, and plum. Roasted medium for balance, it brings together sweetness, body, and a hint of spice. Easy to enjoy – perfect for every",
+      "variants": [
+        {
+          "title": "250g / Brazil & Honduras",
+          "price": "14.00",
+          "available": true
+        },
+        {
+          "title": "1Kg / Brazil & Honduras",
+          "price": "37.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "id": 8955872837975,
+      "title": "Aléro",
+      "handle": "alero",
+      "product_type": "Espresso",
+      "tags": [],
+      "body_html": "<p class=\"p1\">Smooth and mellow, Alero combines chocolate, caramel, and stone fruit notes for a balanced everyday cup. Grown at up to 1,560 m and fully washed, it offers gentle sweetness with a medium roast profile. With an SCA score of 83.5, it’s an easygoing choice with solid quality.</p>",
+      "variants": [
+        {
+          "title": "250g",
+          "price": "14.00",
+          "available": true
+        },
+        {
+          "title": "1Kg",
+          "price": "37.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "id": 8955872313687,
+      "title": "Amizade",
+      "handle": "amizade",
+      "product_type": "Espresso",
+      "tags": [],
+      "body_html": "<p class=\"p1\">Sweet, smooth, and comforting – Amizade brings together notes of chocolate, nutella, and dried fruit with hints of cinnamon. Grown in the highlands of Minas Gerais and naturally sun-dried, it offers a rich body and mellow acidity. With an SCA score of 83.5, it’s a well-balanced classic",
+      "variants": [
+        {
+          "title": "250g",
+          "price": "14.00",
+          "available": true
+        },
+        {
+          "title": "1Kg",
+          "price": "37.00",
+          "available": true
+        }
+      ]
+    }
+  ]
+}

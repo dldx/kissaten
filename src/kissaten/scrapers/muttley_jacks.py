@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="SEK",
     country="Sweden",
-    status="experimental",
+    status="available",
 )
 class MuttleyJacksScraper(ShopifyJsonScraper):
     """Scraper for Muttley & Jack's (muttleyandjacks.se) using Shopify products.json."""

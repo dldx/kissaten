@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class AeroCoffeeScraper(BaseScraper):
     """Scraper for Aero Coffee Roasters (aerocoffeeroasters.com) with AI extraction."""

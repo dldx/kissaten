@@ -110,7 +110,7 @@ def _parse_weight_grams(text: str) -> int | None:
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class HermansBoyScraper(BaseScraper):
     """Scraper for Herman's Boy Coffee (hermans-boy.square.site) with AI-powered extraction."""

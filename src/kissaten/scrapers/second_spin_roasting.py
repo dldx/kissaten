@@ -45,7 +45,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class SecondSpinRoastingScraper(ShopifyJsonScraper):
     """Scraper for Second Spin Roasting Co. (secondspinroasting.com) using Shopify products.json."""

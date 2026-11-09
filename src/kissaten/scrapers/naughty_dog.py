@@ -187,23 +187,14 @@ class NaughtyDogScraper(BaseScraper):
                 return None
             name = name_el.get_text(strip=True).title()
 
-            spans = [s.get_text(strip=True) for s in desc.find_all("span") if s.get_text(strip=True)]
+            spans = [s.get_text(" ", strip=True) for s in desc.find_all("span") if s.get_text(strip=True)]
             country_text = spans[0] if spans else ""
             process_text = spans[1] if len(spans) > 1 else ""
 
             img_el = article.find("img")
             image_url = urljoin(self.base_url, img_el["src"]) if img_el and img_el.get("src") else None
 
-            # Modal lookup via data-bs-target on overlay div
-            overlay = article.find("div", class_="bg-overlay")
-            modal_class = None
-            if overlay and overlay.get("data-bs-target"):
-                modal_class = overlay["data-bs-target"].lstrip(".")
-
-            modal = None
-            if modal_class:
-                # Use CSS selector for reliability
-                modal = page_soup.select_one(f"div.modal.{modal_class}")
+            modal = self._find_modal(page_soup, article)
 
             details = self._extract_details_from_modal(modal) if modal else {}
 
@@ -220,7 +211,7 @@ class NaughtyDogScraper(BaseScraper):
             harvest_text = details.get("harvest") or ""
             packaging = details.get("avalaible packaging") or details.get("available packaging") or ""
 
-            weight = self._first_weight(packaging)
+            weight = self._first_weight(packaging) or self._weight_from_variants(modal)
 
             origin_beans: list[Bean] = []
             if len(countries) == 1:
@@ -307,6 +298,51 @@ class NaughtyDogScraper(BaseScraper):
             return None
 
     # Parsing helpers --------------------------------------------------
+    def _find_modal(self, page_soup: BeautifulSoup, article) -> any | None:
+        """Locate the product detail modal referenced by the article overlay.
+
+        The site historically used a class-based ``data-bs-target``
+        (``.some-modal-class``); it now uses an id (``#coffee-modal-283``).
+        Support both so old snapshots keep parsing.
+        """
+        overlay = article.find("div", class_="bg-overlay")
+        if not overlay:
+            return None
+        target = overlay.get("data-bs-target")
+        if not target:
+            return None
+        target = target.strip()
+        if target.startswith("#"):
+            return page_soup.select_one(target)
+        if target.startswith("."):
+            modal_class = target.lstrip(".")
+            return page_soup.select_one(f"div.modal.{modal_class}")
+        return None
+
+    def _weight_from_variants(self, modal) -> int | None:
+        """Extract a package weight from the modal's variant size list.
+
+        The current markup dropped the ``Available packaging`` table row and
+        instead lists variants like ``200g`` / ``1000g`` / ``4x30g`` in
+        ``span.coffee-detail-variant-size``. For multipacks (``4x30g``) the
+        total weight (4 * 30g) is used.
+        """
+        if not modal:
+            return None
+        for el in modal.select(".coffee-detail-variant-size"):
+            text = el.get_text(strip=True).lower()
+            m = re.search(r"(?:(\d{1,2})\s*x\s*)?(\d{2,5})\s*g", text)
+            if not m:
+                continue
+            try:
+                mult = int(m.group(1)) if m.group(1) else 1
+                val = int(m.group(2)) * mult
+            except ValueError:
+                continue
+            if 50 <= val <= 10000:
+                return val
+        return None
+
     def _split_countries(self, text: str) -> list[str]:
         if not text:
             return []

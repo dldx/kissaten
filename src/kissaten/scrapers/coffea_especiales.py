@@ -44,7 +44,7 @@ FERMENTATION_PROJECT_URL = "https://www.coffea.gt/fermentationproject"
     requires_api_key=True,
     currency="GTQ",
     country="Guatemala",
-    status="experimental",
+    status="available",
 )
 class CoffeaEspecialesScraper(BaseScraper):
     """Scraper for Coffea Cafés Especiales (coffea.gt) with AI extraction."""

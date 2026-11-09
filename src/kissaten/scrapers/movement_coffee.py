@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="experimental",
+    status="available",
 )
 class MovementCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Movement Coffee (movementcoffee.com) using Shopify products.json.

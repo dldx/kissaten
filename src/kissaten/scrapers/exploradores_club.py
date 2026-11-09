@@ -77,7 +77,7 @@ EXCLUDED_URL_PATTERNS = [
     requires_api_key=True,
     currency="MXN",
     country="Mexico",
-    status="experimental",
+    status="available",
 )
 class ExploradoresClubScraper(BaseScraper):
     """Scraper for Exploradores De Café (grupoexploradores.com) — Squarespace.

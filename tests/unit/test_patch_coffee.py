@@ -36,7 +36,7 @@ def test_registry_entry(scraper):
     assert info.currency == "USD"
     assert info.country == "United States"
     assert info.requires_api_key is True
-    assert info.status == "experimental"
+    assert info.status == "available"
     assert info.website == "https://patchcoffee.shop"
 
 

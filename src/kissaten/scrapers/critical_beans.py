@@ -43,7 +43,7 @@ API_PRODUCTS_URL = "https://criticalbeansit.be/api/products"
     requires_api_key=True,
     currency="EUR",
     country="Belgium",
-    status="experimental",
+    status="available",
 )
 class CriticalBeansScraper(BaseScraper):
     """Scraper for Critical Beans (criticalbeansit.be JSON API)."""

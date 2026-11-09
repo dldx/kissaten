@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Spain",
-    status="experimental",
+    status="available",
 )
 class SanAgustinScraper(BaseScraper):
     """Scraper for San Agustín Tostadores De Café (sanagustin.com) with AI extraction."""
