@@ -1009,6 +1009,7 @@
 									bind:selectedBean={selectedBeanDetails}
 									savedBeanPaths={savedBeanPaths}
 									originOptions={data?.originOptions || []}
+									groupSuggestionsByActivity={true}
 								/>
 								{#if selectedBeanUrlPath && selectedBeanUrlPath !== "custom"}
 									<a

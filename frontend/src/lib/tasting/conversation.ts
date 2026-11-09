@@ -301,6 +301,22 @@ export const DEFECT_CONVERSATION: TastingConversationCategory[] = [
 		question: "Notice any raw, beany, or 'underflow' tastes?",
 		flavors: ["Raw", "Under-ripe", "Beany"],
 		isDefect: true
+	},
+	{
+		id: "under_extracted",
+		name: "Under-extracted",
+		emoji: "⏱️",
+		question: "Does it taste weak, thin, or sharply sour for the brew?",
+		flavors: ["Sour", "Salty", "Weak/Watery", "Thin", "Hollow"],
+		isDefect: true
+	},
+	{
+		id: "over_extracted",
+		name: "Over-extracted",
+		emoji: "🔥",
+		question: "Does it taste harsh, drying, or unpleasantly bitter?",
+		flavors: ["Bitter", "Harsh", "Dry/Astringent", "Muddy"],
+		isDefect: true
 	}
 ];
 

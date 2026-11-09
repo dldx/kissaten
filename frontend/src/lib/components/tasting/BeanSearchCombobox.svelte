@@ -5,6 +5,7 @@
 	import { Search, Loader2, X, Star, History, Sparkles, Camera, Image as ImageIcon } from "lucide-svelte";
 	import * as Dialog from "$lib/components/ui/dialog";
 	import { onMount } from "svelte";
+	import { browser } from "$app/environment";
 	import { slide } from "svelte/transition";
 	import { api, type CoffeeBean } from "$lib/api";
 	import {
@@ -43,6 +44,8 @@
 		enableImageSearch?: boolean;
 		/** Pre-loaded country list from layout data, used for origin code → name resolution in image search */
 		originOptions?: { value: string; text: string }[];
+		/** When true, the empty-query list is grouped into Recently Brewed / Recently Viewed / Saved sections */
+		groupSuggestionsByActivity?: boolean;
 	}
 
 	let {
@@ -53,12 +56,15 @@
 		selectedBean = $bindable(null),
 		savedBeanPaths = [],
 		enableImageSearch = false,
-		originOptions = []
+		originOptions = [],
+		groupSuggestionsByActivity = false
 	}: Props = $props();
 
 	let currentUser = $state<any>(null);
 
 	let open = $state(false);
+	let viewportWidth = $state(browser ? window.innerWidth : 1024);
+	let tooltipSide: "bottom" | "right" = $derived(viewportWidth < 1024 ? "bottom" : "right");
 	let searchQuery = $state("");
 	let isLoading = $state(false);
 	let apiResults = $state<CoffeeBean[]>([]);
@@ -167,6 +173,32 @@
 				seen.add(path);
 				return true;
 			});
+
+			// Recipes only store the bean path, so beans that were brewed but never
+			// viewed/tasted/saved have no cached bean data. Fetch them so the
+			// "Recently Brewed" section is complete.
+			const brewedPathsMissingData = [...beanActivity.entries()]
+				.filter(([path, a]) => !!a.lastBrewedAt && !a.bean && !seen.has(path) && path !== "custom" && !path.startsWith("/custom/"))
+				.map(([path]) => path);
+			if (groupSuggestionsByActivity && brewedPathsMissingData.length > 0) {
+				try {
+					const brewedRes = await api.searchBeansByPaths(brewedPathsMissingData.slice(0, 20));
+					if (brewedRes.success && brewedRes.data) {
+						const existingPaths = new Set(
+							localSuggestions
+								.map((b) => b.bean_url_path || api.getBeanUrlPath(b))
+								.filter(Boolean)
+						);
+						const extraBrewed = brewedRes.data.filter((b) => {
+							const path = b.bean_url_path || api.getBeanUrlPath(b);
+							return !!path && !existingPaths.has(path);
+						});
+						localSuggestions = [...localSuggestions, ...extraBrewed];
+					}
+				} catch (e) {
+					console.error("[BeanSearchCombobox] Failed to fetch brewed bean details:", e);
+				}
+			}
 			console.log(`[BeanSearchCombobox] Initial localSuggestions: ${localSuggestions.length}`);
 		} finally {
 			isLoading = false;
@@ -536,6 +568,70 @@
 			.map((s) => s.bean);
 	});
 
+	interface SuggestionSection {
+		title: string;
+		beans: CoffeeBean[];
+	}
+
+	/**
+	 * Empty-query suggestions grouped by activity, in priority order:
+	 * Recently Brewed → Recently Viewed → Saved → anything else. Each bean
+	 * appears at most once, in the first group it qualifies for.
+	 */
+	const groupedSuggestionSections = $derived.by<SuggestionSection[]>(() => {
+		if (!groupSuggestionsByActivity) return [];
+		if (searchQuery.trim() || imagePreview) return [];
+
+		const pathOf = (bean: CoffeeBean) => bean.bean_url_path || api.getBeanUrlPath(bean);
+		const candidates = localSuggestions
+			.map((bean) => ({ bean, path: pathOf(bean) }))
+			.filter((entry): entry is { bean: CoffeeBean; path: string } => !!entry.path);
+
+		const used = new Set<string>();
+		const sections: SuggestionSection[] = [];
+
+		const addSection = (
+			title: string,
+			entries: { bean: CoffeeBean; path: string }[]
+		) => {
+			const beans: CoffeeBean[] = [];
+			for (const entry of entries) {
+				if (used.has(entry.path)) continue;
+				used.add(entry.path);
+				beans.push(entry.bean);
+			}
+			if (beans.length > 0) sections.push({ title, beans });
+		};
+
+		const byActivity = (
+			kind: "lastBrewedAt" | "lastViewedAt"
+		) =>
+			candidates
+				.filter((entry) => !!beanActivity.get(entry.path)?.[kind])
+				.sort(
+					(a, b) =>
+						(beanActivity.get(b.path)?.[kind] ?? 0) -
+						(beanActivity.get(a.path)?.[kind] ?? 0)
+				);
+
+		addSection("Recently Brewed", byActivity("lastBrewedAt"));
+		addSection("Recently Viewed", byActivity("lastViewedAt"));
+
+		const savedRank = new Map(savedBeanPaths.map((path, index) => [path, index]));
+		const saved = candidates
+			.filter((entry) => savedRank.has(entry.path))
+			.sort(
+				(a, b) =>
+					(savedRank.get(a.path) ?? Number.MAX_SAFE_INTEGER) -
+					(savedRank.get(b.path) ?? Number.MAX_SAFE_INTEGER)
+			);
+		addSection("Saved", saved);
+
+		addSection("More", candidates);
+
+		return sections;
+	});
+
 	/**
 	 * Latest activity for a bean path, picking the most recent timestamp with
 	 * tie-break priority brewed > tasted > viewed. Returns null when there is
@@ -578,6 +674,8 @@
 		return originMatch ? 1 : 0;
 	}
 </script>
+
+<svelte:window bind:innerWidth={viewportWidth} />
 
 <div class="w-full min-w-0">
 	{#if value}
@@ -663,6 +761,40 @@
 							role="presentation"
 							onmousedown={(e) => e.preventDefault()}
 						>
+						{#snippet suggestionItem(bean: CoffeeBean)}
+							<Tooltip.Root delayDuration={300}>
+								<Tooltip.Trigger>
+									{#snippet child({ props })}
+										<Command.Item
+											{...props}
+											value={bean.name + " " + bean.roaster + " " + (bean.bean_url_path || "")}
+											onSelect={() => handleSelect(bean)}
+											class="group/item relative flex items-center gap-2 p-2 rounded-none w-full"
+										>
+											<div class="flex-1 min-w-0">
+												<CoffeeBeanTile {bean} size="md" noLink class="bg-transparent hover:bg-muted/50 border-none rounded-none w-full p-1.5" />
+											</div>
+										</Command.Item>
+									{/snippet}
+								</Tooltip.Trigger>
+								<Tooltip.Portal>
+									<Tooltip.Content
+										side={tooltipSide}
+										class="hidden sm:block bg-transparent shadow-none p-0 border-none"
+										sideOffset={10}
+										avoidCollisions={true}
+										collisionPadding={12}
+										sticky="always"
+										onmousedown={handleTooltipContentClick}
+									>
+										<div class="w-[min(20rem,calc(100vw-1.5rem))] pointer-events-none">
+											<CoffeeBeanCard {bean} />
+										</div>
+									</Tooltip.Content>
+								</Tooltip.Portal>
+							</Tooltip.Root>
+						{/snippet}
+
 						<Command.List
 							onscroll={handleScroll}
 							class="max-h-72 max-sm:max-h-full overflow-x-hidden overflow-y-auto scroll-py-3"
@@ -708,41 +840,21 @@
 							</Button>
 						</div>
 
-						{#if suggestions.length > 0}
-							<Command.Group heading="Recently Viewed & Saved" class="[&_[data-command-group-items]]:flex [&_[data-command-group-items]]:flex-col p-0">
-								{#each suggestions as bean}
-									{@const suggestionPath = bean.bean_url_path || api.getBeanUrlPath(bean)}
-									{@const activity = latestActivity(suggestionPath)}
-									{@const isCustomSuggestion = (bean as any).is_custom || bean.bean_url_path?.startsWith('/custom/')}
-									<Tooltip.Root delayDuration={300}>
-										<Tooltip.Trigger asChild>
-											{#snippet children({ props })}
-												<Command.Item
-														onSelect={() => handleSelect(bean)}
-														class="group/item relative flex items-center gap-2 p-2 rounded-none w-full"
-													>
-														<div class="flex-1 min-w-0">
-															<CoffeeBeanTile {bean} size="md" noLink class="bg-transparent hover:bg-muted/50 border-none rounded-none w-full p-1.5" />
-														</div>
-														<div class="flex shrink-0 flex-col items-end gap-1.5 pr-1">
-														</div>
-													</Command.Item>
-												{/snippet}
-											</Tooltip.Trigger>
-											<Tooltip.Content
-												side="right"
-												class="hidden sm:block bg-transparent shadow-none p-0 border-none"
-												sideOffset={10}
-												onmousedown={handleTooltipContentClick}
-											>
-												<div class="w-80 pointer-events-none">
-													<CoffeeBeanCard {bean} />
-												</div>
-											</Tooltip.Content>
-										</Tooltip.Root>
+						{#if groupedSuggestionSections.length > 0}
+							{#each groupedSuggestionSections as section}
+								<Command.Group heading={section.title} class="[&_[data-command-group-items]]:flex [&_[data-command-group-items]]:flex-col p-0">
+									{#each section.beans as bean}
+										{@render suggestionItem(bean)}
 									{/each}
 								</Command.Group>
-							{/if}
+							{/each}
+						{:else if suggestions.length > 0}
+							<Command.Group heading="Recently Viewed & Saved" class="[&_[data-command-group-items]]:flex [&_[data-command-group-items]]:flex-col p-0">
+								{#each suggestions as bean}
+									{@render suggestionItem(bean)}
+								{/each}
+							</Command.Group>
+						{/if}
 
 							{#if apiResults.length > 0}
 								<Command.Group heading={imagePreview ? "Image Search Results" : "Search Results"} class="[&_[data-command-group-items]]:flex [&_[data-command-group-items]]:flex-col p-0">
@@ -761,17 +873,22 @@
 														</Command.Item>
 													{/snippet}
 												</Tooltip.Trigger>
+											<Tooltip.Portal>
 												<Tooltip.Content
-													side="right"
+													side={tooltipSide}
 													class="hidden sm:block bg-transparent shadow-none p-0 border-none"
 													sideOffset={10}
+													avoidCollisions={true}
+													collisionPadding={12}
+													sticky="always"
 													onmousedown={handleTooltipContentClick}
 												>
-													<div class="w-80 pointer-events-none">
+													<div class="w-[min(20rem,calc(100vw-1.5rem))] pointer-events-none">
 														<CoffeeBeanCard {bean} />
 													</div>
 												</Tooltip.Content>
-											</Tooltip.Root>
+											</Tooltip.Portal>
+										</Tooltip.Root>
 										{/if}
 									{/each}
 									{#if isMoreLoading}
