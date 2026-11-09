@@ -16,3 +16,4 @@
 - [Tasting Kit Flagging & Review Pipeline — 2026-08 (plan)](tasting-kit-review-plan-2026-08.md)
 - [Tasting Kit Review Pipeline — 2026-08](tasting-kit-review-pipeline.md)
 - [Offline-First PWA Plan — 2026-09](offline-first-plan-2026-09.md)
+- [Incremental Refresh Memory & Performance Optimization — 2026-11](refresh-memory-optimization-2026-11.md)

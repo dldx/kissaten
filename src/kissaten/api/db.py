@@ -5,6 +5,8 @@ import logging
 import os
 import re
 import unicodedata
+import urllib.parse
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
@@ -155,6 +157,11 @@ if _use_rw_db:
         conn.execute("SET preserve_insertion_order = false;")
     except Exception as e:
         logger.warning(f"Failed to set preserve_insertion_order: {e}")
+    _mem_limit = os.environ.get("KISSATEN_DUCKDB_MEMORY_LIMIT", "8GB")
+    try:
+        conn.execute(f"SET memory_limit = '{_mem_limit}';")
+    except Exception as e:
+        logger.warning(f"Failed to set memory_limit: {e}")
 
 # For read-only API mode, load the FTS extension and then completely lock down the connection.
 # LOAD is process-local and works in read-only mode; INSTALL writes to
@@ -738,13 +745,23 @@ def is_file_processed(file_path: Path, data_dir: Path, check_checksum: bool = Fa
         return False
 
 
-def filter_unprocessed_files(file_paths: list[Path], data_dir: Path, check_checksum: bool = False) -> list[Path]:
+def filter_unprocessed_files(
+    file_paths: Sequence[str | Path],
+    data_dir: Path,
+    check_checksum: bool = False,
+    file_type: str | None = None,
+) -> list[Path]:
     """Batch check which files have not been processed yet.
 
     Args:
-        file_paths: List of file paths to check
+        file_paths: Paths to check (``str`` or ``Path``; strings avoid building
+            ~1.6M ``Path`` objects for the diffjson corpus).
         data_dir: Data directory for relative path calculation
         check_checksum: If True, verify checksums match. If False, only check if paths exist.
+        file_type: Optional ``processed_files.file_type`` to restrict the DB
+            scan (``"json"`` / ``"diffjson"``). Narrowing the scan keeps the
+            fetched set roughly the size of the input instead of loading every
+            tracked file.
 
     Returns:
         List of file paths that have not been processed (or have changed if check_checksum=True)
@@ -753,60 +770,112 @@ def filter_unprocessed_files(file_paths: list[Path], data_dir: Path, check_check
         return []
 
     try:
-        # Build mapping of relative paths to absolute paths
-        path_mapping = {}
-        checksum_mapping = {}
+        # Derive paths relative to data_dir with plain string slicing.
+        # Path.relative_to for ~1.6M files costs tens of seconds and, together
+        # with a path->path mapping dict, roughly 2 GB of resident memory; the
+        # string form is ~50x faster and holds only the relative strings.
+        prefix = str(data_dir)
+        if not prefix.endswith(os.sep):
+            prefix += os.sep
+
+        relative_paths: list[str] = []
+        checksum_mapping: dict[str, str] = {}
 
         for file_path in file_paths:
-            try:
-                relative_path = str(file_path.relative_to(data_dir))
-                path_mapping[relative_path] = file_path
-
-                if check_checksum:
-                    checksum_mapping[relative_path] = calculate_file_checksum(file_path)
-            except Exception:
-                # If we can't get relative path, skip this file
+            abs_path = os.fspath(file_path)
+            if not abs_path.startswith(prefix):
                 continue
+            relative_path = abs_path[len(prefix) :]
+            relative_paths.append(relative_path)
+            if check_checksum:
+                checksum_mapping[relative_path] = calculate_file_checksum(Path(abs_path))
 
-        if not path_mapping:
+        if not relative_paths:
             return []
 
-        # Get all processed files in a single query
-        relative_paths = list(path_mapping.keys())
-        placeholders = ",".join(["?"] * len(relative_paths))
+        # Fetch the processed set in one scan and diff in Python. Querying with
+        # ``WHERE file_path IN (?, ?, …)`` is a trap at this scale: even batched
+        # at 10k values per query, ~160 such queries over the ~1.6M-row table
+        # take many minutes, whereas a single ``WHERE file_type = ?`` scan
+        # returns in ~2s. The table is keyed by file_path, so a path that is not
+        # in the fetched set is unprocessed.
+        columns = "file_path, checksum" if check_checksum else "file_path"
+        if file_type is not None:
+            rows = conn.execute(
+                f"SELECT {columns} FROM processed_files WHERE file_type = ?", [file_type]
+            ).fetchall()
+        else:
+            rows = conn.execute(f"SELECT {columns} FROM processed_files").fetchall()
 
         if check_checksum:
-            # Check both path and checksum
-            query = f"""
-                SELECT file_path, checksum FROM processed_files
-                WHERE file_path IN ({placeholders})
-            """
-            processed_files = conn.execute(query, relative_paths).fetchall()
-
-            # Build set of processed file paths with matching checksums
             processed_set = {
-                row[0] for row in processed_files if row[0] in checksum_mapping and row[1] == checksum_mapping[row[0]]
+                row[0] for row in rows if row[0] in checksum_mapping and row[1] == checksum_mapping[row[0]]
             }
         else:
-            # Only check if paths exist
-            query = f"""
-                SELECT file_path FROM processed_files
-                WHERE file_path IN ({placeholders})
-            """
-            processed_files = conn.execute(query, relative_paths).fetchall()
-            processed_set = {row[0] for row in processed_files}
+            processed_set = {row[0] for row in rows}
 
         # Return files that are not in the processed set
-        unprocessed_files = [
-            path_mapping[rel_path] for rel_path in path_mapping.keys() if rel_path not in processed_set
-        ]
-
-        return unprocessed_files
+        return [data_dir / rel_path for rel_path in relative_paths if rel_path not in processed_set]
 
     except Exception as e:
         # On error, assume all files are unprocessed to be safe
         console.print(f"[yellow]Warning: Error checking processed files: {e}[/yellow]")
-        return file_paths
+        return [Path(p) for p in file_paths]
+
+
+def mark_files_processed_batch(
+    file_paths: Sequence[str | Path],
+    data_dir: Path,
+    file_type: str,
+    precomputed_checksums: dict[str, str] | None = None,
+):
+    """Mark multiple files as processed in bounded batch inserts.
+
+    Computes checksums and inserts into processed_files using a numpy dict
+    replacement scan, replacing thousands of per-file INSERT + commit calls.
+    """
+    if not file_paths:
+        return
+
+    import numpy as np
+
+    prefix = str(data_dir)
+    if not prefix.endswith(os.sep):
+        prefix += os.sep
+
+    chunk_size = 25_000
+    for chunk_start in range(0, len(file_paths), chunk_size):
+        chunk = file_paths[chunk_start : chunk_start + chunk_size]
+        rel_paths: list[str] = []
+        checksums: list[str] = []
+
+        for fp in chunk:
+            abs_str = os.fspath(fp)
+            rel = abs_str[len(prefix) :] if abs_str.startswith(prefix) else str(Path(fp).relative_to(data_dir))
+            rel_paths.append(rel)
+
+            if precomputed_checksums and abs_str in precomputed_checksums:
+                checksums.append(precomputed_checksums[abs_str])
+            else:
+                try:
+                    checksums.append(calculate_file_checksum(Path(abs_str)))
+                except Exception:
+                    checksums.append("")
+
+        if not rel_paths:
+            continue
+
+        staging_data = {  # noqa: F841 - DuckDB replacement scan reads this local
+            "file_path": np.array(rel_paths),
+            "checksum": np.array(checksums),
+            "file_type": np.array([file_type] * len(rel_paths)),
+        }
+        conn.execute("""
+            INSERT OR REPLACE INTO processed_files (file_path, checksum, file_type, processed_at)
+            SELECT file_path, checksum, file_type, CURRENT_TIMESTAMP
+            FROM staging_data
+        """)
+        conn.commit()
 
 
 def mark_file_processed(file_path: Path, data_dir: Path, file_type: str):
@@ -1317,9 +1386,12 @@ async def apply_diffjson_updates(
     if incremental:
         console.print(f"[cyan]Filtering {len(diffjson_files)} diffjson files...[/cyan]")
 
-        # Batch check all files at once (much faster than checking one by one)
-        file_paths = [Path(f) for f in diffjson_files]
-        unprocessed_files = filter_unprocessed_files(file_paths, data_dir, check_checksum=check_for_changes)
+        # Pass the glob's strings straight through and narrow the processed-file
+        # scan to diffjson: building ~1.6M Path objects here costs tens of
+        # seconds and ~1 GB, and a full-table scan would fetch json rows too.
+        unprocessed_files = filter_unprocessed_files(
+            diffjson_files, data_dir, check_checksum=check_for_changes, file_type="diffjson"
+        )
 
         if not unprocessed_files:
             console.print("[yellow]All diffjson files already processed - skipping[/yellow]")
@@ -1334,19 +1406,27 @@ async def apply_diffjson_updates(
     else:
         console.print(f"Processing {len(diffjson_files)} diffjson update files...")
 
-    # Parse all diffjson files and sort them by scraped_at timestamp
+    # Parse all diffjson files and sort them by scraped_at timestamp.
+    # Reading file bytes once allows computing the sha256 checksum in memory
+    # with zero additional disk I/O, ready for batch marking at the end.
     diffjson_updates = []
+    precomputed_checksums: dict[str, str] = {}
+    all_diffjson_files: list[str] = []
 
     for diffjson_file in diffjson_files:
+        all_diffjson_files.append(diffjson_file)
         try:
-            with open(diffjson_file) as f:
-                raw_update_data = json.load(f)
+            with open(diffjson_file, "rb") as f:
+                content = f.read()
+
+            precomputed_checksums[diffjson_file] = hashlib.sha256(content).hexdigest()
+            raw_update_data = json.loads(content)
 
             # Validate the diffjson data using Pydantic schema
             try:
                 diff_update = CoffeeBeanDiffUpdate.model_validate(raw_update_data)
             except Exception as validation_error:
-                print(f"  Skipping {diffjson_file}: validation failed - {validation_error}")
+                logger.debug(f"Skipping {diffjson_file}: validation failed - {validation_error}")
                 continue
 
             # Parse scraped_at timestamp for sorting
@@ -1356,7 +1436,7 @@ async def apply_diffjson_updates(
 
             diffjson_updates.append({"file": diffjson_file, "update": diff_update, "scraped_at": scraped_at})
         except Exception as e:
-            print(f"  Error parsing {diffjson_file}: {e}")
+            logger.debug(f"Error parsing {diffjson_file}: {e}")
             continue
 
     # Sort by scraped_at timestamp (earliest first) to apply updates chronologically
@@ -1374,62 +1454,81 @@ async def apply_diffjson_updates(
 
     updates_applied = 0
 
+    # Resolve bean URLs in one scan rather than one ``SELECT ... WHERE url = ?``
+    # per diffjson file. ``coffee_beans.url`` is not indexed, so each per-file
+    # lookup scanned the whole coffee_beans table; with tens of thousands of
+    # unapplied diffjson this made the apply phase take many minutes. A
+    # URL->id map over the ~20k beans is small and turns each lookup into an
+    # O(1) dict access. setdefault preserves ``fetchone()`` semantics (first
+    # row wins) when several beans share a URL. Unquoted URLs are also mapped
+    # so percent-encoding case variations (e.g. %e2 vs %E2) match reliably.
+    url_to_bean_id: dict[str, int] = {}
+    for bean_id, bean_url in conn.execute(
+        "SELECT id, url FROM coffee_beans WHERE url IS NOT NULL ORDER BY id"
+    ).fetchall():
+        url_to_bean_id.setdefault(bean_url, bean_id)
+        url_to_bean_id.setdefault(urllib.parse.unquote(bean_url), bean_id)
+
+    # Coalesce updates per bean in chronological order. Because diffjson files
+    # are sorted earliest-first, subsequent updates for the same bean overwrite
+    # earlier values; collapsing them first reduces ~100k SQL UPDATE statements
+    # to ~15k, producing the identical final row state in a fraction of the time.
+    bean_updates: dict[int, dict[str, Any]] = {}
     for update_info in diffjson_updates:
         diffjson_file = update_info["file"]
         diff_update = update_info["update"]
         try:
-            # Extract URL from validated update data (already validated above)
             url = str(diff_update.url)
-
-            # Check if bean exists in database
-            existing_bean = conn.execute("SELECT id FROM coffee_beans WHERE url = ?", [url]).fetchone()
-
-            if not existing_bean:
-                print(f"  Skipping {diffjson_file}: no matching bean found for URL {url}")
+            bean_id = url_to_bean_id.get(url) or url_to_bean_id.get(urllib.parse.unquote(url))
+            if bean_id is None:
                 continue
 
-            bean_id = existing_bean[0]
+            update_data = diff_update.model_dump(
+                exclude_none=True, exclude={"url", "scraped_at", "scraper_version"}
+            )
+            if not update_data:
+                continue
 
-            # Convert the validated model to dict and exclude None values and URL
-            update_data = diff_update.model_dump(exclude_none=True, exclude={"url"})
-
-            # Build UPDATE query for fields that exist in the validated diffjson
-            update_fields = []
-            update_params = []
-
-            # Handle special case for tasting_notes (array field)
-            if "tasting_notes" in update_data:
-                update_fields.append("tasting_notes = ?")
-                update_params.append(update_data["tasting_notes"])
-                del update_data["tasting_notes"]  # Remove so it's not processed again
-
-            # Handle all other fields
-            for field, value in update_data.items():
-                update_fields.append(f"{field} = ?")
-                update_params.append(value)
-
-            if update_fields:
-                # Execute update
-                update_query = f"""
-                    UPDATE coffee_beans
-                    SET {", ".join(update_fields)}
-                    WHERE id = ?
-                """
-                update_params.append(bean_id)
-
-                conn.execute(update_query, update_params)
-
-                updates_applied += 1
-
-                # Mark file as processed after successful update
-                # Track in both full refresh and incremental mode so subsequent incremental updates can skip
-                mark_file_processed(Path(diffjson_file), data_dir, "diffjson")
-            else:
-                print(f"  Skipping {diffjson_file}: no updatable fields found")
+            if bean_id not in bean_updates:
+                bean_updates[bean_id] = {}
+            bean_updates[bean_id].update(update_data)
 
         except Exception as e:
-            print(f"  Error processing {diffjson_file}: {e}")
+            logger.debug(f"Error processing {diffjson_file}: {e}")
             continue
+
+    # Apply the coalesced updates in a single transaction
+    for bean_id, data in bean_updates.items():
+        update_fields = []
+        update_params = []
+
+        if "tasting_notes" in data:
+            update_fields.append("tasting_notes = ?")
+            update_params.append(data["tasting_notes"])
+            data = {k: v for k, v in data.items() if k != "tasting_notes"}
+
+        for field, value in data.items():
+            update_fields.append(f"{field} = ?")
+            update_params.append(value)
+
+        if update_fields:
+            update_query = f"""
+                UPDATE coffee_beans
+                SET {", ".join(update_fields)}
+                WHERE id = ?
+            """
+            update_params.append(bean_id)
+            conn.execute(update_query, update_params)
+            updates_applied += 1
+
+    conn.commit()
+
+    # Mark all examined diffjson files as processed in batch so they are not
+    # re-filtered, re-read and re-skipped on subsequent incremental refreshes.
+    if all_diffjson_files:
+        mark_files_processed_batch(
+            all_diffjson_files, data_dir, "diffjson", precomputed_checksums=precomputed_checksums
+        )
 
     if updates_applied > 0:
         # Recalculate USD prices for updated beans
@@ -1684,23 +1783,27 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 if not incremental:
                     conn.execute("DELETE FROM varietal_mappings")
 
-                # Insert all mappings
-                for mapping in mapping_data:
-                    original_name = mapping.get("original_name", "")
-                    canonical_names = mapping.get("canonical_names", [])
-                    confidence = mapping.get("confidence", 1.0)
-                    is_compound = mapping.get("is_compound", False)
-                    separator = mapping.get("separator")
-
-                    if original_name and canonical_names:
-                        conn.execute(
-                            """
-                            INSERT OR REPLACE INTO varietal_mappings
-                            (original_name, canonical_names, confidence, is_compound, separator)
-                            VALUES (?, ?, ?, ?, ?)
-                            """,
-                            [original_name, canonical_names, confidence, is_compound, separator],
-                        )
+                # Insert all mappings in batch
+                mapping_rows = [
+                    (
+                        mapping.get("original_name", ""),
+                        mapping.get("canonical_names", []),
+                        mapping.get("confidence", 1.0),
+                        mapping.get("is_compound", False),
+                        mapping.get("separator"),
+                    )
+                    for mapping in mapping_data
+                    if mapping.get("original_name") and mapping.get("canonical_names")
+                ]
+                if mapping_rows:
+                    conn.executemany(
+                        """
+                        INSERT OR REPLACE INTO varietal_mappings
+                        (original_name, canonical_names, confidence, is_compound, separator)
+                        VALUES (?, ?, ?, ?, ?)
+                        """,
+                        mapping_rows,
+                    )
 
                 conn.commit()
                 print(f"Loaded {len(varietal_mapping)} varietal mappings into database")
@@ -1943,7 +2046,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 # Use Python to check which files need processing
                 # This properly calculates checksums when check_for_changes=True
                 unprocessed_json_files = filter_unprocessed_files(
-                    all_json_files, data_dir, check_checksum=check_for_changes
+                    all_json_files, data_dir, check_checksum=check_for_changes, file_type="json"
                 )
 
                 # If check_for_changes is True, identify which files have changed (not just new)
@@ -2092,32 +2195,37 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 ) as json_data
             """)
 
-        # Also create a view to get scrape dates from diffjson files to determine the actual latest scrape dates
-        # First check if there are any diffjson files to avoid DuckDB errors
-        diffjson_pattern = str(data_dir / "**" / "*.diffjson")
+        # Collect the scrape dates present in diffjson files so the latest
+        # scrape date for a roaster is known even when its newest session
+        # produced only diffjson updates (e.g. an out-of-stock-only run).
+        #
+        # The date is encoded in the file *path* (…/<roaster>/<YYYYMMDD>/…),
+        # so only the directory names are needed — never the file contents.
+        # The previous implementation fed every diffjson to read_json with
+        # auto_detect/union_by_name, which made DuckDB parse and schema-union
+        # ~1.6M tiny files at once and allocate >12 GB, getting the refresh
+        # OOM-killed. Enumerating paths with iglob and keeping just the distinct
+        # (roaster, date) pairs bounds memory to a few MB.
+        diffjson_dirs: set[tuple[str, str]] = set()
+        for diffjson_path in glob.iglob(str(data_dir / "**" / "*.diffjson"), recursive=True):
+            parts = diffjson_path.split(os.sep)
+            if len(parts) >= 3:
+                diffjson_dirs.add((parts[-3], parts[-2]))
 
-        diffjson_files_exist = bool(glob.glob(diffjson_pattern, recursive=True))
-
-        if diffjson_files_exist:
-            conn.execute(f"""
-                CREATE OR REPLACE TEMPORARY VIEW diffjson_scrape_dates AS
-                SELECT DISTINCT
-                    split_part(filename, '/', -3) as roaster_directory,
-                    split_part(filename, '/', -2) as scrape_date
-                FROM read_json('{diffjson_pattern}',
-                    filename=true,
-                    auto_detect=true,
-                    union_by_name=true,
-                    ignore_errors=true
-                )
-            """)
-        else:
-            # Create empty view if no diffjson files exist
-            conn.execute("""
-                CREATE OR REPLACE TEMPORARY VIEW diffjson_scrape_dates AS
-                SELECT NULL as roaster_directory, NULL as scrape_date
-                WHERE false
-            """)
+        # Materialize the (roaster, date) pairs as a small temp table instead
+        # of a view over read_json; latest_scrapes unions it with the JSON
+        # scrape dates. An empty table preserves the old empty-view semantics.
+        conn.execute("""
+            CREATE OR REPLACE TEMPORARY TABLE diffjson_scrape_dates (
+                roaster_directory VARCHAR,
+                scrape_date VARCHAR
+            )
+        """)
+        if diffjson_dirs:
+            conn.executemany(
+                "INSERT INTO diffjson_scrape_dates VALUES (?, ?)",
+                sorted(diffjson_dirs),
+            )
 
         # Create a view to identify the latest scrape date for each roaster (considering both JSON and diffjson)
         conn.execute("""
@@ -2499,30 +2607,15 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
 
         # Mark processed JSON files (in both full refresh and incremental mode)
         # This allows subsequent incremental updates to know what's been processed
-        from rich.progress import BarColumn, Progress, SpinnerColumn, TaskProgressColumn, TextColumn
-
-        # Get list of files that were just processed
         processed_files_result = conn.execute("""
             SELECT DISTINCT filename
             FROM raw_coffee_data
         """).fetchall()
 
         if processed_files_result:
-            with Progress(
-                SpinnerColumn(),
-                TextColumn("[progress.description]{task.description}"),
-                BarColumn(),
-                TaskProgressColumn(),
-            ) as progress:
-                mark_task = progress.add_task(
-                    f"[cyan]Marking {len(processed_files_result)} JSON files as processed...",
-                    total=len(processed_files_result),
-                )
-
-                for (filename,) in processed_files_result:
-                    if filename:
-                        mark_file_processed(Path(filename), data_dir, "json")
-                    progress.advance(mark_task)
+            json_filenames = [f[0] for f in processed_files_result if f[0]]
+            console.print(f"[cyan]Marking {len(json_filenames)} JSON files as processed...[/cyan]")
+            mark_files_processed_batch(json_filenames, data_dir, "json")
 
         # Calculate USD prices for all coffee beans after currency rates are available
         print("Calculating USD prices for currency conversion...")
@@ -2599,7 +2692,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
 
         # Clean up temporary views and tables
         conn.execute("DROP VIEW IF EXISTS raw_coffee_data")
-        conn.execute("DROP VIEW IF EXISTS diffjson_scrape_dates")
+        conn.execute("DROP TABLE IF EXISTS diffjson_scrape_dates")
         conn.execute("DROP VIEW IF EXISTS latest_scrapes")
         conn.execute("DROP VIEW IF EXISTS earliest_coffee_dates")
         conn.execute("DROP VIEW IF EXISTS latest_coffee_data")

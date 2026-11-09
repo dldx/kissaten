@@ -127,7 +127,22 @@ def is_file_processed(file_path: Path, data_dir: Path) -> bool:
 
 def mark_file_processed(file_path: Path, data_dir: Path, file_type: str):
     """Mark a file as processed by storing its checksum."""
+
+def mark_files_processed_batch(
+    file_paths: Sequence[str | Path],
+    data_dir: Path,
+    file_type: str,
+    precomputed_checksums: dict[str, str] | None = None,
+):
+    """Mark multiple files as processed in bounded batch inserts via NumPy replacement scan."""
 ```
+
+### Memory & Scaling Safeguards
+
+1. **`KISSATEN_DUCKDB_MEMORY_LIMIT`**: Configurable memory ceiling on read-write connections (default: `8GB`), preventing DuckDB from exhausting system RAM on low-memory VPS environments.
+2. **Path-Based Diffjson Date Extraction**: Scans directory paths via `glob.iglob` rather than executing `read_json` over all `.diffjson` files on disk, bounding memory to <30 MB even with >1.5M diffjson files.
+3. **Diffjson Update Coalescing**: Chronological diffjson updates for the same bean are collapsed in memory before issuing SQL updates, reducing commit contention and WAL churn.
+4. **Batch Tracking**: Files are recorded into `processed_files` in batches using NumPy arrays, avoiding per-row commit overhead. All examined diffjson files (including skips for delisted products) are recorded to prevent permanent backlogs.
 
 ## Programmatic Usage
 
