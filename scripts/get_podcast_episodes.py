@@ -1,5 +1,5 @@
 # /// script
-# dependencies = ["feedparser", "httpx", "tenacity", "requests", "pydantic", "python-dotenv"]
+# dependencies = ["feedparser", "httpx", "tenacity", "requests", "pydantic", "beautifulsoup4", "python-dotenv"]
 # requires-python = ">=3.10"
 # ///
 
@@ -9,6 +9,7 @@ import base64
 import json
 import math
 import os
+import re
 import subprocess
 import sys
 import uuid
@@ -18,6 +19,7 @@ import dotenv
 import feedparser
 import httpx
 import requests
+from bs4 import BeautifulSoup
 from pydantic import BaseModel, Field, ValidationError
 from tenacity import (
     retry,
@@ -42,6 +44,59 @@ class Chunk(BaseModel):
 class TranscriptionResponse(BaseModel):
     text: str
     chunks: list[Chunk]
+
+
+# Max characters kept per episode description, to keep metadata files small.
+MAX_DESCRIPTION_LENGTH = 4000
+
+DESCRIPTION_TRUNCATION_MARKER = "..."
+
+
+def _html_to_text(html: str) -> str:
+    """Strip HTML tags from a string and collapse whitespace to single spaces."""
+    soup = BeautifulSoup(html, "html.parser")
+    for tag in soup(["script", "style"]):
+        tag.decompose()
+    return re.sub(r"\s+", " ", soup.get_text(separator=" ", strip=True))
+
+
+def extract_description(entry) -> str | None:
+    """Extract and clean the episode description from a feedparser entry.
+
+    Prefers content:encoded (full show notes), falls back to summary, then description.
+    Returns cleaned plain text, or None if nothing usable is present.
+
+    NOTE: feed descriptions usually carry sponsor reads, newsletter plugs, Patreon
+    tiers and tracking links. None of that is filtered out here -- this helper only
+    cleans faithfully. The consumer (proper-noun extraction for ASR word boosting)
+    is responsible for deciding what to keep.
+    """
+    candidates = []
+
+    # content:encoded -- the richest source, but note that feedparser always exposes
+    # `content` as a key (defaulting to an empty list), so hasattr() is useless here
+    # and blind indexing would raise IndexError on feeds without content:encoded.
+    content = entry.get("content")
+    if isinstance(content, list) and content:
+        first = content[0]
+        value = first.get("value") if hasattr(first, "get") else None
+        if isinstance(value, str):
+            candidates.append(value)
+
+    for key in ("summary", "description"):
+        value = entry.get(key)
+        if isinstance(value, str):
+            candidates.append(value)
+
+    for raw in candidates:
+        text = _html_to_text(raw)
+        if not text:
+            continue
+        if len(text) > MAX_DESCRIPTION_LENGTH:
+            text = text[:MAX_DESCRIPTION_LENGTH].rstrip() + DESCRIPTION_TRUNCATION_MARKER
+        return text
+
+    return None
 
 
 @retry(
@@ -252,6 +307,7 @@ async def main():
                             "url": entry.get("link"),
                             "audio_url": entry_url,
                             "published_date": entry.get("published"),
+                            "description": extract_description(entry),
                         }
 
                         # Handle missing Buzzsprout links
@@ -287,6 +343,7 @@ async def main():
                         "url": episode.get("link"),
                         "audio_url": audio_url,
                         "published_date": episode.get("published"),
+                        "description": extract_description(episode),
                     }
 
                     # Handle missing Buzzsprout links
