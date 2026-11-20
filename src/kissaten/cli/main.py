@@ -3130,6 +3130,10 @@ def apply_review_decisions(
     `kissaten refresh` shows them in public search. Rejected products keep
     requires_review=true (stay hidden).
 
+    kind='not-a-bean' user reports are deliberately NOT processed here — hiding a
+    product on an unreviewed user report is an admin decision, not an automatic
+    one. The rows are left in status 'new' for whatever flow handles them.
+
     Marks each applied feedback row status='applied'. Idempotent: re-running only
     processes rows still in 'new' status. Use --dry-run to preview.
 
@@ -3210,8 +3214,10 @@ def apply_review_decisions(
 
     # Keep the LATEST decision per entity_url_path (rowid ascending => last wins).
     latest: dict[str, tuple] = {}
+    entity_row_ids: dict[str, list[str]] = {}
     for row in rows:
         latest[row[2]] = row  # key = entity_url_path
+        entity_row_ids.setdefault(row[2], []).append(row[1])
 
     # Build a lookup from bean JSON files under data_dir/roasters, keyed by both
     # the derived bean_url_path and the stored product url. The derived
@@ -3269,7 +3275,7 @@ def apply_review_decisions(
 
         if decision == "rejected":
             action = "rejected: stays hidden"
-            ids_to_update.append(row_id)
+            ids_to_update.extend(entity_row_ids[entity_url_path])
         else:  # approved
             entry = bean_lookup.get(entity_url_path) or url_lookup.get(entity_url_path)
             if entry is None:
@@ -3285,11 +3291,11 @@ def apply_review_decisions(
                 target = Path(entry["json_path"]).parent / f"{_review_diffjson_filename(product_url)}.review.diffjson"
                 if target.exists():
                     action = "already applied"
-                    ids_to_update.append(row_id)
+                    ids_to_update.extend(entity_row_ids[entity_url_path])
                 else:
                     action = "diffjson written"
                     written_count += 1
-                    ids_to_update.append(row_id)
+                    ids_to_update.extend(entity_row_ids[entity_url_path])
                     if not dry_run:
                         target.parent.mkdir(parents=True, exist_ok=True)
                         with open(target, "w", encoding="utf-8") as f:

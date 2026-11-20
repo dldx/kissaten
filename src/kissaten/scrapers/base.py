@@ -1623,7 +1623,7 @@ class BaseScraper(ABC):
             url: The product URL the bean was extracted from.
             is_new: True when this is a brand-new product being scraped for the
                 first time. ``requires_review`` is only set for new products so
-                that previously-approved kits are never re-hidden by
+                that previously-approved products are never re-hidden by
                 stock-update diffs (which also pass through this helper on the
                 Shopify path with is_new=False).
         """
@@ -1634,7 +1634,15 @@ class BaseScraper(ABC):
             bool(bean.is_tasting_kit) or self.is_tasting_kit_url(url) or self._bean_name_is_tasting_kit(bean)
         )
         if is_new:
-            bean.requires_review = bool(bean.is_tasting_kit)
+            # Two shapes land in the admin triage queue: curated tasting kits
+            # (flagged is_tasting_kit) and origin-less products that carry no
+            # origin fact at all — house/espresso/seasonal blends whose page
+            # states no origin, plus priced equipment/merch that slipped past
+            # the URL/name filters. The price recovered by the extraction guard
+            # proves "this page sells something", not "this is coffee", so an
+            # admin confirms or rejects before the bean becomes publicly
+            # searchable (see docs/KIT_REVIEW.md).
+            bean.requires_review = bool(bean.is_tasting_kit) or not self._has_usable_origin(bean)
         else:
             bean.requires_review = bool(getattr(bean, "requires_review", False))
 
@@ -2292,9 +2300,12 @@ class BaseScraper(ABC):
                     # carries no extractable price either. They flow through and
                     # are flagged is_tasting_kit/requires_review below, which
                     # keeps them out of public search until an admin approves
-                    # them. Origin-less blends are deliberately *not*
-                    # review-flagged: review-flagging every house blend would put
-                    # the whole catalogue in the admin review queue.
+                    # them. Every priced origin-less product is triaged the
+                    # same way: _apply_product_flags review-flags it so an
+                    # admin confirms (a blend whose page genuinely states no
+                    # origin) or rejects (priced equipment/merch that slipped
+                    # past the URL/name filters) before it becomes publicly
+                    # searchable.
                     if not self.is_tasting_kit_url(product_url) and not self._has_recovered_price(bean):
                         logger.warning(
                             f"Failed to extract data from {product_url}: "

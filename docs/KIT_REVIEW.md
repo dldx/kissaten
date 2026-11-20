@@ -89,6 +89,15 @@ The frontend stores the decision as a `page_feedback` row with
 `kind = 'product-review'` and `fields[0] = {"key": "decision", "value":
 "approved" | "rejected"}`.
 
+## Not-a-bean user reports are not auto-processed
+
+Public bean pages also carry a **🚫 Not a bean** report action, stored as
+`page_feedback` rows with `kind = 'not-a-bean'`. `apply-review-decisions`
+deliberately does **not** act on them: hiding a product on an unreviewed user
+report is an admin decision, not an automatic one. Report rows are left in
+status `new` for whatever flow handles them; `apply-review-decisions --dry-run`
+will not list them either.
+
 ## How `apply-review-decisions` works
 
 ```
@@ -136,6 +145,38 @@ against a copy) — the frontend uses libsql (WAL mode); the command opens the
 main file read-only and falls back to `immutable=1` if a WAL/lock error
 occurs. Run it where the SQLite file is reachable, then `kissaten refresh` on
 the host that owns the data directory.
+
+## Origin-less products are triaged too (2026-11 update)
+
+Since the extraction guard started keeping priced origin-less products
+("Keep origin-less beans that carry a recovered price"), a second shape flows
+into the database alongside blends: pages that state **no origin fact at all**
+(country, process and variety all empty) but do carry a price. That shape is
+ambiguous between:
+
+- a genuine **blend / house blend** whose page states no single origin, and
+- **equipment/merch/services** that slipped past the URL and name filters
+  (drinkware, grinders, scales, gift vouchers, subscriptions, …).
+
+A recovered price proves "this page sells something", not "this page sells
+coffee", so both shapes are routed through the review queue: for brand-new
+products (`is_new=True`), `_apply_product_flags` sets `requires_review = true`
+whenever the extraction produced no usable origin
+(`_has_usable_origin` — first origin must state a country, process or
+variety). The admin confirms (genuine origin-less blend) or rejects (merch)
+using the standard approve/reject flow above.
+
+Notes:
+
+- Only **brand-new** products are flagged. Stock-update diffs pass through
+  `_apply_product_flags` with `is_new=False` and never change the flag, so an
+  approved origin-less blend stays approved.
+- The volume is bounded: roughly 10–30 origin-less new products per week
+  across the whole roaster fleet (the deploy week produced ~200 because the
+  policy change admitted every origin-less product then on sale at once).
+- The beans-no-origin `validate-db` check (C. Referential integrity) counts
+  rows with no origin regardless of review status; see that command for how
+  the two policies interact.
 
 ## Known tradeoff
 

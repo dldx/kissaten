@@ -6,6 +6,7 @@
   import AdminBetaInterestSection from "$lib/components/admin/AdminBetaInterestSection.svelte";
   import AdminRoasterSuggestionsSection from "$lib/components/admin/AdminRoasterSuggestionsSection.svelte";
   import AdminReviewQueueSection from "$lib/components/admin/AdminReviewQueueSection.svelte";
+  import AdminNotABeanReportsSection from "$lib/components/admin/AdminNotABeanReportsSection.svelte";
   import AdminUsersSection from "$lib/components/admin/AdminUsersSection.svelte";
 
   let { data } = $props();
@@ -75,6 +76,8 @@
     <AdminRoasterSuggestionsSection roasters={data.allRoasters ?? []} />
     <Separator />
     <AdminReviewQueueSection />
+    <Separator />
+    <AdminNotABeanReportsSection />
     <Separator />
     <AdminUsersSection />
   </div>

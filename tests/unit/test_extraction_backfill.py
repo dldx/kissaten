@@ -652,12 +652,14 @@ def test_has_recovered_price_predicate():
 # sellable product rather than a nav page, an equipment listing or an error
 # page rendered as HTML.
 #
-# Deliberately NOT part of this rule: origin-less products are *not* flagged
-# ``requires_review``. Every house/espresso/seasonal blend on every storefront
-# is origin-less by definition, so review-flagging them would put essentially
-# the whole catalogue in the admin queue and make that queue unusable. The
-# review gate is reserved for the genuinely ambiguous case — a curated
-# multi-coffee kit — which is what ``is_tasting_kit``/``requires_review`` mean.
+# But a recovered price only proves "this page sells something", not "this
+# page sells coffee". So every priced origin-less product is triaged:
+# ``_apply_product_flags`` review-flags it ``requires_review`` so an admin
+# confirms (a blend whose page genuinely states no origin) or rejects (priced
+# equipment/merch that slipped past the URL/name filters) before it becomes
+# publicly searchable. The flag is set only for brand-new products
+# (``is_new=True``); stock-update diffs never re-hide an already-approved
+# product.
 # ---------------------------------------------------------------------------
 
 
@@ -684,16 +686,35 @@ def _scraper() -> "_MinimalScraper":
     return scraper
 
 
-async def test_priced_origin_less_blend_is_admitted_and_is_not_review_flagged(mocker):
-    # The admission itself: a priced product page with no origin survives, and
-    # stays visible in public search (see the note above on why it is not sent
-    # to the review queue).
+async def test_priced_origin_less_blend_is_admitted_and_review_flagged(mocker):
+    # The admission itself: a priced product page with no origin survives the
+    # guard, and lands in the admin triage queue (requires_review) so an admin
+    # confirms it is a genuine origin-less blend before it becomes publicly
+    # searchable.
     out = await _extract(_scraper(), mocker, _originless_bean())
 
     assert out is not None
     assert out.origins == []
     assert out.is_tasting_kit is False
-    assert out.requires_review is False
+    assert out.requires_review is True
+
+
+def test_stock_update_diff_does_not_flag_or_unflag_origin_less_bean():
+    # Stock-update diffs pass through _apply_product_flags with is_new=False.
+    # They must neither newly flag an origin-less product (the admin already
+    # saw it when it first appeared) nor clear a flag — the update diffjson
+    # itself only carries url/in_stock, so the flag's DB state is untouched.
+    scraper = _scraper()
+    bean = _originless_bean()
+    bean.requires_review = False
+
+    scraper._apply_product_flags(bean, str(bean.url), is_new=False)
+
+    assert bean.requires_review is False
+
+    bean.requires_review = True
+    scraper._apply_product_flags(bean, str(bean.url), is_new=False)
+    assert bean.requires_review is True
 
 
 async def test_priced_origin_less_equipment_name_is_still_rejected(mocker):
@@ -705,10 +726,9 @@ async def test_priced_origin_less_equipment_name_is_still_rejected(mocker):
     # Note the residual gap: the base blocklist is a fixed English token list
     # (``grinder``, ``dripper``, ``tumbler``, ...) and does not cover every
     # piece of drinkware — "mug" and "cup" are absent, so a priced origin-less
-    # product named e.g. "Ceramic Mug" would pass. Roasters whose catalogues
-    # carry that shape filter it themselves (see ``acid_coffee.py``, which
-    # rejects the whole ``Goods`` breadcrumb category because the base list is
-    # English-only). Widening the base list is a separate change from this one.
+    # product named e.g. "Ceramic Mug" would be admitted. Since the origin-less
+    # triage change it lands in the admin review queue (requires_review) rather
+    # than in public search, so an admin rejects it there.
     scraper = _scraper()
     out = await _extract(
         scraper,

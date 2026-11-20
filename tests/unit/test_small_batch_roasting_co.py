@@ -154,8 +154,10 @@ def test_tasting_kit_and_review_flags():
         currency="AUD",
     )
     scraper._apply_product_flags(single_bean, str(single_bean.url), is_new=True)
+    # Not a kit, but the page states no origin, so the origin-less triage
+    # review-flags it for admin confirmation (see docs/KIT_REVIEW.md).
     assert single_bean.is_tasting_kit is False
-    assert single_bean.requires_review is False
+    assert single_bean.requires_review is True
 
 
 def test_postprocess_extracted_bean():

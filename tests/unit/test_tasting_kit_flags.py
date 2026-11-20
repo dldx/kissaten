@@ -161,8 +161,12 @@ class TestNameBasedReviewFlag:
         assert bean.requires_review is True
 
     def test_plain_bean_name_not_flagged(self, scraper):
+        # A bean with a real extracted origin is not flagged by the name-based
+        # kit detector (and, with an origin present, not by the origin-less
+        # triage either).
         bean = _make_bean("https://proper-roaster.com/products/ethiopia-yirgacheffe")
         bean.name = "Ethiopia Yirgacheffe"
+        bean.origins = [{"country": "Ethiopia"}]
         scraper._apply_product_flags(bean, str(bean.url), is_new=True)
         assert bean.is_tasting_kit is False
         assert bean.requires_review is False

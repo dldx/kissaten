@@ -270,3 +270,4 @@ class TestUpdateDb:
             assert self._requires_review_of(BEAN_URL) is True
         finally:
             self._cleanup(BEAN_URL)
+

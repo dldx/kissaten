@@ -150,6 +150,46 @@ export const listProductReviewDecisions = query(
 );
 export type SubmitProductReviewResult = { status: "submitted"; id: string };
 
+export interface NotABeanReportRow {
+  id: string;
+  entityUrlPath: string;
+  entityName: string | null;
+  createdAt: number; // ms
+  status: string;
+}
+
+/**
+ * List not-a-bean user reports from page_feedback (kind='not-a-bean').
+ * Admin-only. Reports are deliberately NOT auto-processed by the CLI
+ * (apply-review-decisions ignores this kind), so this view is how admins
+ * triage them. Reports do NOT hide the reported product on their own.
+ */
+export const listNotABeanReports = query(
+  async (): Promise<NotABeanReportRow[]> => {
+    requireAdmin();
+    const rows = await db
+      .select({
+        id: pageFeedback.id,
+        entityUrlPath: pageFeedback.entityUrlPath,
+        entityName: pageFeedback.entityName,
+        createdAt: pageFeedback.createdAt,
+        status: pageFeedback.status,
+      })
+      .from(pageFeedback)
+      .where(eq(pageFeedback.kind, "not-a-bean"))
+      .orderBy(desc(pageFeedback.createdAt));
+    return rows
+      .filter((r) => r.entityUrlPath)
+      .map((r) => ({
+        id: r.id,
+        entityUrlPath: r.entityUrlPath as string,
+        entityName: r.entityName,
+        createdAt: r.createdAt.getTime(),
+        status: r.status,
+      }));
+  },
+);
+
 /**
  * Record an admin product-review decision (tasting kits, etc.) into the
  * page_feedback table. The decision lives in fields[0] as {key:"decision"}.
