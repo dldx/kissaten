@@ -12,6 +12,7 @@ from .alema import AlemaScraper
 from .aliena_coffee import AlienaCoffeeScraper
 from .allpress import AllpressScraper
 from .amoc_coffee import AmocCoffeeScraper
+from .anamorphic_coffee import AnamorphicCoffeeScraper
 from .ancoats import AncoatsScraper
 from .anonymous_coffee import AnonymousCoffeeScraper
 from .apollons_gold import ApollonsGoldScraper
@@ -71,6 +72,7 @@ from .botz import BotzScraper
 from .brainwave_coffee import BrainwaveCoffeeScraper
 from .brandywine_coffee_roasters import BrandywineCoffeeRoastersScraper
 from .brass_horn_coffee import BrassHornCoffeeScraper
+from .brew_methods import BrewMethodsScraper
 from .brewtus_roasting import BrewtusRoastingScraper
 from .brio_coffeeworks import BrioCoffeeworksScraper
 from .bugan_coffee import BuganCoffeeScraper
@@ -99,6 +101,7 @@ from .cat_and_cloud import CatAndCloudScraper
 from .catalyst import CatalystScraper
 from .cedar import CedarScraper
 from .celsius_roasters import CelsiusRoastersScraper
+from .central_coast_coffee import CentralCoastCoffeeScraper
 from .ceto import CetoScraper
 from .chimney_fire import ChimneyFireScraper
 from .chipp import ChippCoffeeCoScraper
@@ -126,6 +129,7 @@ from .coffeelab import CoffeeLabScraper
 from .coffever import CoffeverScraper
 from .coffilab import CoffilabScraper
 from .cofmos import CofmosScraper
+from .collusion_coffee import CollusionCoffeeScraper
 from .colonna import ColonnaScraper
 from .colours_coffee import ColoursCoffeeScraper
 from .common_time_coffee import CommonTimeCoffeeScraper
@@ -282,6 +286,7 @@ from .kanso_coffee import KansoCoffeeLabScraper
 from .kapow_coffee import KapowCoffeeScraper
 from .kb_coffee_roasters import KBCoffeeRoastersScraper
 from .kesh_kesh import KeshKeshScraper
+from .kierto_coffee import KiertoCoffeeScraper
 from .killbean import KillBeanScraper
 from .kings_arms_coffee import KingsArmsCoffeeScraper
 from .klover_club import KloverClubScraper
@@ -332,6 +337,7 @@ from .module_coffee import ModuleCoffeeScraper
 from .mokcoffee import MOKCoffeeScraper
 from .moklair import MoklairScraper
 from .momos_coffee import MomosCoffeeScraper
+from .monastery_coffee import MonasteryCoffeeScraper
 from .monogram import MonogramScraper
 from .monsoon_estates import MonsoonEstatesScraper
 from .moongoat import MoongoatScraper
@@ -356,6 +362,7 @@ from .ninety_four_celcius import NinetyFourCelciusScraper
 from .nir_coffee import NirCoffeeScraper
 from .nokora import NokoraCoffeeScraper
 from .nomad_coffee import NomadCoffeeScraper
+from .nord_coffee import NordCoffeeScraper
 from .nord_kaffe import NordKaffeScraper
 from .norml import NormlScraper
 from .north_star import NorthStarCoffeeScraper
@@ -590,6 +597,7 @@ __all__ = [
     "AlienaCoffeeScraper",
     "AllpressScraper",
     "AmocCoffeeScraper",
+    "AnamorphicCoffeeScraper",
     "AncoatsScraper",
     "AnonymousCoffeeScraper",
     "ApollonsGoldScraper",
@@ -649,6 +657,7 @@ __all__ = [
     "BrainwaveCoffeeScraper",
     "BrandywineCoffeeRoastersScraper",
     "BrassHornCoffeeScraper",
+    "BrewMethodsScraper",
     "BrewtusRoastingScraper",
     "BrioCoffeeworksScraper",
     "BuganCoffeeScraper",
@@ -673,12 +682,14 @@ __all__ = [
     "CatalystScraper",
     "CelsiusRoastersScraper",
     "CetoScraper",
+    "CentralCoastCoffeeScraper",
     "ChimneyFireScraper",
     "ChippCoffeeCoScraper",
     "ChronicCoffeeScraper",
     "ChunkyCherryCoffeeScraper",
     "CityBoyCoffeeScraper",
     "CliftonScraper",
+    "CollusionCoffeeScraper",
     "CoaltownScraper",
     "CobornCoffeeScraper",
     "Code194CoffeeScraper",
@@ -859,6 +870,7 @@ __all__ = [
     "KeshKeshScraper",
     "KillBeanScraper",
     "KingsArmsCoffeeScraper",
+    "KiertoCoffeeScraper",
     "KloverClubScraper",
     "KnockboxScraper",
     "KofraScraper",
@@ -901,6 +913,7 @@ __all__ = [
     "MicrologyScraper",
     "MiroManufacturaScraper",
     "MirraCoffeeScraper",
+    "MonasteryCoffeeScraper",
     "MissingBeanScraper",
     "MissionScraper",
     "MobyDickCoffeeRoastersScraper",
@@ -931,6 +944,7 @@ __all__ = [
     "NirCoffeeScraper",
     "NokoraCoffeeScraper",
     "NomadCoffeeScraper",
+    "NordCoffeeScraper",
     "NordKaffeScraper",
     "NormlScraper",
     "NorthStarCoffeeScraper",
