@@ -6,6 +6,7 @@ import { db } from '$lib/server/database'
 import { getRequestEvent } from '$app/server'
 import { sendEmail } from '$lib/server/email'
 import { notifyAdminNewSignUp } from '$lib/server/admin-notifications'
+import { printDevVerificationCode } from '$lib/server/dev-login-code'
 
 const otpStore = new Map<string, string>();
 
@@ -77,6 +78,12 @@ export const auth = betterAuth({
 
 			const otp = otpStore.get(email) || "------";
 			otpStore.delete(email); // Clean up
+
+			if (import.meta.env.DEV) {
+				// Dev mode: print the code to the terminal instead of emailing it.
+				printDevVerificationCode(email, otp);
+				return;
+			}
 
 			void sendEmail({
 				to: email,

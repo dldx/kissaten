@@ -11,6 +11,7 @@
 	import { cn } from "$lib/utils";
 	import Logo from "$lib/static/logo.svg?raw";
 	import { Vault } from "lucide-svelte";
+	import { dev } from "$app/environment";
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {
 		form: any;
@@ -112,6 +113,15 @@
 				<Field>
 					<Button type="submit" class="w-full">Login/Signup</Button>
 				</Field>
+
+				{#if dev}
+					<p
+						class="text-muted-foreground text-xs text-center"
+					>
+						A one-time verification code will appear in the dev
+						server terminal — no email needed.
+					</p>
+				{/if}
 			</FieldGroup>
 		</form>
 	{/if}

@@ -16,6 +16,7 @@
 	import Logo from "$lib/static/logo.svg?raw";
 	import { authClient } from "$lib/auth-client";
 	import { goto, invalidateAll } from "$app/navigation";
+	import { dev } from "$app/environment";
 
 	const email = page.url.searchParams.get("email") || "";
 	let otp = $state("");
@@ -74,10 +75,18 @@
 			</div>
 			<CardTitle class="font-bold text-3xl">Check your email</CardTitle>
 			<CardDescription class="text-base">
-				We've sent a magic link and a verification code to <br />
-				<strong class="text-foreground break-words"
-					>{email || "your email"}</strong
-				>
+				{#if dev}
+					A verification code for <br />
+					<strong class="text-foreground break-words"
+						>{email || "your email"}</strong
+					>
+					has been printed in the dev server terminal.
+				{:else}
+					We've sent a magic link and a verification code to <br />
+					<strong class="text-foreground break-words"
+						>{email || "your email"}</strong
+					>
+				{/if}
 			</CardDescription>
 		</CardHeader>
 		<CardContent class="space-y-8">
@@ -140,20 +149,45 @@
 			</div>
 
 			<p class="text-muted-foreground text-sm text-center">
-				Click the link in the email to sign in automatically.<br />
-				The link and code will expire in 5 minutes.
+				{#if dev}
+					Enter the code printed in the terminal.<br />
+					The code expires in 5 minutes.
+				{:else}
+					Click the link in the email to sign in automatically.<br />
+					The link and code will expire in 5 minutes.
+				{/if}
 			</p>
 
 			<Alert>
 				<AlertDescription>
-					<p class="mb-2 font-medium">Didn't receive the email?</p>
-					<ul class="space-y-1 text-sm">
-						<li>• Check your spam or junk folder</li>
-						<li>
-							• Make sure you entered the correct email address
-						</li>
-						<li>• Wait a few minutes and check again</li>
-					</ul>
+					{#if dev}
+						<p class="mb-2 font-medium">
+							Looking for the verification code?
+						</p>
+						<ul class="space-y-1 text-sm">
+							<li>
+								• Look for the code in the terminal running
+								the dev server (<code>bun run dev</code> or
+								<code>kissaten dev --frontend</code>)
+							</li>
+							<li>
+								• If you don't see it, make sure the email
+								above is the one you entered
+							</li>
+						</ul>
+					{:else}
+						<p class="mb-2 font-medium">
+							Didn't receive the email?
+						</p>
+						<ul class="space-y-1 text-sm">
+							<li>• Check your spam or junk folder</li>
+							<li>
+								• Make sure you entered the correct email
+								address
+							</li>
+							<li>• Wait a few minutes and check again</li>
+						</ul>
+					{/if}
 				</AlertDescription>
 			</Alert>
 
