@@ -376,3 +376,87 @@ export const USER_EMAIL_LOGO_ATTACHMENT = {
   path: "static/logo_full.png",
   cid: "logo@kissaten.app",
 };
+
+/**
+ * One notification item destined for a batched user digest. Each queue row in
+ * `email_queue` carries one of these in its `data` JSON column.
+ */
+export type UserDigestItem =
+  | {
+      kind: "roaster-implemented";
+      name?: string | null;
+      roasterName: string;
+      roasterUrl: string;
+    }
+  | { kind: "beta-approved"; name?: string | null }
+  | {
+      kind: "report-resolved";
+      name?: string | null;
+      entityName?: string | null;
+    };
+
+/**
+ * Aggregated digest email for a single user who has several queued
+ * notifications (new roasters they voted for, resolved reports, beta access,
+ * …). Flush runs send at most one of these per recipient — this is what keeps
+ * user emails from turning into a per-event spam stream.
+ */
+export function userDigestTemplate(input: {
+  name?: string | null;
+  items: UserDigestItem[];
+}): UserEmailRendered {
+  const greetingName = input.name?.trim() || "there";
+  const total = input.items.length;
+  const roasters = input.items.filter((i) => i.kind === "roaster-implemented");
+  const reports = input.items.filter((i) => i.kind === "report-resolved");
+  const beta = input.items.filter((i) => i.kind === "beta-approved");
+
+  const paragraphs: string[] = [];
+  if (roasters.length > 0) {
+    paragraphs.push(
+      roasters.length === 1
+        ? "A roaster you voted for is now on Kissaten — thanks for helping grow the catalogue!"
+        : `${roasters.length} roasters you voted for are now on Kissaten — thanks for helping grow the catalogue!`,
+    );
+  }
+  if (reports.length > 0) {
+    paragraphs.push(
+      reports.length === 1
+        ? "We've addressed your report — thanks for helping keep the catalogue accurate."
+        : `We've addressed ${reports.length} of your reports — thanks for helping keep the catalogue accurate.`,
+    );
+  }
+  if (beta.length > 0) {
+    paragraphs.push(
+      "Your beta access was approved — you can now enable beta features from your profile.",
+    );
+  }
+
+  const details = [
+    ...roasters.map(
+      (r) => `☕ New roaster: ${cleanText(r.roasterName)}
+   ${r.roasterUrl}`,
+    ),
+    ...reports
+      .map((r) =>
+        r.entityName
+          ? `🐛 Report addressed: ${cleanText(r.entityName)}`
+          : "🐛 A report you filed was addressed",
+      )
+      .filter(Boolean),
+    ...(beta.length > 0 ? ["🧪 Beta access approved"] : []),
+  ].join("\n\n");
+
+  return kissatenEmailTemplate({
+    subject: `${total} ${total === 1 ? "update" : "updates"} from Kissaten`,
+    accent: "#f2a03d",
+    headerTitle: "Hello from Kissaten 👋",
+    greeting: greetingName,
+    paragraphs,
+    details,
+    ctaText: "Visit Kissaten",
+    ctaUrl: "https://kissaten.app",
+    footerMessage: "Thanks for being an early supporter!",
+    footerDescriptor: "Your coffee bean discovery platform",
+  });
+}

@@ -1,7 +1,7 @@
 ---
 type: "Reference"
 title: "Email Notifications"
-description: "Kissaten email system: nodemailer SMTP transporter, the single branded email shell in email-templates.ts, admin digest notifications, and user-facing transactional emails (magic-link OTP, beta approval, roaster-implemented to opted-in voters)."
+description: "Kissaten email system: nodemailer SMTP transporter, the single branded email shell in email-templates.ts, immediate admin digest notifications, and user-facing emails batched through the email_queue outbox into one digest per user (magic-link OTP, beta approval, roaster-implemented to opted-in voters)."
 ---
 
 # Email Notifications
@@ -21,8 +21,10 @@ All mail code lives in `frontend/src/lib/server/`.
 | File | Responsibility |
 |---|---|
 | `email.ts` | SMTP transporter factory (`createEmailTransporter`) and `sendEmail` wrapper (nodemailer) |
-| `email-templates.ts` | `kissatenEmailTemplate` branded shell, the admin notification `meta` registry, and user-facing templates |
-| `admin-notifications.ts` | Notification functions that resolve recipients and fire `sendEmail` |
+| `email-templates.ts` | `kissatenEmailTemplate` branded shell, the admin notification `meta` registry, user-facing templates, and the `userDigestTemplate` |
+| `admin-notifications.ts` | Notification functions: admin digests fire `sendEmail` immediately; user-facing notices enqueue into the outbox |
+| `email-queue.ts` | Batched outbox: `enqueueEmail` inserts; `flushEmailQueue` groups pending rows per recipient and sends one digest per user |
+| `flush-email-queue.ts` | Standalone flush script (`scripts/`, dry-run by default, `--send` to deliver) — the cron/scheduled hook for the outbox |
 | `test-email.ts` | Standalone script to verify the SMTP connection and send a test message (`bun run src/lib/server/test-email.ts` from `frontend/`) |
 
 ## SMTP Configuration (`email.ts`)
@@ -108,6 +110,41 @@ Sent to a single recipient (the user themselves).
   to every voter who cast a vote with `notifyOnImplementation = true` when the
   suggestion is marked implemented. See below.
 
+## Batched Email Outbox (one digest per user)
+
+User-facing emails are deliberately **not** sent immediately. They are inserted
+into the `email_queue` table (`frontend/drizzle/0011_*.sql` migration) as
+`pending` rows, and a flush groups them **per recipient** so each user receives
+at most one email per flush:
+
+- **One pending item** → rendered with the item's dedicated template
+  (e.g. `roasterImplementedUserTemplate`).
+- **Several pending items** → rendered with `userDigestTemplate` in
+  `email-templates.ts` (subject `N updates from Kissaten`, one section per
+  kind: ☕ new roasters, 🐛 addressed reports, 🧪 beta access).
+
+Kinds flowing through the outbox: `roaster-implemented`,
+`beta-approved`, and (future report lifecycle) `report-resolved`.
+
+- `enqueueEmail(db, …)` — inserts a `pending` row, sends nothing.
+- `flushEmailQueue(db)` — reads all `pending` rows, groups by
+  `recipient_email`, sends one digest per person via the normal `sendEmail`
+  path, and marks the rows `sent`.
+- **Failure semantics**: a SEND failure leaves the recipient's rows `pending`
+  so the next flush retries them (self-healing when SMTP is temporarily down);
+  a render failure (bad payload) is deterministic and marks the rows `failed`.
+- **Delivery trigger**: `frontend/scripts/flush-email-queue.ts` — the same
+  grouping/flush logic as a standalone command, dry-run by default, `--send` to
+  deliver, exit 2 when anything failed. Hook it into cron (e.g. daily) or run
+  it manually after admin sessions; it is the only place SMTP is actually hit
+  for user mail.
+- **Admin notifications intentionally bypass the outbox** — `broadcast()` still
+  sends admin digests immediately per event.
+
+The whole point: marking several roasters "implemented" (or resolving several
+reports) queues many rows for the same voter, and the next flush sends **one**
+email about all of them — no per-event spam.
+
 ## The Roaster-Implemented Flow
 
 Both the admin digest and the opted-in voter emails fire from
@@ -119,7 +156,10 @@ Both the admin digest and the opted-in voter emails fire from
    action returns early and re-notifies nobody (a re-save never re-sends).
 3. `notifyAdminSuggestionImplemented` broadcasts the digest to admins.
 4. Voters who opted in are queried (`roasterSuggestionVotes` joined to `user`
-   where `notifyOnImplementation = true`), then each is emailed individually.
+   where `notifyOnImplementation = true`), then each is enqueued into the
+   `email_queue` outbox (one row per voter) — delivered later by the digest
+   flush, so several roasters marked implemented in one session still result in
+   a single email per voter.
 
 The same flow can be triggered from a terminal (or by a coding agent) via
 `frontend/scripts/notify-roaster-implemented.ts` — see
@@ -146,6 +186,6 @@ are never told who submitted the suggestion.
   connection and sends a test message (requires `SMTP_*` in `frontend/.env`).
 - Notifications are fire-and-forget (`void …`); per-recipient send errors are
   caught and logged (`[admin-notifications] …`) without failing the request.
-- Sending is deferred/bulk-auditable via Sentry/Logfire logging from the
-  `sendEmail` wrapper's console output; there is no dedicated email queue — all
-  sends are synchronous within the request lifecycle (fire-and-forget).
+- Admin sends are fire-and-forget per request; user-facing sends are batched
+  through the `email_queue` outbox and flushed by
+  `scripts/flush-email-queue.ts` (see **Batched Email Outbox** below).

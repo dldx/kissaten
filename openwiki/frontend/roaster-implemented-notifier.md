@@ -1,7 +1,7 @@
 ---
 type: "Reference"
 title: "Roaster-Implemented Notifier Script"
-description: "CLI/agentic counterpart of the admin panel's 'Mark implemented' action: flips a roaster suggestion to implemented and emails opted-in voters, with dry-run default, idempotency guard, and hard kill-switch."
+description: "CLI/agentic counterpart of the admin panel's 'Mark implemented' action: flips a roaster suggestion to implemented, queues opted-in voter notices into the batched email outbox, and flushes one digest per voter, with dry-run default, idempotency guard, and hard kill-switch."
 ---
 
 # Roaster-Implemented Notifier Script
@@ -16,11 +16,15 @@ Running it does two things, in the same order as the admin panel:
 
 1. Flips the suggestion to `status: "implemented"` and stamps
    `implemented_roaster_slug`.
-2. Emails every voter who opted in (`notify_on_implementation = 1`), plus an
-   admin digest (kind `roaster-implemented`) to every admin-role user.
+2. Queues one `email_queue` row per opted-in voter
+   (`notify_on_implementation = 1`), then flushes the outbox — so each voter
+   gets a single aggregated digest, not one email per roaster. The admin digest
+   (kind `roaster-implemented`) is sent directly to every admin-role user, like
+   the panel.
 
-Emails use the same templates and SMTP transport as the app — see
-[Email Notifications](email-notifications.md).
+Emails use the same templates, SMTP transport, and batched-outbox machinery as
+the app — see [Email Notifications](email-notifications.md) (the "Batched
+Email Outbox" section) and `scripts/flush-email-queue.ts`.
 
 ## Usage
 
@@ -63,9 +67,11 @@ sqlite3 "file:frontend/local.db?mode=ro" \
   form (`/^[a-z0-9&_\-éūëöáíóúñûē']+$/`).
 - **GDPR opt-in respected.** Only voters with `notify_on_implementation = 1`
   are emailed; other voters of the same suggestion are never contacted.
-- **Graceful failure.** Per-recipient SMTP errors are collected and reported;
-  the run completes and exits 2 rather than crashing mid-batch. The DB update
-  is applied before sends are attempted (same as the admin panel).
+- **Graceful failure.** Voter emails and the admin digest are sent via the
+  flush; SMTP errors are collected and reported, and the run exits 2 rather
+  than crashing mid-batch. Failed voter digests stay `pending` in
+  `email_queue` so a later `flush-email-queue.ts --send` retries them. The DB
+  update is applied before sends are attempted (same as the admin panel).
 
 ## Exit codes
 
@@ -98,8 +104,9 @@ port so no mail could leave the machine:
   `--db file:<copy>` when practising.
 - **SMTP must be configured** for `--send` to succeed: `SMTP_HOST`, `SMTP_PORT`,
   `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` (see
-  [Email Notifications](email-notifications.md)). Without them, sends fail and
-  the script exits 2 with the DB update already applied.
+  [Email Notifications](email-notifications.md)). Voter rows are queued and
+  flushed by the script itself; if the flush can't reach SMTP, the rows stay
+  `pending` and the script exits 2 with the DB update already applied.
 - To smoke-test the mail path end-to-end without real recipients, point SMTP at
   a dead port (`SMTP_HOST=127.0.0.1 SMTP_PORT=59999`) and confirm exit code 2
   with per-recipient `ECONNREFUSED` errors — this exercises the full render +

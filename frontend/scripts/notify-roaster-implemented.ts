@@ -35,32 +35,34 @@
  * input / hard-disabled, 2 = completed but one or more emails failed to send.
  */
 
-import { config } from 'dotenv';
-import { resolve } from 'path';
+import { config } from "dotenv";
+import { resolve } from "path";
 
 // Load .env from the frontend directory (this script reads it, not the caller).
-config({ path: resolve(process.cwd(), '.env') });
+config({ path: resolve(process.cwd(), ".env") });
 
-import { and, eq } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/libsql';
-import { createClient } from '@libsql/client/node';
+import { and, eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client/node";
 import {
-	roasterSuggestionVotes,
-	roasterSuggestions,
-	user
-} from '../src/lib/server/database/schema';
-import { sendEmail } from '../src/lib/server/email';
+  emailQueue,
+  roasterSuggestionVotes,
+  roasterSuggestions,
+  user,
+} from "../src/lib/server/database/schema";
+import { sendEmail } from "../src/lib/server/email";
 import {
-	adminNotificationTemplate,
-	roasterImplementedUserTemplate,
-	ADMIN_NOTIFICATION_LOGO_ATTACHMENT,
-	USER_EMAIL_LOGO_ATTACHMENT
-} from '../src/lib/server/email-templates';
+  adminNotificationTemplate,
+  roasterImplementedUserTemplate,
+  ADMIN_NOTIFICATION_LOGO_ATTACHMENT,
+} from "../src/lib/server/email-templates";
+import { nanoid } from "nanoid";
+import { flushEmailQueue } from "../src/lib/server/email-queue";
 
 const SLUG_REGEX = /^[a-z0-9&_\-éūëöáíóúñûē']+$/;
 
 function usage(): never {
-	console.log(`Usage:
+  console.log(`Usage:
   bun run scripts/notify-roaster-implemented.ts <suggestionId> <roasterSlug> [--send] [--db <url>] [--site-url <url>]
 
 Examples:
@@ -68,204 +70,228 @@ Examples:
   bun run scripts/notify-roaster-implemented.ts sug_abc123 "coffee-circle" --send
   bun run scripts/notify-roaster-implemented.ts sug_abc123 "coffee-circle" --send --db file:local.db
 `);
-	process.exit(0);
+  process.exit(0);
 }
 
 function parseArgs(argv: string[]) {
-	const positional: string[] = [];
-	let send = false;
-	let dbUrl: string | undefined;
-	let siteUrl = 'https://kissaten.app';
+  const positional: string[] = [];
+  let send = false;
+  let dbUrl: string | undefined;
+  let siteUrl = "https://kissaten.app";
 
-	for (let i = 0; i < argv.length; i++) {
-		const arg = argv[i];
-		if (arg === '--help' || arg === '-h') usage();
-		else if (arg === '--send') send = true;
-		else if (arg === '--db') dbUrl = argv[++i];
-		else if (arg === '--site-url') siteUrl = argv[++i].replace(/\/+$/, '');
-		else if (arg.startsWith('--')) {
-			console.error(`Unknown flag: ${arg}`);
-			usage();
-		} else positional.push(arg);
-	}
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i];
+    if (arg === "--help" || arg === "-h") usage();
+    else if (arg === "--send") send = true;
+    else if (arg === "--db") dbUrl = argv[++i];
+    else if (arg === "--site-url") siteUrl = argv[++i].replace(/\/+$/, "");
+    else if (arg.startsWith("--")) {
+      console.error(`Unknown flag: ${arg}`);
+      usage();
+    } else positional.push(arg);
+  }
 
-	if (positional.length !== 2) {
-		console.error('Exactly two positional arguments are required: <suggestionId> <roasterSlug>');
-		usage();
-	}
-	return { suggestionId: positional[0], roasterSlug: positional[1], send, dbUrl, siteUrl };
+  if (positional.length !== 2) {
+    console.error(
+      "Exactly two positional arguments are required: <suggestionId> <roasterSlug>",
+    );
+    usage();
+  }
+  return {
+    suggestionId: positional[0],
+    roasterSlug: positional[1],
+    send,
+    dbUrl,
+    siteUrl,
+  };
 }
 
 async function main() {
-	const { suggestionId, roasterSlug, send, dbUrl, siteUrl } = parseArgs(process.argv.slice(2));
+  const { suggestionId, roasterSlug, send, dbUrl, siteUrl } = parseArgs(
+    process.argv.slice(2),
+  );
 
-	const databaseUrl = dbUrl ?? process.env.DATABASE_URL;
-	if (!databaseUrl) {
-		console.error('DATABASE_URL is not set. Pass --db <url> or configure it in .env.');
-		process.exit(1);
-	}
+  const databaseUrl = dbUrl ?? process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    console.error(
+      "DATABASE_URL is not set. Pass --db <url> or configure it in .env.",
+    );
+    process.exit(1);
+  }
 
-	// Hard kill-switch, matching admin-notifications.isEnabled().
-	const rawEnabled = process.env.ADMIN_NOTIFICATIONS_ENABLED;
-	if (rawEnabled === 'false' || rawEnabled === '0') {
-		console.error('ADMIN_NOTIFICATIONS_ENABLED is explicitly disabled; refusing to run.');
-		process.exit(1);
-	}
+  // Hard kill-switch, matching admin-notifications.isEnabled().
+  const rawEnabled = process.env.ADMIN_NOTIFICATIONS_ENABLED;
+  if (rawEnabled === "false" || rawEnabled === "0") {
+    console.error(
+      "ADMIN_NOTIFICATIONS_ENABLED is explicitly disabled; refusing to run.",
+    );
+    process.exit(1);
+  }
 
-	// Same slug charset validation as the admin panel form.
-	if (!SLUG_REGEX.test(roasterSlug)) {
-		console.error(`Invalid roaster slug: "${roasterSlug}"`);
-		process.exit(1);
-	}
+  // Same slug charset validation as the admin panel form.
+  if (!SLUG_REGEX.test(roasterSlug)) {
+    console.error(`Invalid roaster slug: "${roasterSlug}"`);
+    process.exit(1);
+  }
 
-	const db = drizzle(createClient({ url: databaseUrl }));
+  const db = drizzle(createClient({ url: databaseUrl }));
 
-	const [suggestion] = await db
-		.select({
-			id: roasterSuggestions.id,
-			name: roasterSuggestions.name,
-			status: roasterSuggestions.status,
-			implementedRoasterSlug: roasterSuggestions.implementedRoasterSlug,
-			submittedByEmail: user.email
-		})
-		.from(roasterSuggestions)
-		.leftJoin(user, eq(user.id, roasterSuggestions.userId))
-		.where(eq(roasterSuggestions.id, suggestionId))
-		.limit(1);
+  const [suggestion] = await db
+    .select({
+      id: roasterSuggestions.id,
+      name: roasterSuggestions.name,
+      status: roasterSuggestions.status,
+      implementedRoasterSlug: roasterSuggestions.implementedRoasterSlug,
+      submittedByEmail: user.email,
+    })
+    .from(roasterSuggestions)
+    .leftJoin(user, eq(user.id, roasterSuggestions.userId))
+    .where(eq(roasterSuggestions.id, suggestionId))
+    .limit(1);
 
-	if (!suggestion) {
-		console.error(`Suggestion not found: ${suggestionId}`);
-		process.exit(1);
-	}
+  if (!suggestion) {
+    console.error(`Suggestion not found: ${suggestionId}`);
+    process.exit(1);
+  }
 
-	console.log(`Suggestion : ${suggestion.name} (${suggestion.id})`);
-	console.log(`Status     : ${suggestion.status}`);
-	console.log(`Roaster    : ${roasterSlug}`);
-	console.log(`Mode       : ${send ? 'SEND' : 'DRY RUN (no writes, no emails)'}`);
-	console.log('');
+  console.log(`Suggestion : ${suggestion.name} (${suggestion.id})`);
+  console.log(`Status     : ${suggestion.status}`);
+  console.log(`Roaster    : ${roasterSlug}`);
+  console.log(
+    `Mode       : ${send ? "SEND" : "DRY RUN (no writes, no emails)"}`,
+  );
+  console.log("");
 
-	// Idempotency, mirroring the admin panel: never re-notify an implemented suggestion.
-	if (suggestion.status === 'implemented') {
-		if (suggestion.implementedRoasterSlug === roasterSlug) {
-			console.log('Already implemented with this slug; nothing to do.');
-			process.exit(0);
-		}
-		console.error(
-			`Suggestion is already implemented with slug "${suggestion.implementedRoasterSlug}"; refusing to change it.`
-		);
-		process.exit(1);
-	}
+  // Idempotency, mirroring the admin panel: never re-notify an implemented suggestion.
+  if (suggestion.status === "implemented") {
+    if (suggestion.implementedRoasterSlug === roasterSlug) {
+      console.log("Already implemented with this slug; nothing to do.");
+      process.exit(0);
+    }
+    console.error(
+      `Suggestion is already implemented with slug "${suggestion.implementedRoasterSlug}"; refusing to change it.`,
+    );
+    process.exit(1);
+  }
 
-	const votingUsers = await db
-		.select({ email: user.email, name: user.name })
-		.from(roasterSuggestionVotes)
-		.innerJoin(user, eq(user.id, roasterSuggestionVotes.userId))
-		.where(
-			and(
-				eq(roasterSuggestionVotes.suggestionId, suggestionId),
-				eq(roasterSuggestionVotes.notifyOnImplementation, true)
-			)
-		);
+  const votingUsers = await db
+    .select({ email: user.email, name: user.name })
+    .from(roasterSuggestionVotes)
+    .innerJoin(user, eq(user.id, roasterSuggestionVotes.userId))
+    .where(
+      and(
+        eq(roasterSuggestionVotes.suggestionId, suggestionId),
+        eq(roasterSuggestionVotes.notifyOnImplementation, true),
+      ),
+    );
 
-	const recipients = votingUsers.filter((r) => !!r.email);
-	const roasterUrl = `${siteUrl}/roasters/${roasterSlug}`;
-	const sampleRender = roasterImplementedUserTemplate({
-		name: recipients[0]?.name ?? null,
-		roasterName: suggestion.name,
-		roasterUrl
-	});
+  const recipients = votingUsers.filter((r) => !!r.email);
+  const roasterUrl = `${siteUrl}/roasters/${roasterSlug}`;
+  const sampleRender = roasterImplementedUserTemplate({
+    name: recipients[0]?.name ?? null,
+    roasterName: suggestion.name,
+    roasterUrl,
+  });
 
-	console.log(`Opted-in voters to notify: ${recipients.length}`);
-	for (const r of recipients) {
-		console.log(`  - ${r.email}${r.name ? ` (${r.name})` : ''}`);
-	}
-	if (recipients.length > 0) {
-		console.log('');
-		console.log(`Subject: ${sampleRender.subject}`);
-		console.log('--- text preview ---');
-		console.log(sampleRender.text);
-	}
-	console.log('');
+  console.log(`Opted-in voters to notify: ${recipients.length}`);
+  for (const r of recipients) {
+    console.log(`  - ${r.email}${r.name ? ` (${r.name})` : ""}`);
+  }
+  if (recipients.length > 0) {
+    console.log("");
+    console.log(`Subject: ${sampleRender.subject}`);
+    console.log("--- text preview ---");
+    console.log(sampleRender.text);
+  }
+  console.log("");
 
-	if (!send) {
-		console.log('Dry run complete. Re-run with --send to update the DB and send the emails.');
-		process.exit(0);
-	}
+  if (!send) {
+    console.log(
+      "Dry run complete. Re-run with --send to update the DB and send the emails.",
+    );
+    process.exit(0);
+  }
 
-	// 1. Flip the suggestion to implemented (same as the admin panel action).
-	await db
-		.update(roasterSuggestions)
-		.set({
-			status: 'implemented',
-			implementedRoasterSlug: roasterSlug,
-			updatedAt: new Date()
-		})
-		.where(eq(roasterSuggestions.id, suggestionId));
-	console.log('✅ Suggestion marked as implemented.');
+  // 1. Flip the suggestion to implemented (same as the admin panel action).
+  await db
+    .update(roasterSuggestions)
+    .set({
+      status: "implemented",
+      implementedRoasterSlug: roasterSlug,
+      updatedAt: new Date(),
+    })
+    .where(eq(roasterSuggestions.id, suggestionId));
+  console.log("✅ Suggestion marked as implemented.");
 
-	// 2. Email opted-in voters. Collect failures but keep going.
-	let failures = 0;
-	for (const recipient of recipients) {
-		const rendered = roasterImplementedUserTemplate({
-			name: recipient.name,
-			roasterName: suggestion.name,
-			roasterUrl
-		});
-		try {
-			await sendEmail({
-				to: recipient.email as string,
-				subject: rendered.subject,
-				text: rendered.text,
-				html: rendered.html,
-				attachments: [USER_EMAIL_LOGO_ATTACHMENT]
-			});
-			console.log(`📧 Sent to ${recipient.email}`);
-		} catch (err) {
-			failures++;
-			console.error(`❌ Failed to send to ${recipient.email}:`, err);
-		}
-	}
+  // 2. Queue voter notifications into the batched outbox, then flush. Each
+  //    voter gets ONE aggregated digest (adding several roasters at once =
+  //    one email, not one per roaster). Failures only affect that recipient.
+  await db.insert(emailQueue).values(
+    recipients.map((r) => ({
+      id: `eml_${nanoid()}`,
+      recipientEmail: r.email as string,
+      recipientName: r.name ?? null,
+      kind: "roaster-implemented",
+      data: {
+        kind: "roaster-implemented",
+        name: r.name,
+        roasterName: suggestion.name,
+        roasterUrl,
+      },
+      status: "pending",
+      createdAt: new Date(),
+    })),
+  );
+  const { sent, failed: voterFailures } = await flushEmailQueue(db);
+  console.log(`📧 Voter digests sent: ${sent}, failed: ${voterFailures}`);
 
-	// 3. Notify admins (same template the admin panel uses).
-	const admins = (
-		await db.select({ email: user.email }).from(user).where(eq(user.role, 'admin'))
-	)
-		.map((r) => r.email)
-		.filter((e) => !!e);
-	const adminRendered = adminNotificationTemplate({
-		kind: 'roaster-implemented',
-		data: {
-			email: suggestion.submittedByEmail ?? '',
-			roasterName: suggestion.name,
-			roasterSlug
-		}
-	});
-	for (const adminEmail of admins) {
-		try {
-			await sendEmail({
-				to: adminEmail as string,
-				subject: adminRendered.subject,
-				text: adminRendered.text,
-				html: adminRendered.html,
-				attachments: [ADMIN_NOTIFICATION_LOGO_ATTACHMENT]
-			});
-			console.log(`📧 Admin notified: ${adminEmail}`);
-		} catch (err) {
-			failures++;
-			console.error(`❌ Failed to notify admin ${adminEmail}:`, err);
-		}
-	}
+  let failures = voterFailures;
 
-	console.log('');
-	if (failures > 0) {
-		console.error(`Done with ${failures} email failure(s). DB update was applied.`);
-		process.exit(2);
-	}
-	console.log('Done: suggestion implemented, voters and admins notified.');
-	process.exit(0);
+  // 3. Notify admins (same template the admin panel uses).
+  const admins = (
+    await db
+      .select({ email: user.email })
+      .from(user)
+      .where(eq(user.role, "admin"))
+  )
+    .map((r) => r.email)
+    .filter((e) => !!e);
+  const adminRendered = adminNotificationTemplate({
+    kind: "roaster-implemented",
+    data: {
+      email: suggestion.submittedByEmail ?? "",
+      roasterName: suggestion.name,
+      roasterSlug,
+    },
+  });
+  for (const adminEmail of admins) {
+    try {
+      await sendEmail({
+        to: adminEmail as string,
+        subject: adminRendered.subject,
+        text: adminRendered.text,
+        html: adminRendered.html,
+        attachments: [ADMIN_NOTIFICATION_LOGO_ATTACHMENT],
+      });
+      console.log(`📧 Admin notified: ${adminEmail}`);
+    } catch (err) {
+      failures++;
+      console.error(`❌ Failed to notify admin ${adminEmail}:`, err);
+    }
+  }
+
+  console.log("");
+  if (failures > 0) {
+    console.error(
+      `Done with ${failures} email failure(s). DB update was applied.`,
+    );
+    process.exit(2);
+  }
+  console.log("Done: suggestion implemented, voters and admins notified.");
+  process.exit(0);
 }
 
 main().catch((err) => {
-	console.error(err);
-	process.exit(1);
+  console.error(err);
+  process.exit(1);
 });

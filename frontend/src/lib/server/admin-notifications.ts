@@ -1,13 +1,11 @@
 import { eq } from "drizzle-orm";
+import { nanoid } from "nanoid";
 import { db } from "$lib/server/database";
-import { user } from "$lib/server/database/schema";
+import { emailQueue, user } from "$lib/server/database/schema";
 import { sendEmail } from "$lib/server/email";
 import {
   adminNotificationTemplate,
   ADMIN_NOTIFICATION_LOGO_ATTACHMENT,
-  betaApprovedUserTemplate,
-  roasterImplementedUserTemplate,
-  USER_EMAIL_LOGO_ATTACHMENT,
   type AdminNotificationKind,
 } from "$lib/server/email-templates";
 
@@ -114,31 +112,38 @@ export function notifyAdminSuggestionImplemented(input: {
   });
 }
 
-export function notifyVotersSuggestionImplemented(input: {
+export async function notifyVotersSuggestionImplemented(input: {
   recipients: Array<{ email: string; name?: string | null }>;
   roasterName: string;
   roasterUrl: string;
-}): void {
+}): Promise<void> {
   if (!isEnabled() || input.recipients.length === 0) return;
-  for (const recipient of input.recipients) {
-    if (!recipient.email) continue;
-    const rendered = roasterImplementedUserTemplate({
-      name: recipient.name,
-      roasterName: input.roasterName,
-      roasterUrl: input.roasterUrl,
-    });
-    void sendEmail({
-      to: recipient.email,
-      subject: rendered.subject,
-      text: rendered.text,
-      html: rendered.html,
-      attachments: [USER_EMAIL_LOGO_ATTACHMENT],
-    }).catch((err) => {
-      console.error(
-        `[admin-notifications] Failed to send roaster-implemented email to ${recipient.email}:`,
-        err,
-      );
-    });
+  const rows = input.recipients
+    .filter((r) => !!r.email)
+    .map((r) => ({
+      id: `eml_${nanoid()}`,
+      recipientEmail: r.email,
+      recipientName: r.name ?? null,
+      kind: "roaster-implemented",
+      data: {
+        kind: "roaster-implemented",
+        name: r.name,
+        roasterName: input.roasterName,
+        roasterUrl: input.roasterUrl,
+      },
+      status: "pending",
+      createdAt: new Date(),
+    }));
+  if (rows.length === 0) return;
+  try {
+    // Queued, not sent — the digest flush (scripts/flush-email-queue.ts) sends
+    // one aggregated email per voter, so N newly-added roasters = 1 email.
+    await db.insert(emailQueue).values(rows);
+  } catch (err) {
+    console.error(
+      "[admin-notifications] Failed to enqueue roaster-implemented emails:",
+      err,
+    );
   }
 }
 
@@ -182,22 +187,25 @@ export function notifyAdminNewsletterChange(input: {
   );
 }
 
-export function notifyUserBetaApproved(input: {
+export async function notifyUserBetaApproved(input: {
   email: string;
   name?: string | null;
-}): void {
+}): Promise<void> {
   if (!isEnabled()) return;
-  const rendered = betaApprovedUserTemplate({ name: input.name });
-  void sendEmail({
-    to: input.email,
-    subject: rendered.subject,
-    text: rendered.text,
-    html: rendered.html,
-    attachments: [USER_EMAIL_LOGO_ATTACHMENT],
-  }).catch((err) => {
+  try {
+    await db.insert(emailQueue).values({
+      id: `eml_${nanoid()}`,
+      recipientEmail: input.email,
+      recipientName: input.name ?? null,
+      kind: "beta-approved",
+      data: { kind: "beta-approved", name: input.name },
+      status: "pending",
+      createdAt: new Date(),
+    });
+  } catch (err) {
     console.error(
-      `[admin-notifications] Failed to send beta-approved email to ${input.email}:`,
+      "[admin-notifications] Failed to enqueue beta-approved email:",
       err,
     );
-  });
+  }
 }

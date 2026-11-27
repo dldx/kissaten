@@ -193,7 +193,7 @@ export const approveBetaTester = form(userIdSchema, async ({ userId }) => {
     .where(eq(user.id, userId));
 
   if (target?.email) {
-    notifyUserBetaApproved({ email: target.email, name: target.name });
+    await notifyUserBetaApproved({ email: target.email, name: target.name });
   }
 
   return { success: true, userId } as const;
@@ -312,7 +312,7 @@ export const markSuggestionImplemented = form(
     const recipients = votingUsers
       .filter((r) => !!r.email)
       .map((r) => ({ email: r.email as string, name: r.name }));
-    notifyVotersSuggestionImplemented({
+    await notifyVotersSuggestionImplemented({
       recipients,
       roasterName: suggestion.name,
       roasterUrl,
