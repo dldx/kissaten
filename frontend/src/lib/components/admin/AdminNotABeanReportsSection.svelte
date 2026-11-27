@@ -1,18 +1,24 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button/index.js";
-  import * as Card from "$lib/components/ui/card/index.js";
-  import { Badge } from "$lib/components/ui/badge/index.js";
-  import { CheckIcon } from "lucide-svelte";
+  import CheckIcon from "lucide-svelte/icons/check";
+  import XIcon from "lucide-svelte/icons/x";
   import BanIcon from "lucide-svelte/icons/ban";
   import RotateCcwIcon from "lucide-svelte/icons/rotate-ccw";
+  import { api, type SearchParams, type CoffeeBean } from "$lib/api";
   import {
     listNotABeanReports,
+    resolveFeedback,
     submitProductReview,
     type NotABeanReportRow,
   } from "$lib/api/feedback.remote";
   import { formatRelative, formatAbsolute } from "$lib/utils/history";
   import { onMount } from "svelte";
   import { toast } from "svelte-sonner";
+  import AdminFlagQueue from "./AdminFlagQueue.svelte";
+  import type {
+    FlagQueueAction,
+    FlagQueueBadge,
+    FlagQueueItem,
+  } from "./flagQueue";
 
   // Not-a-bean user reports. Reports do NOT hide the reported product on
   // their own (apply-review-decisions ignores this kind), so this view is
@@ -25,10 +31,16 @@
     latestAt: number;
     status: string;
     restored: boolean;
+    dismissed: boolean;
   }
 
   let reports = $state<NotABeanReportRow[]>([]);
   let restored = $state<Record<string, boolean>>({});
+  // Locally-resolved groups (status = 'resolved' persisted on the report rows).
+  let dismissed = $state<Record<string, boolean>>({});
+  // Resolved bean data per entity path, so user-flag rows render with the
+  // same thumbnail / price / source-link body as scraper-flag rows.
+  let beanByPath = $state<Record<string, CoffeeBean>>({});
   let loading = $state(false);
   let loadError = $state("");
   let submitting = $state(false);
@@ -50,26 +62,67 @@
           latestAt: r.createdAt,
           status: r.status,
           restored: restored[r.entityUrlPath] ?? false,
+          dismissed: dismissed[r.entityUrlPath] ?? false,
         });
       }
     }
     return [...map.values()];
   });
 
+  // Pending = untouched reports ('new', or 'triaged' by the classify-feedback
+  // AI triage); priority heuristic: more reporters and fresher reports first
+  // (higher report count = stronger signal).
   const pendingGroups = $derived(
-    groups.filter((g) => g.status === "new" && !g.restored),
+    groups
+      .filter(
+        (g) =>
+          (g.status === "new" || g.status === "triaged") &&
+          !g.restored &&
+          !g.dismissed,
+      )
+      .sort((a, b) => b.count - a.count || b.latestAt - a.latestAt),
   );
   const handledGroups = $derived(
     groups
-      .filter((g) => g.status !== "new" || g.restored)
+      .filter(
+        (g) =>
+          (g.status !== "new" && g.status !== "triaged") ||
+          g.restored ||
+          g.dismissed,
+      )
       .sort((a, b) => b.latestAt - a.latestAt),
   );
+
+  // entityUrlPath is recorded from bean.bean_url_path (no "/roasters" prefix),
+  // but strip it defensively in case a path ever comes through with it.
+  function normalizePath(path: string): string {
+    return path.startsWith("/roasters") ? path.slice("/roasters".length) : path;
+  }
 
   async function loadReports() {
     loading = true;
     loadError = "";
     try {
       reports = await listNotABeanReports();
+
+      const paths = [
+        ...new Set(
+          reports.map((r) => normalizePath(r.entityUrlPath)).filter(Boolean),
+        ),
+      ];
+      if (paths.length > 0) {
+        // Resolve full bean data via the backend by-paths endpoint so user-flag
+        // rows render like scraper-flag rows. Unresolved (deleted / no longer
+        // matching) paths fall back to the report's own entity name.
+        const beans = await api.fetchAllBeansByPaths(paths, {
+          include_unreviewed: true,
+        } as SearchParams);
+        const byPath: Record<string, CoffeeBean> = {};
+        for (const bean of beans) {
+          if (bean.bean_url_path) byPath[bean.bean_url_path] = bean;
+        }
+        beanByPath = byPath;
+      }
     } catch (err) {
       loadError =
         err instanceof Error ? err.message : "Failed to load reports.";
@@ -107,155 +160,106 @@
       submitting = false;
     }
   }
+
+  // Mark every report for this entity as resolved (valid report: product
+  // stays hidden, no restore). Re-fetching report rows isn't needed — the
+  // local `dismissed` map moves the group into the handled list immediately.
+  async function dismissReport(group: ReportGroup) {
+    submitting = true;
+    try {
+      await resolveFeedback({ entityUrlPath: group.entityUrlPath });
+      dismissed[group.entityUrlPath] = true;
+      toast.success("Report marked resolved.");
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "Could not mark report resolved.",
+      );
+    } finally {
+      submitting = false;
+    }
+  }
+
+  // Map the report groups onto the shared flag-queue item model.
+  const pendingQueueItems = $derived(
+    pendingGroups.map((group) => toQueueItem(group, false)),
+  );
+  const handledQueueItems = $derived(
+    handledGroups.map((group) => toQueueItem(group, true)),
+  );
+
+  function groupActions(
+    group: ReportGroup,
+    handled: boolean,
+  ): FlagQueueAction[] {
+    const actions: FlagQueueAction[] = [];
+    if (handled && (group.restored || group.dismissed)) return actions;
+    actions.push({
+      label: "Restore bean",
+      icon: RotateCcwIcon,
+      variant: "outline",
+      disabled: submitting,
+      onClick: () => restoreBean(group),
+    });
+    if (!handled) {
+      actions.push({
+        label: "Dismiss",
+        icon: XIcon,
+        variant: "ghost",
+        disabled: submitting,
+        onClick: () => dismissReport(group),
+      });
+    }
+    return actions;
+  }
+
+  function toQueueItem(group: ReportGroup, handled: boolean): FlagQueueItem {
+    const path = normalizePath(group.entityUrlPath);
+    const bean = beanByPath[path] ?? null;
+
+    const badges: FlagQueueBadge[] = [];
+    if (bean) badges.push({ label: bean.roaster });
+    if (group.count > 1) badges.push({ label: `${group.count} reports` });
+    if (handled) {
+      badges.push(
+        group.restored
+          ? { label: "restore recorded" }
+          : group.dismissed
+            ? { label: "resolved" }
+            : { label: "hidden", variant: "outline" },
+      );
+    } else {
+      badges.push({
+        label: "awaiting review",
+        variant: "outline",
+        className: "text-destructive",
+      });
+    }
+
+    return {
+      id: `report-${group.entityUrlPath}`,
+      bean,
+      displayName: group.entityName,
+      icon: BanIcon,
+      pathLabel: bean?.bean_url_path ?? path,
+      badges,
+      caption: `reported ${formatRelative(new Date(group.latestAt).toISOString())}`,
+      captionTitle: formatAbsolute(new Date(group.latestAt).toISOString()),
+      actions: groupActions(group, handled),
+    };
+  }
 </script>
 
-<!-- ── Not-a-bean reports ──────────────────────────────── -->
-<section id="not-a-bean-reports" class="space-y-3 scroll-mt-24">
-  <div>
-    <h2 class="font-semibold text-xl">Not-a-bean reports</h2>
-    <p class="text-muted-foreground text-sm">
-      User reports that a product is not a coffee bean (equipment, merch, …).
-      Reports never hide a product automatically — review them here and use
-      <em>Restore</em> if the report was wrong.
-    </p>
-  </div>
-
-  {#if loading}
-    <div class="py-8 text-muted-foreground text-center text-sm">
-      Loading…
-    </div>
-  {:else if loadError}
-    <div class="py-8 text-destructive text-center text-sm">{loadError}</div>
-  {:else if groups.length === 0}
-    <Card.Root>
-      <Card.Content class="py-12">
-        <div class="flex flex-col items-center gap-3 text-muted-foreground">
-          <BanIcon class="w-10 h-10" />
-          <p class="font-medium">No not-a-bean reports. ✓</p>
-        </div>
-      </Card.Content>
-    </Card.Root>
-  {:else}
-    {#if pendingGroups.length > 0}
-      <div class="space-y-2">
-        {#each pendingGroups as group (group.entityUrlPath)}
-          <Card.Root>
-            <Card.Content class="pt-6">
-              <div
-                class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4"
-              >
-                <div class="min-w-0 flex-1 space-y-1">
-                  <div class="flex items-center gap-2">
-                    <BanIcon class="w-4 h-4 shrink-0 text-muted-foreground" />
-                    <p class="truncate font-semibold">{group.entityName}</p>
-                    {#if group.count > 1}
-                      <Badge class="" variant="secondary">{group.count} reports</Badge>
-                    {/if}
-                    <Badge variant="outline" class="text-destructive">
-                      awaiting review
-                    </Badge>
-                  </div>
-                  <div
-                    class="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground"
-                  >
-                    <a
-                      href={"/roasters" + group.entityUrlPath}
-                      class="hover:underline"
-                    >
-                      {group.entityUrlPath}
-                    </a>
-                    <span
-                      title={formatAbsolute(new Date(group.latestAt).toISOString())}
-                    >
-                      reported {formatRelative(new Date(group.latestAt).toISOString())}
-                    </span>
-                  </div>
-                </div>
-                <div class="flex shrink-0 flex-wrap gap-2 sm:justify-end">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={submitting}
-                    onclick={() => restoreBean(group)}
-                  >
-                    <RotateCcwIcon class="mr-1 h-3.5 w-3.5" />
-                    Restore bean
-                  </Button>
-                </div>
-              </div>
-            </Card.Content>
-          </Card.Root>
-        {/each}
-      </div>
-    {:else}
-      <Card.Root>
-        <Card.Content class="py-12">
-          <div class="flex flex-col items-center gap-3 text-muted-foreground">
-            <CheckIcon class="h-10 w-10" />
-            <p class="font-medium">No reports awaiting review. ✓</p>
-          </div>
-        </Card.Content>
-      </Card.Root>
-    {/if}
-
-    {#if handledGroups.length > 0}
-      <div class="space-y-2 pt-2">
-        <h3 class="text-sm font-medium text-muted-foreground">
-          Previously handled
-        </h3>
-        {#each handledGroups as group (group.entityUrlPath)}
-          <Card.Root class="opacity-75">
-            <Card.Content class="pt-6">
-              <div
-                class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4"
-              >
-                <div class="min-w-0 flex-1 space-y-1">
-                  <div class="flex items-center gap-2">
-                    <BanIcon class="w-4 h-4 shrink-0 text-muted-foreground" />
-                    <p class="truncate font-semibold">{group.entityName}</p>
-                    {#if group.count > 1}
-                      <Badge class="" variant="secondary">{group.count} reports</Badge>
-                    {/if}
-                    {#if group.restored}
-                      <Badge class="">restore recorded</Badge>
-                    {:else}
-                      <Badge class="" variant="outline">hidden</Badge>
-                    {/if}
-                  </div>
-                  <div
-                    class="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground"
-                  >
-                    <a
-                      href={"/roasters" + group.entityUrlPath}
-                      class="hover:underline"
-                    >
-                      {group.entityUrlPath}
-                    </a>
-                    <span
-                      title={formatAbsolute(new Date(group.latestAt).toISOString())}
-                    >
-                      reported {formatRelative(new Date(group.latestAt).toISOString())}
-                    </span>
-                  </div>
-                </div>
-                {#if !group.restored}
-                  <div class="flex shrink-0 flex-wrap gap-2 sm:justify-end">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      disabled={submitting}
-                      onclick={() => restoreBean(group)}
-                    >
-                      <RotateCcwIcon class="mr-1 h-3.5 w-3.5" />
-                      Restore bean
-                    </Button>
-                  </div>
-                {/if}
-              </div>
-            </Card.Content>
-          </Card.Root>
-        {/each}
-      </div>
-    {/if}
-  {/if}
-</section>
+<AdminFlagQueue
+  sectionId="not-a-bean-reports"
+  title="Not-a-bean reports"
+  description="User reports that a product is not a coffee bean (equipment, merch, …). Reports never hide a product automatically — review them here and use Restore if the report was wrong."
+  {loading}
+  error={loadError}
+  pendingItems={pendingQueueItems}
+  handledItems={handledQueueItems}
+  handledTitle="Previously handled"
+  emptyIcon={BanIcon}
+  emptyText="No not-a-bean reports. ✓"
+  pendingEmptyIcon={CheckIcon}
+  pendingEmptyText="No reports awaiting review. ✓"
+/>

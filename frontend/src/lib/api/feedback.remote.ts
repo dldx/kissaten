@@ -6,6 +6,7 @@ import { db } from "$lib/server/database";
 import { pageFeedback } from "$lib/server/database/schema";
 import { feedbackSchema } from "$lib/schema/feedback";
 import { notifyAdminPageFeedback } from "$lib/server/admin-notifications";
+import { enqueueEmail } from "$lib/server/email-queue";
 import { nanoid } from "nanoid";
 
 function requireAdmin() {
@@ -255,5 +256,64 @@ export const submitProductReview = command(
     // enough for the admin review queue. (notifyAdminPageFeedback is available
     // if we later want the email digest to mention review decisions.)
     return { status: "submitted", id };
+  },
+);
+
+export type ResolveFeedbackResult = { status: "resolved"; id: string };
+
+/**
+ * Admin-only: mark every not-a-bean report for an entity as resolved (the
+ * report was valid against a non-coffee product, or no further action is
+ * needed). Sets status='resolved' + resolved_at, moving the report into the
+ * "previously handled" admin list, and queues a 'report-resolved' digest item
+ * for each reporter who supplied an email address (supplying one serves as
+ * the opt-in for update notifications).
+ */
+export const resolveFeedback = command(
+  z.object({ entityUrlPath: z.string().min(1).max(500) }),
+  async (data): Promise<ResolveFeedbackResult> => {
+    requireAdmin();
+    const entityUrlPath = data.entityUrlPath.trim();
+
+    // Capture reporter identities + entity name BEFORE the update so the
+    // digest queue can notify everyone who filed the report.
+    const rows = await db
+      .select({
+        email: pageFeedback.reporterEmail,
+        entityName: pageFeedback.entityName,
+      })
+      .from(pageFeedback)
+      .where(
+        and(
+          eq(pageFeedback.kind, "not-a-bean"),
+          eq(pageFeedback.entityUrlPath, entityUrlPath),
+        ),
+      );
+
+    await db
+      .update(pageFeedback)
+      .set({ status: "resolved", resolvedAt: new Date() })
+      .where(
+        and(
+          eq(pageFeedback.kind, "not-a-bean"),
+          eq(pageFeedback.entityUrlPath, entityUrlPath),
+        ),
+      );
+
+    const emails = [
+      ...new Set(
+        rows.map((r) => r.email?.trim()).filter((e): e is string => !!e),
+      ),
+    ];
+    const entityName = rows[0]?.entityName ?? null;
+    for (const email of emails) {
+      await enqueueEmail(db, {
+        to: email,
+        kind: "report-resolved",
+        data: { kind: "report-resolved", name: null, entityName },
+      });
+    }
+
+    return { status: "resolved", id: entityUrlPath };
   },
 );
