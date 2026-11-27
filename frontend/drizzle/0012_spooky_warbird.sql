@@ -1,0 +1,1 @@
+ALTER TABLE `page_feedback` ADD `resolved_at` integer;

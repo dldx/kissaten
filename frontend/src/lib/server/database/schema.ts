@@ -20,9 +20,13 @@ export const user = sqliteTable("user", {
     .notNull(),
   isBetaAllowed: integer("is_beta_allowed", { mode: "boolean" }).default(false),
   betaEnabled: integer("beta_enabled", { mode: "boolean" }).default(false),
-  betaInterest: integer("beta_interest", { mode: "boolean" }).default(false).notNull(),
+  betaInterest: integer("beta_interest", { mode: "boolean" })
+    .default(false)
+    .notNull(),
   defaultRoasterLocations: text("default_roaster_locations"),
-  role: text("role", { enum: ["user", "admin"] }).default("user").notNull(),
+  role: text("role", { enum: ["user", "admin"] })
+    .default("user")
+    .notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
     .notNull(),
@@ -249,7 +253,11 @@ export const pageFeedback = sqliteTable(
     reporterEmail: text("reporter_email"),
     reporterUserAgent: text("reporter_user_agent"),
     reporterIp: text("reporter_ip"),
+    // Report lifecycle: 'new' (submitted, awaiting review) | 'triaged' (legacy)
+    // | 'applied' (product-review applied by the CLI) | 'resolved' (dismissed).
     status: text("status").default("new").notNull(),
+    // Set when the report is marked resolved by an admin.
+    resolvedAt: integer("resolved_at", { mode: "timestamp_ms" }),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
@@ -266,6 +274,40 @@ export const pageFeedback = sqliteTable(
     entityIdx: index("page_feedback_entity_idx").on(
       table.entitySlug,
       table.kind,
+    ),
+  }),
+);
+
+/**
+ * Outbox for batched (digest) user-facing notification emails. Notifications
+ * are enqueued here instead of being sent immediately, and a flush job groups
+ * them per recipient so each user gets at most one email per flush. Admin
+ * notifications bypass this table (see admin-notifications.ts).
+ */
+export const emailQueue = sqliteTable(
+  "email_queue",
+  {
+    id: text("id").primaryKey(), // eml_<nanoid>
+    recipientEmail: text("recipient_email").notNull(),
+    recipientName: text("recipient_name"),
+    // 'roaster-implemented' | 'beta-approved' | 'report-resolved'
+    kind: text("kind").notNull(),
+    // Typed as UserDigestItem (email-templates.ts) at the queue layer.
+    data: text("data", { mode: "json" })
+      .$type<Record<string, unknown>>()
+      .default({})
+      .notNull(),
+    // 'pending' | 'sent' | 'failed'
+    status: text("status").default("pending").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    sentAt: integer("sent_at", { mode: "timestamp_ms" }),
+  },
+  (table) => ({
+    recipientStatusIdx: index("email_queue_recipient_status_idx").on(
+      table.recipientEmail,
+      table.status,
     ),
   }),
 );
