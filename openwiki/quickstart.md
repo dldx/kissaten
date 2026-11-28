@@ -24,6 +24,7 @@ Kissaten is a full-stack coffee bean discovery platform that scrapes bean data f
 | Frontend | [frontend/email-notifications.md](frontend/email-notifications.md) | SMTP transport, branded email shell, admin digests, user-facing emails (roaster-implemented to voters) |
 | Roasters | [roasters/index.md](roasters/index.md) | Roaster profiles: sustainability, equipment, philosophy, quirks for scraped UK roasters |
 | Operations | [operations/operations.md](operations/operations.md) | CLI, scheduling, DB validation, testing, deployment, CI |
+| Operations | [operations/page-cache-archive.md](operations/page-cache-archive.md) | Raw-page archive (`data/cache/roasters/`), R2 sync via `cache-sync`, admin cache viewer |
 
 ## Tech Stack
 
@@ -63,6 +64,7 @@ Scraped data lives under `data/roasters/<roaster>/<session_date>/`. DuckDB files
 - **AI pipeline** enriches scraped data: extraction from HTML/screenshots, categorization of processing methods/varietals/tasting notes, region geocoding, and validation gates for mapping consistency.
 - **DuckDB** is the primary analytical store. The API loads JSON data incrementally via checksum-based diffing. `price_options` (bag-size variants) power largest-bag pricing on search.
 - **Tasting kits & review queue** — curated multi-coffee kits/samplers are extracted and flagged `is_tasting_kit` + `requires_review`; they stay out of public search until an admin approves them through the frontend review queue and `kissaten apply-review-decisions`. See [operations/tasting-kit-review-pipeline.md](operations/tasting-kit-review-pipeline.md).
+- **Page-cache archive & viewer** — every fetched page is archived as a `data/cache/roasters/<roaster>/<YYYYMMDD>/<filename>.tar.gz` (HTML + optional screenshot), mirrored to private Cloudflare R2 with `kissaten cache-sync`, and inspectable through the admin-only viewer. See [operations/page-cache-archive.md](operations/page-cache-archive.md).
 - **Frontend** is a SvelteKit app with routes for search, roasters, origins, flavours, a tasting wizard, brew assistant, and a user vault.
 - **CLI** (`kissaten` command) orchestrates scraping, database refresh, validation, server lifecycle, and maintenance tasks (including `apply-review-decisions` and `deduplicate-mappings`).
 

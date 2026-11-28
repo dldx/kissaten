@@ -26,6 +26,17 @@ A ~1,800-line abstract base class providing:
 - **DiffJSON stock updates**: Tracks stock/field changes for already-known beans via `.diffjson` files
 - **Error handling**: Retries, rate limiting, structured logging via Logfire
 
+#### Raw page cache
+
+`_save_page_cache()` writes one self-contained tarball per fetched page to
+`data/cache/roasters/<roaster_dir>/<YYYYMMDD>/<filename>.tar.gz`, containing
+`metadata.json`, `page.html`, and an optional `screenshot.png`. The filename is
+derived deterministically from the last URL path segment (see
+`page_cache_filename()`); `_get_cache_filename()` delegates to it. The local
+archive is append-only and can be mirrored to private Cloudflare R2 with
+`kissaten cache-sync`, then inspected through the admin-only viewer. See
+[Page Cache Archive & Admin Viewer](../operations/page-cache-archive.md).
+
 Subclasses must implement:
 - `get_store_urls()` — return the list of roaster store/product URLs
 - `_extract_product_urls_from_store()` — extract individual product page URLs from a store page

@@ -1,6 +1,7 @@
 # Files
 
 - [Operations](operations.md) - CLI commands, scheduled scraping, testing, database validation, proxy config, deployment, CI/CD, and maintenance scripts for Kissaten.
+- [Page Cache Archive & Admin Viewer](page-cache-archive.md) - Raw page archive (tar.gz), Cloudflare R2 sync, and the admin-only viewer for comparing cached pages with structured bean data.
 - [Playwright 429 Escalation Investigation — 2026-07-30](playwright-escalation-investigation-2026-07.md)
 - [Scraper Log Analysis — July 2026 (Post-Fix)](scraper-log-analysis-2026-07-post-fix.md)
 - [Scraper Log Analysis — July 2026](scraper-log-analysis-2026-07.md)

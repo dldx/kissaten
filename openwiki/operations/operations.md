@@ -27,6 +27,7 @@ The CLI is built with Typer + Rich and lives in `src/kissaten/cli/main.py`. Invo
 | `refresh` | Load scraped JSON into DuckDB (`--incremental` for diff-based loading) |
 | `validate-db` | Validate DuckDB integrity (volume drift, nulls, referential integrity, normalization, freshness, FTS divergence) |
 | `stats` | Show database statistics |
+| `cache-sync [--roaster <name>] [--verify]` | Mirror the local raw-page cache (`data/cache/roasters/`) to Cloudflare R2 with `rclone copy --immutable`; never `sync`/`--delete` (see [Page Cache Archive & Admin Viewer](page-cache-archive.md)) |
 | `apply-review-decisions --from-db <path> [--data-dir data] [--dry-run] [--update-db]` | Apply admin product-review decisions from the frontend SQLite DB to the data layer (see [Tasting Kit Review Pipeline](tasting-kit-review-pipeline.md)) |
 | `deduplicate-mappings [--dry-run]` | Collapse redundant case-variant duplicate entries in `varietal_mappings.json` and `processing_methods_mappings.json`; exits 1 when genuine conflicts (different canonicals) remain so CI cannot hide them (see [Name Mappings & Validation](../data/name-mappings.md)) |
 

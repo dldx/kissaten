@@ -82,6 +82,13 @@ Request model (`BrewRecipeRequest`) in detail:
 - AI-powered reranking (Jina AI + Gemini)
 - Podcast tagging via `PodcastTagger` (see [ai/ai-pipeline.md](../ai/ai-pipeline.md))
 
+### Admin Page Cache (`src/kissaten/api/cache_viewer.py`)
+Read-only, admin-gated access to the raw pages archived under `data/cache/roasters/` (local first, Cloudflare R2 fallback):
+- `GET /v1/admin/cache/beans/{roaster_slug}/{bean_slug}` — list cached snapshots for a bean (bean summary, candidate roaster dirs, `local`/`r2` sources, storage availability, warnings)
+- `GET /v1/admin/cache/beans/{roaster_slug}/{bean_slug}/content?session=YYYYMMDD&filename=...&kind=html|screenshot|metadata|raw` — serve one snapshot's HTML, screenshot, metadata, or raw archive
+
+Both require `X-Kissaten-Admin-Token`, compared with `KISSATEN_ADMIN_API_TOKEN`; the endpoint returns 503 when the environment variable is unset and 401 on a wrong/missing token. The content endpoint also requires the snapshot to belong to the bean. HTML is served with a sandbox CSP and script-src disabled. See [operations/page-cache-archive.md](../operations/page-cache-archive.md) for the archive layout, `kissaten cache-sync`, R2 config, and the frontend viewer.
+
 ## DuckDB Layer (`src/kissaten/api/db.py`)
 
 ### Connection Management

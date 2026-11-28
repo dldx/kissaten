@@ -36,7 +36,7 @@ Kissaten is a three-layer coffee bean discovery platform:
 2. **AI Extraction**: `CoffeeDataExtractor` (Gemini 2.5 Flash/Lite) processes HTML and/or screenshots into structured `CoffeeBean` Pydantic models. Translates foreign-language pages when needed.
 3. **Categorization**: AI categorizers standardize processing methods, varietals, tasting notes, and regions using mapping files in `src/kissaten/database/`.
 4. **Validation**: `validation_gate.py` checks mapping consistency (no conflicting duplicates) before data enters DuckDB. `kissaten deduplicate-mappings` collapses redundant case-variant duplicate mappings; genuine conflicts are left for humans (see [data/name-mappings.md](../data/name-mappings.md)).
-5. **Storage**: Validated beans are saved as JSON under `data/roasters/<roaster>/<session>/` (with sidecar `*.diffjson` update files, including `*.review.diffjson` from the tasting-kit approval flow). DuckDB loads these incrementally via checksum-based diffing; `price_options` bag variants populate the `largest_bag` pricing CTE.
+5. **Storage**: Validated beans are saved as JSON under `data/roasters/<roaster>/<session>/` (with sidecar `*.diffjson` update files, including `*.review.diffjson` from the tasting-kit approval flow). DuckDB loads these incrementally via checksum-based diffing; `price_options` bag variants populate the `largest_bag` pricing CTE. Separately, each fetched raw page is archived verbatim under `data/cache/roasters/<roaster>/<YYYYMMDD>/*.tar.gz` — distinct from the DuckDB AI search/media caches — and optionally mirrored to Cloudflare R2 (see [operations/page-cache-archive.md](../operations/page-cache-archive.md)).
 6. **Review gate (2026-08)**: tasting kits/samplers are flagged `is_tasting_kit` + `requires_review` at scrape time; they are hidden from public search until an admin approves them via the frontend queue and `kissaten apply-review-decisions` writes a review diffjson (see [operations/tasting-kit-review-pipeline.md](../operations/tasting-kit-review-pipeline.md)).
 7. **API**: FastAPI serves DuckDB data with full-text search, faceted filtering, relevance scoring, largest-bag pricing, and location exploration (`/v1/roasted-in/{slug}`).
 8. **Frontend**: SvelteKit consumes the API, with local-first sync (Dexie/IndexedDB ↔ Turso/libSQL via Drizzle) for user data — tasting sessions, saved beans, custom beans, and brew recipes. See [frontend/sync-system.md](../frontend/sync-system.md) for the full sync architecture.
@@ -67,7 +67,7 @@ src/kissaten/
 ├── ai/            # AI modules (extractor, categorizers, search agent, validation)
 ├── api/           # FastAPI app, DB, sub-routers (ai_search, brew, fx, podcasts)
 │   └── proto/     # Protobuf definitions for BeanConqueror share
-├── cache/         # AI search cache, media insights cache (DuckDB-backed)
+├── cache/         # AI search/media caches + raw page-cache helpers (page_cache, r2_page_cache)
 ├── cli/           # Typer CLI with Rich output
 ├── database/      # Static data: mappings, lexicons, CSVs, region JSONs
 ├── dedup/         # Farm deduplication (normalize → fuzzy match → cluster → TUI)
