@@ -5,6 +5,8 @@
     "": {
       "name": "kissaten-frontend",
       "dependencies": {
+        "@better-auth/core": "1.7.2",
+        "@better-auth/kysely-adapter": "1.7.2",
         "@dnd-kit-svelte/svelte": "0.1.6",
         "@fontsource-variable/cabin": "5.2.8",
         "@fontsource-variable/quicksand": "5.2.10",
