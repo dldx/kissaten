@@ -20,6 +20,7 @@ Kissaten is a coffee bean database and search application that scrapes coffee be
 - `src/kissaten/services/` (geocoding), `src/kissaten/cli/` (Typer CLI), `src/kissaten/cache/`, `src/kissaten/ai/`, `src/kissaten/dedup/`.
 - `frontend/` is a Svelte 5 (runes) app; routes live under `frontend/src/routes/(main)/` (search, origins, processes, varietals, tasting, flavours, brew-assistant, admin, vault, …) and `(no-layout)/`.
 - `data/roasters/<roaster>/<YYYYMMDD>/` holds per-bean `<slug>_<HHMMSS>.json` files plus update artifacts (`<slug>_<hash8>.diffjson`, `_out_of_stock.diffjson`, `.review.diffjson`). DuckDB files (`kissaten.duckdb` prod, `rw_kissaten.duckdb` rw) live directly in `data/`.
+- `data/cache/roasters/<roaster_dir>/<YYYYMMDD>/<filename>.tar.gz` is an append-only raw-page archive written by `BaseScraper._save_page_cache`, mirrored to Cloudflare R2 with `kissaten cache-sync`; the API exposes a read-only admin cache viewer. See [`docs/CACHE_ARCHIVE.md`](docs/CACHE_ARCHIVE.md).
 
 ## Technology Stack
 
@@ -83,13 +84,15 @@ Each roaster has its own module in `src/kissaten/scrapers/`. All scrapers:
 
 The pipeline is incremental, not full-reimport. Scrapers write per-bean JSON + diff artifacts into `data/roasters/<roaster>/<YYYYMMDD>/`; `kissaten refresh` applies them to the rw DuckDB, which is then validated and promoted to the prod DB. See [`docs/INCREMENTAL_DATABASE_UPDATES.md`](docs/INCREMENTAL_DATABASE_UPDATES.md).
 
+`data/cache/` is a separate append-only raw-page archive: scrapers write deterministic `<roaster>/<YYYYMMDD>/<slug>.tar.gz` files, and `kissaten cache-sync` mirrors them to a private Cloudflare R2 bucket with `rclone copy --immutable` (never `sync --delete`). The API serves the archive through a read-only, admin-only cache viewer (`KISSATEN_ADMIN_API_TOKEN`), reading local files first and falling back to R2 on hosts without local cache. Configure it with `KISSATEN_CACHE_DIR` and the `KISSATEN_R2_*` variables; full details in [`docs/CACHE_ARCHIVE.md`](docs/CACHE_ARCHIVE.md).
+
 ## API Design
 
 Routes live under `/v1/*` in `src/kissaten/api/main.py`: `/v1/search`, `/v1/roasters`, `/v1/beans/{roaster_slug}/{bean_slug}`, `/v1/origins` (+ regions/farms), `/v1/processes`, `/v1/varietals`, `/v1/tasting-note-categories` (+ `/v1/tasting-notes/{note}/details`), `/v1/stats`, `/v1/health`. Use Pydantic models for request/response. Public search must keep hiding `requires_review = true` rows unless `include_unreviewed = true` is passed.
 
 ## CLI
 
-The `kissaten` CLI (Typer + rich) is defined in `src/kissaten/cli/main.py`. Real commands include: `scrape`, `test-scraper`, `run-all-scrapers`, `refresh`, `refresh-media`, `validate-db`, `serve`, `dev`, `show-bean`, `list-sessions`, `list-scrapers`, `scraper-info`, `cache-stats`/`cache-cleanup`/`cache-clear`, `categorize-processing`/`categorize-varietals`/`categorize-tasting-notes`/`categorize-all`, `validate-mappings`, `deduplicate-regions`, `deduplicate-mappings`, `apply-review-decisions`.
+The `kissaten` CLI (Typer + rich) is defined in `src/kissaten/cli/main.py`. Real commands include: `scrape`, `test-scraper`, `run-all-scrapers`, `refresh`, `refresh-media`, `validate-db`, `serve`, `dev`, `show-bean`, `list-sessions`, `list-scrapers`, `scraper-info`, `cache-sync`, `cache-stats`/`cache-cleanup`/`cache-clear`, `categorize-processing`/`categorize-varietals`/`categorize-tasting-notes`/`categorize-all`, `validate-mappings`, `deduplicate-regions`, `deduplicate-mappings`, `apply-review-decisions`.
 
 ## Testing
 

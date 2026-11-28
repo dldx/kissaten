@@ -38,6 +38,9 @@ export function resolveInternalApiUrl(
 export function resolveInternalApiBase(env: {
   INTERNAL_API_BASE?: string;
   VITE_BACKEND_URL?: string;
+  // Accept `$env/dynamic/private` (which has a broader index signature) without
+  // forcing every caller to cast.
+  [key: string]: string | undefined;
 }): string {
   if (env.INTERNAL_API_BASE) return env.INTERNAL_API_BASE.replace(/\/+$/, "");
   const host = env.VITE_BACKEND_URL;

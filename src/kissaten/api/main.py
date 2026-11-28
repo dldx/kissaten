@@ -28,6 +28,7 @@ from starlette.types import Scope
 from kissaten.api.ai_search import create_ai_search_router
 from kissaten.api.beanconqueror_share import build_share_link
 from kissaten.api.brew_assistant import router as brew_assistant_router
+from kissaten.api.cache_viewer import router as cache_viewer_router
 from kissaten.api.db import (
     conn,
     normalize_farm_name,
@@ -872,6 +873,9 @@ async def lifespan(app: FastAPI):
 
     # Include Brew Assistant router
     app.include_router(brew_assistant_router)
+
+    # Include admin page-cache viewer router
+    app.include_router(cache_viewer_router)
     yield
     conn.close()
 

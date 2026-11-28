@@ -2409,6 +2409,290 @@ def validate_db(
             raise typer.Exit(1)
 
 
+#: rclone remote name used via environment config (no rclone.conf needed).
+RCLONE_CACHE_REMOTE = "kissatenr2"
+
+RCLONE_INSTALL_HINT = (
+    "Install rclone from https://rclone.org/install/ (or `sudo snap install rclone`) and make sure it is on PATH."
+)
+
+
+def _normalise_cache_prefix(prefix: str | None) -> str:
+    """Normalise an R2 key prefix (strip whitespace and leading/trailing slashes)."""
+    return (prefix or "").strip().strip("/")
+
+
+def _is_valid_cache_roaster(roaster: str) -> bool:
+    """Return True when ``roaster`` is a single, safe path segment.
+
+    Rejects empty strings, ``.``/``..`` and anything containing a path
+    separator so a scoped sync cannot escape the cache tree.
+    """
+    return bool(roaster) and roaster not in {".", ".."} and "/" not in roaster and "\\" not in roaster
+
+
+def _cache_sync_rclone_env(
+    endpoint: str,
+    access_key_id: str,
+    secret_access_key: str,
+    base_env: dict[str, str] | None = None,
+) -> dict[str, str]:
+    """Build the environment that describes the temporary ``kissatenr2`` remote.
+
+    rclone reads backend configuration from ``RCLONE_CONFIG_<REMOTE>_<KEY>``
+    environment variables, where the remote name is uppercased. Credentials
+    therefore never appear in the process argv (and so not in ``ps`` output or
+    shell history). See ``rclone help backend s3``.
+    """
+    env = dict(os.environ if base_env is None else base_env)
+    env.update(
+        {
+            f"RCLONE_CONFIG_{RCLONE_CACHE_REMOTE.upper()}_TYPE": "s3",
+            f"RCLONE_CONFIG_{RCLONE_CACHE_REMOTE.upper()}_PROVIDER": "Cloudflare",
+            f"RCLONE_CONFIG_{RCLONE_CACHE_REMOTE.upper()}_ACCESS_KEY_ID": access_key_id,
+            f"RCLONE_CONFIG_{RCLONE_CACHE_REMOTE.upper()}_SECRET_ACCESS_KEY": secret_access_key,
+            f"RCLONE_CONFIG_{RCLONE_CACHE_REMOTE.upper()}_ENDPOINT": endpoint,
+            f"RCLONE_CONFIG_{RCLONE_CACHE_REMOTE.upper()}_REGION": "auto",
+        }
+    )
+    return env
+
+
+def _build_cache_copy_command(
+    rclone: str,
+    source_dir: Path,
+    destination: str,
+    transfers: int,
+    checkers: int,
+    *,
+    dry_run: bool = False,
+    no_progress: bool = False,
+) -> list[str]:
+    """Build the ``rclone copy`` argv for mirroring the page cache to R2.
+
+    Deliberately uses ``copy`` (never ``sync``) without ``--delete`` so the
+    append-only archive can never lose remote objects.
+    """
+    cmd = [
+        rclone,
+        "copy",
+        str(source_dir),
+        destination,
+        "--fast-list",
+        "--immutable",
+        "--transfers",
+        str(transfers),
+        "--checkers",
+        str(checkers),
+        "--stats",
+        "30s",
+    ]
+    if not no_progress:
+        cmd.append("--progress")
+    if dry_run:
+        cmd.append("--dry-run")
+    return cmd
+
+
+def _build_cache_verify_command(rclone: str, source_dir: Path, destination: str) -> list[str]:
+    """Build the ``rclone check`` argv that verifies every local archive is on R2."""
+    return [rclone, "check", "--one-way", "--size-only", str(source_dir), destination]
+
+
+@app.command()
+def cache_sync(
+    source_dir: Path = typer.Option(
+        Path("data/cache/roasters"), "--source-dir", help="Local page-cache directory to mirror"
+    ),
+    roaster: str | None = typer.Option(
+        None,
+        "--roaster",
+        help="Sync only one roaster subdirectory (e.g. poma_coffee) instead of the whole cache tree",
+    ),
+    bucket: str | None = typer.Option(
+        None, "--bucket", help="R2 bucket name (default: KISSATEN_R2_BUCKET or 'kissaten')"
+    ),
+    prefix: str | None = typer.Option(
+        None, "--prefix", help="Key prefix inside the bucket (default: KISSATEN_R2_PREFIX or 'cache')"
+    ),
+    endpoint: str | None = typer.Option(None, "--endpoint", help="R2 S3 endpoint (default: KISSATEN_R2_ENDPOINT)"),
+    access_key_id: str | None = typer.Option(
+        None, "--access-key-id", help="R2 access key id (default: KISSATEN_R2_ACCESS_KEY_ID)"
+    ),
+    secret_access_key: str | None = typer.Option(
+        None, "--secret-access-key", help="R2 secret access key (default: KISSATEN_R2_SECRET_ACCESS_KEY)"
+    ),
+    transfers: int = typer.Option(16, "--transfers", help="Number of parallel rclone file transfers"),
+    checkers: int = typer.Option(32, "--checkers", help="Number of parallel rclone checkers"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Show what rclone would copy without uploading anything"),
+    verify: bool = typer.Option(
+        False,
+        "--verify",
+        help="After copying, run `rclone check --one-way --size-only` and exit non-zero on any missing object",
+    ),
+    no_progress: bool = typer.Option(False, "--no-progress", help="Disable rclone's --progress output"),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+):
+    """Mirror the local raw-page cache to Cloudflare R2 with rclone.
+
+    Copies ``data/cache/roasters/`` (or ``--source-dir``) to
+    ``kissatenr2:<bucket>/<prefix>/roasters`` using ``rclone copy``. Pass
+    ``--roaster <name>`` to sync only one roaster subdirectory to
+    ``kissatenr2:<bucket>/<prefix>/roasters/<name>`` without re-walking the
+    whole multi-gigabyte tree. The cache is append-only — filenames are
+    date/slug based — so this command never deletes remote objects
+    (``--immutable`` skips files that already exist).
+
+    Credentials are passed through rclone ``RCLONE_CONFIG_*`` environment
+    variables, so they never appear in the process argv. Use ``--dry-run`` to
+    preview and ``--verify`` to check that every local archive reached R2.
+    """
+    setup_logging(verbose)
+
+    source_dir = source_dir.expanduser()
+    bucket = (bucket or os.environ.get("KISSATEN_R2_BUCKET") or "kissaten").strip()
+    prefix = _normalise_cache_prefix(prefix if prefix is not None else os.environ.get("KISSATEN_R2_PREFIX", "cache"))
+    endpoint = (endpoint or os.environ.get("KISSATEN_R2_ENDPOINT") or "").strip()
+    access_key_id = (access_key_id or os.environ.get("KISSATEN_R2_ACCESS_KEY_ID") or "").strip()
+    secret_access_key = (secret_access_key or os.environ.get("KISSATEN_R2_SECRET_ACCESS_KEY") or "").strip()
+
+    if roaster is not None and not _is_valid_cache_roaster(roaster):
+        console.print(
+            f"[red]Error: invalid --roaster {roaster!r}: expected a single path segment "
+            "(non-empty, no '/' or '\\\\', not '.' or '..')[/red]"
+        )
+        raise typer.Exit(1)
+
+    if roaster is not None:
+        source_dir = source_dir / roaster
+        if not source_dir.is_dir():
+            console.print(f"[red]Error: roaster cache directory not found: {source_dir}[/red]")
+            console.print("[dim]Check the --roaster name against the subdirectories under --source-dir.[/dim]")
+            raise typer.Exit(1)
+    elif not source_dir.is_dir():
+        console.print(f"[red]Error: cache source directory not found: {source_dir}[/red]")
+        console.print("[dim]Pass --source-dir or run a scraper to populate data/cache/roasters/.[/dim]")
+        raise typer.Exit(1)
+
+    rclone = shutil.which("rclone")
+    if not rclone:
+        console.print("[red]Error: rclone was not found on PATH.[/red]")
+        console.print(f"[dim]{RCLONE_INSTALL_HINT}[/dim]")
+        raise typer.Exit(1)
+
+    missing = [
+        name
+        for name, value in (
+            ("bucket", bucket),
+            ("endpoint", endpoint),
+            ("access key id", access_key_id),
+            ("secret access key", secret_access_key),
+        )
+        if not value
+    ]
+    if missing:
+        console.print(f"[red]Error: missing R2 configuration: {', '.join(missing)}[/red]")
+        console.print(
+            "[dim]Set KISSATEN_R2_ENDPOINT, KISSATEN_R2_BUCKET, KISSATEN_R2_ACCESS_KEY_ID and "
+            "KISSATEN_R2_SECRET_ACCESS_KEY (see env.example) or pass the matching --flags.[/dim]"
+        )
+        raise typer.Exit(1)
+
+    if transfers < 1:
+        console.print("[red]Error: --transfers must be at least 1[/red]")
+        raise typer.Exit(1)
+    if checkers < 1:
+        console.print("[red]Error: --checkers must be at least 1[/red]")
+        raise typer.Exit(1)
+
+    key_prefix = f"{prefix}/" if prefix else ""
+    roaster_suffix = f"/{roaster}" if roaster else ""
+    destination = f"{RCLONE_CACHE_REMOTE}:{bucket}/{key_prefix}roasters{roaster_suffix}"
+
+    console.print("\n[bold cyan]☕ Page cache → Cloudflare R2[/bold cyan]")
+    if roaster:
+        console.print(f"[blue]Roaster:[/blue] {roaster} (scoped sync)")
+    console.print(f"[blue]Source:[/blue] {source_dir.resolve()}")
+    console.print(f"[blue]Destination:[/blue] {destination}")
+    console.print(f"[blue]rclone:[/blue] {rclone} (transfers={transfers}, checkers={checkers})")
+    if dry_run:
+        console.print("[yellow]Dry run: no objects will be uploaded.[/yellow]")
+    if verify and not dry_run:
+        console.print("[dim]Will verify with `rclone check --one-way --size-only` after copying.[/dim]")
+    console.print("[dim]Using `rclone copy --immutable`: remote objects are never deleted.[/dim]\n")
+
+    env = _cache_sync_rclone_env(endpoint, access_key_id, secret_access_key)
+    copy_cmd = _build_cache_copy_command(
+        rclone,
+        source_dir,
+        destination,
+        transfers,
+        checkers,
+        dry_run=dry_run,
+        no_progress=no_progress,
+    )
+
+    with logfire.span(
+        "cache_sync",
+        source_dir=str(source_dir),
+        destination=destination,
+        dry_run=dry_run,
+        verify=verify,
+    ):
+        console.print(f"[dim]$ {' '.join(copy_cmd)}[/dim]")
+        try:
+            copy_result = subprocess.run(copy_cmd, env=env)
+        except FileNotFoundError:
+            console.print("[red]Error: rclone disappeared while starting the copy.[/red]")
+            console.print(f"[dim]{RCLONE_INSTALL_HINT}[/dim]")
+            raise typer.Exit(1)
+        except KeyboardInterrupt:
+            console.print("\n[yellow]cache-sync interrupted by user[/yellow]")
+            raise typer.Exit(1)
+
+        if copy_result.returncode != 0:
+            console.print(f"[red]rclone copy failed with exit code {copy_result.returncode}[/red]")
+            logfire.error(
+                "cache_sync copy failed",
+                returncode=copy_result.returncode,
+                destination=destination,
+            )
+            raise typer.Exit(1)
+
+        logfire.info("cache_sync copy finished", destination=destination, dry_run=dry_run)
+
+        if verify and dry_run:
+            console.print("[yellow]Skipping --verify because --dry-run copied nothing.[/yellow]")
+        elif verify:
+            verify_cmd = _build_cache_verify_command(rclone, source_dir, destination)
+            console.print(f"\n[dim]$ {' '.join(verify_cmd)}[/dim]")
+            try:
+                verify_result = subprocess.run(verify_cmd, env=env)
+            except FileNotFoundError:
+                console.print("[red]Error: rclone disappeared while starting verification.[/red]")
+                raise typer.Exit(1)
+            except KeyboardInterrupt:
+                console.print("\n[yellow]Verification interrupted by user[/yellow]")
+                raise typer.Exit(1)
+
+            if verify_result.returncode != 0:
+                console.print(f"[red]Verification failed with exit code {verify_result.returncode}[/red]")
+                logfire.error(
+                    "cache_sync verify failed",
+                    returncode=verify_result.returncode,
+                    destination=destination,
+                )
+                raise typer.Exit(1)
+
+            logfire.info("cache_sync verify passed", destination=destination)
+            console.print("[green]✓ Verified every local archive exists on R2.[/green]")
+
+    if dry_run:
+        console.print("\n[green]✓ Dry run complete — no objects uploaded.[/green]")
+    else:
+        console.print(f"\n[green]✓ cache-sync complete → {destination}[/green]")
+
+
 @app.command()
 def cache_stats(
     cache_db: Path = typer.Option(

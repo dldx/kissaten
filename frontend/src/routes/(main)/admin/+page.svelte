@@ -7,6 +7,7 @@
   import AdminRoasterSuggestionsSection from "$lib/components/admin/AdminRoasterSuggestionsSection.svelte";
   import AdminReviewQueueSection from "$lib/components/admin/AdminReviewQueueSection.svelte";
   import AdminNotABeanReportsSection from "$lib/components/admin/AdminNotABeanReportsSection.svelte";
+  import AdminCacheInspectorSection from "$lib/components/admin/AdminCacheInspectorSection.svelte";
   import AdminUsersSection from "$lib/components/admin/AdminUsersSection.svelte";
 
   let { data } = $props();
@@ -60,6 +61,12 @@
         Flagged for Review
       </a>
       <a
+        href="#cache-inspector"
+        class="hover:bg-muted px-3 py-1.5 rounded-md transition-colors"
+      >
+        Cache Inspector
+      </a>
+      <a
         href="#newsletter"
         class="hover:bg-muted px-3 py-1.5 rounded-md transition-colors"
       >
@@ -78,6 +85,8 @@
     <AdminReviewQueueSection />
     <Separator />
     <AdminNotABeanReportsSection />
+    <Separator />
+    <AdminCacheInspectorSection />
     <Separator />
     <AdminUsersSection />
   </div>

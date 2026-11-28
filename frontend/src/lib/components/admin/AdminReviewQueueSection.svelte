@@ -2,6 +2,7 @@
   import CheckIcon from "lucide-svelte/icons/check";
   import XIcon from "lucide-svelte/icons/x";
   import PackageCheckIcon from "lucide-svelte/icons/package-check";
+  import DatabaseIcon from "lucide-svelte/icons/database";
   import { api, type CoffeeBean } from "$lib/api";
   import {
     submitProductReview,
@@ -9,10 +10,12 @@
     type ProductReviewDecision,
   } from "$lib/api/feedback.remote";
   import { slugify } from "$lib/utils";
+  import { parseBeanPath } from "$lib/utils/beanPath";
   import { formatRelative, formatAbsolute } from "$lib/utils/history";
   import { onMount } from "svelte";
   import { toast } from "svelte-sonner";
   import AdminFlagQueue from "./AdminFlagQueue.svelte";
+  import AdminCachedPageViewer from "./AdminCachedPageViewer.svelte";
   import type { FlagQueueBadge, FlagQueueItem } from "./flagQueue";
 
   // Flagged-for-review queue (tasting kits etc.). Loaded client-side via the
@@ -26,6 +29,14 @@
   let reviewSubmitting = $state(false);
   let reviewInlineError = $state<Record<string, string>>({});
 
+  // Cached-page viewer target (admin-only raw page cache).
+  let cacheOpen = $state(false);
+  let cacheTarget = $state<{
+    roasterSlug: string;
+    beanSlug: string;
+    beanName: string;
+  } | null>(null);
+
   // The entity path that a review decision is keyed on — must match exactly
   // what submitProductReview records as entityUrlPath so the decisions map
   // keys line up with the submitted values.
@@ -35,6 +46,24 @@
       `/roasters/${slugify(item.roaster)}/${item.clean_url_slug ?? item.name}`
     );
   }
+
+  function openCache(item: CoffeeBean) {
+    const parsed = parseBeanPath(entityPathOf(item));
+    if (!parsed) {
+      toast.error("Could not resolve a roaster/bean path for this item.");
+      return;
+    }
+    cacheTarget = {
+      roasterSlug: parsed.roasterSlug,
+      beanSlug: parsed.beanSlug,
+      beanName: item.name,
+    };
+    cacheOpen = true;
+  }
+
+  $effect(() => {
+    if (!cacheOpen) cacheTarget = null;
+  });
 
   // Derived split: reviewItems stays the full API result (single source of
   // truth); pending/decided are computed from it + decidedReviews.
@@ -162,6 +191,12 @@
       inlineError: reviewInlineError[String(item.id)],
       actions: [
         {
+          label: "View cache",
+          icon: DatabaseIcon,
+          variant: "outline",
+          onClick: () => openCache(item),
+        },
+        {
           label: "Reject",
           icon: XIcon,
           variant: "outline",
@@ -188,4 +223,11 @@
   pendingItems={pendingQueueItems}
   handledItems={handledQueueItems}
   handledTitle="Previously decided"
+/>
+
+<AdminCachedPageViewer
+  bind:open={cacheOpen}
+  roasterSlug={cacheTarget?.roasterSlug ?? ""}
+  beanSlug={cacheTarget?.beanSlug ?? ""}
+  beanName={cacheTarget?.beanName ?? ""}
 />

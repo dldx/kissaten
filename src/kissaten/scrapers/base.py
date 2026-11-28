@@ -21,6 +21,7 @@ from dotenv import load_dotenv
 from playwright.async_api import Browser, Page, async_playwright
 
 from kissaten.ai.extractor import CoffeeDataExtractor
+from kissaten.cache.page_cache import page_cache_filename
 
 from ..schemas import CoffeeBean, CoffeeBeanDiffUpdate, ScrapingSession
 from . import _curl_http as httpx
@@ -580,20 +581,7 @@ class BaseScraper(ABC):
         Returns:
             Cache filename following bean naming convention
         """
-        # Use same slug generation as bean files
-        parsed = urlparse(product_url)
-        path_parts = [p for p in parsed.path.split("/") if p]
-
-        # Get last meaningful part of URL
-        if path_parts:
-            slug = path_parts[-1].replace(".html", "").replace(".php", "")
-            # Clean up the slug
-            slug = re.sub(r"[^a-z0-9_-]", "_", slug.lower())
-        else:
-            # Fallback to hash
-            slug = hashlib.md5(product_url.encode()).hexdigest()[:8]
-
-        return f"{slug}.tar.gz"
+        return page_cache_filename(product_url)
 
     def _get_cache_dir(self, output_dir: Path) -> Path:
         """Get cache directory following roaster/date structure.

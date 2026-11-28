@@ -3,6 +3,7 @@
   import XIcon from "lucide-svelte/icons/x";
   import BanIcon from "lucide-svelte/icons/ban";
   import RotateCcwIcon from "lucide-svelte/icons/rotate-ccw";
+  import DatabaseIcon from "lucide-svelte/icons/database";
   import { api, type SearchParams, type CoffeeBean } from "$lib/api";
   import {
     listNotABeanReports,
@@ -10,10 +11,12 @@
     submitProductReview,
     type NotABeanReportRow,
   } from "$lib/api/feedback.remote";
+  import { parseBeanPath } from "$lib/utils/beanPath";
   import { formatRelative, formatAbsolute } from "$lib/utils/history";
   import { onMount } from "svelte";
   import { toast } from "svelte-sonner";
   import AdminFlagQueue from "./AdminFlagQueue.svelte";
+  import AdminCachedPageViewer from "./AdminCachedPageViewer.svelte";
   import type {
     FlagQueueAction,
     FlagQueueBadge,
@@ -44,6 +47,33 @@
   let loading = $state(false);
   let loadError = $state("");
   let submitting = $state(false);
+
+  // Cached-page viewer target (admin-only raw page cache).
+  let cacheOpen = $state(false);
+  let cacheTarget = $state<{
+    roasterSlug: string;
+    beanSlug: string;
+    beanName: string;
+  } | null>(null);
+
+  function openCache(group: ReportGroup) {
+    const parsed = parseBeanPath(group.entityUrlPath);
+    if (!parsed) {
+      toast.error("Could not resolve a roaster/bean path for this report.");
+      return;
+    }
+    const bean = beanByPath[normalizePath(group.entityUrlPath)];
+    cacheTarget = {
+      roasterSlug: parsed.roasterSlug,
+      beanSlug: parsed.beanSlug,
+      beanName: bean?.name ?? group.entityName,
+    };
+    cacheOpen = true;
+  }
+
+  $effect(() => {
+    if (!cacheOpen) cacheTarget = null;
+  });
 
   const groups = $derived.by(() => {
     const map = new Map<string, ReportGroup>();
@@ -191,7 +221,14 @@
     group: ReportGroup,
     handled: boolean,
   ): FlagQueueAction[] {
-    const actions: FlagQueueAction[] = [];
+    const actions: FlagQueueAction[] = [
+      {
+        label: "View cache",
+        icon: DatabaseIcon,
+        variant: "outline",
+        onClick: () => openCache(group),
+      },
+    ];
     if (handled && (group.restored || group.dismissed)) return actions;
     actions.push({
       label: "Restore bean",
@@ -262,4 +299,11 @@
   emptyText="No not-a-bean reports. ✓"
   pendingEmptyIcon={CheckIcon}
   pendingEmptyText="No reports awaiting review. ✓"
+/>
+
+<AdminCachedPageViewer
+  bind:open={cacheOpen}
+  roasterSlug={cacheTarget?.roasterSlug ?? ""}
+  beanSlug={cacheTarget?.beanSlug ?? ""}
+  beanName={cacheTarget?.beanName ?? ""}
 />
